@@ -59,8 +59,8 @@ int main()
       action = (game_actions[i].test_action)(game_actions[i].data);
     }
 
-    if( action == CHANGE_DIRECTION )
-      change_runner_direction();
+    if( action == TOGGLE_DIRECTION )
+      toggle_runner_direction();
 
     position_runner( &game_state.player_xpos, &game_state.player_ypos );
 

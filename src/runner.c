@@ -26,52 +26,70 @@ typedef struct _runner_state
   struct sp1_ss*   sprite;
 
   RUNNER_DIRECTION direction;
-  uint8_t          frame_num;
 }
 RUNNER_STATE;
-
-struct sp1_Rect runner_screen = {0, 0, 32, 24};
-uint16_t runner_frame_size;
-
 RUNNER_STATE runner;
 
-uint8_t x_pos = 0;
-uint8_t y_pos = 80;
+/*
+ * Runner has access to full screen for now. It'll be faster
+ * when I can reduce this window size.
+ */
+const struct sp1_Rect runner_screen = {0, 0, 32, 24};
+
+/*
+ * For flexibility I want to do something like:
+ *
+ *  static const uint16_t runner_frame_size = runner_right_f2-runner_right_f1;
+ *
+ * but the compiler complains that those values aren't constants. So maybe
+ * there's a way to export a DEFC'ed value from the assembler to the C?
+ * I can't find a way to do that either. So for now use a hard coded constant.
+ */
+
+static const uint16_t runner_frame_size = 16;
+
 
 void create_runner_sprite( RUNNER_DIRECTION initial_direction )
 {
-  runner_frame_size = (runner_right_f2-runner_right_f1);
-
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
   runner.direction = initial_direction;
-  runner.frame_num = 0;
 }
 
 void position_runner( uint8_t* x, uint8_t* y )
 {
   uint8_t* runner_data;
+  uint16_t offset_to_frame;
 
-/* This didn't work properly. Animation looked weird. */
-  runner.frame_num = (*x)&0x0007;
+  /*
+   * Frame number is calculated from the lowest 8 bits of the x position.
+   * This won't be flexible enough if the animation gets more complex
+   * but for now it's fast and simple.
+   *
+   * The calculation is:
+   * 
+   *  frame_num   = (*x) & 0x0007;
+   *  runner_data = runner_right_f1+(runner_frame_size*frame_num);
+   *
+   * The implementation below doesn't use the intermediate variable and
+   * generates more succinct code.
+   */
+  offset_to_frame = runner_frame_size * ((*x) & 0x0007);
 
   if( runner.direction == RUNNER_RIGHT ) {
-    runner_data = runner_right_f1+(runner_frame_size*runner.frame_num);
+    runner_data = runner_right_f1+offset_to_frame;
     (*x)++;
   }
   else {
-    runner_data = runner_left_f1+(runner_frame_size*runner.frame_num);
+    runner_data = runner_left_f1+offset_to_frame;
     (*x)--;
   }
 
   sp1_MoveSprPix(runner.sprite, &runner_screen, runner_data, *x, *y);
-
-//  if( ++runner.frame_num == 8 )
-//    runner.frame_num = 0;
 }
 
-void change_runner_direction(void)
+void toggle_runner_direction(void)
 {
   runner.direction = !runner.direction;
 }

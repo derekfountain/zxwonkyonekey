@@ -7,7 +7,7 @@ GAME_ACTION test_for_keypress( void* data )
 
   if( game_state->key_pressed && ! game_state->key_processed ) {
     game_state->key_processed = 1;
-    return CHANGE_DIRECTION;
+    return TOGGLE_DIRECTION;
   }
 
   return NO_ACTION;

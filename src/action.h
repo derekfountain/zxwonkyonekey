@@ -11,7 +11,7 @@ typedef enum _game_action
   MOVE_LEFT_UP,
   MOVE_LEFT_DOWN,
   MOVE_DOWN,
-  CHANGE_DIRECTION,
+  TOGGLE_DIRECTION,
   JUMP,
   DIE,
 }
