@@ -42,7 +42,7 @@ int main()
   game_state.key_processed = 0;
 
   game_state.player_xpos = 0;
-  game_state.player_ypos = 80;
+  game_state.player_ypos = 96;
 
   while(1) {
     uint8_t i;
@@ -60,7 +60,8 @@ int main()
     }
 
     if( action == TOGGLE_DIRECTION )
-      toggle_runner_direction();
+      start_runner_jumping();
+//      toggle_runner_direction();
 
     position_runner( &game_state.player_xpos, &game_state.player_ypos );
 
