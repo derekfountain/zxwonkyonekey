@@ -48,3 +48,32 @@ GAME_ACTION test_for_start_jump( void* data )
 
   return NO_ACTION;
 }
+
+GAME_ACTION test_for_falling( void* data )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+  uint8_t*    attr_address;
+  uint8_t     attr;
+
+  /* Are we in the middle of a jump? If so, no action */
+  if( game_state->runner_state->jump_offset != NOT_JUMPING )
+    return NO_ACTION;
+
+  /* Are we on a coloured block? If not, no action */
+  attr_address = zx_pxy2aaddr( game_state->player_xpos, game_state->player_ypos+8  );
+  attr = *attr_address;
+  
+  if( (attr & 0x38) != PAPER_WHITE )
+    return NO_ACTION;
+
+  if( MODULO8(game_state->player_xpos) )
+    return NO_ACTION;
+
+  attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos+8  );
+  attr = *attr_address;
+
+  if( (attr & 0x38) != PAPER_WHITE )
+    return NO_ACTION;
+
+  return MOVE_DOWN;
+}

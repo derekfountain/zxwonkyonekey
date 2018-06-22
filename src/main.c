@@ -18,6 +18,7 @@ GAME_STATE game_state;
 
 LOOP_ACTION game_actions[] =
   {
+    {test_for_falling,          &game_state},
     {test_for_start_jump,       &game_state},
     {test_for_direction_change, &game_state},
   };
@@ -43,7 +44,7 @@ int main()
   game_state.key_processed = 0;
 
   game_state.player_xpos = 0;
-  game_state.player_ypos = 96;
+  game_state.player_ypos = 30;
 
   while(1) {
     uint8_t i;
@@ -70,6 +71,10 @@ int main()
 
     case JUMP:
       start_runner_jumping();
+      break;
+
+    case MOVE_DOWN:
+      game_state.player_ypos++;
       break;
     }
 
