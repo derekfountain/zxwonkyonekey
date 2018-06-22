@@ -21,6 +21,7 @@ LOOP_ACTION game_actions[] =
     {test_for_falling,          &game_state},
     {test_for_start_jump,       &game_state},
     {test_for_direction_change, &game_state},
+    {move_sideways,             &game_state},
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
@@ -36,15 +37,15 @@ int main()
   game_state.runner_state = create_runner_sprite( RUNNER_RIGHT );
 
   level1();
-
   sp1_Invalidate(&full_screen);
+  sp1_UpdateNow();
  
   while( in_key_pressed( IN_KEY_SCANCODE_SPACE ) );
   game_state.key_pressed = 0;
   game_state.key_processed = 0;
 
   game_state.player_xpos = 0;
-  game_state.player_ypos = 30;
+  game_state.player_ypos = 96;
 
   while(1) {
     uint8_t i;
@@ -76,6 +77,19 @@ int main()
     case MOVE_DOWN:
       game_state.player_ypos++;
       break;
+
+    case MOVE_UP:
+      game_state.player_ypos--;
+      break;
+
+    case MOVE_RIGHT:
+      game_state.player_xpos++;
+      break;
+
+    case MOVE_LEFT:
+      game_state.player_xpos--;
+      break;
+
     }
 
     position_runner( &game_state.player_xpos, &game_state.player_ypos );

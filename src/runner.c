@@ -2,6 +2,7 @@
 #include <arch/zx/sp1.h>
 
 #include "runner.h"
+#include "game_state.h"
 
 extern uint8_t runner_right_f1[];
 extern uint8_t runner_right_f2[];
@@ -81,11 +82,11 @@ void position_runner( uint8_t* x, uint8_t* y )
 
   if( runner.direction == RUNNER_RIGHT ) {
     runner_data = runner_right_f1+offset_to_frame;
-    (*x)++;
+//    (*x)++;
   }
   else {
     runner_data = runner_left_f1+offset_to_frame;
-    (*x)--;
+//    (*x)--;
   }
 
   if( runner.jump_offset != NOT_JUMPING ) {
@@ -109,6 +110,20 @@ void toggle_runner_direction(void)
 }
 
 void start_runner_jumping(void)
-{
+ {
   runner.jump_offset = 0;
+}
+
+GAME_ACTION move_sideways( void* data )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+
+  if( game_state->runner_state->direction == RUNNER_RIGHT ) {
+//    (game_state->player_xpos)++;
+    return MOVE_RIGHT;
+  }
+  else {
+//    (game_state->player_xpos)--;
+    return MOVE_LEFT;
+  }
 }

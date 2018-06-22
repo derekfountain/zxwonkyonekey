@@ -1,5 +1,5 @@
 #include <arch/zx.h>
-
+#include <stdio.h>
 #include "utils.h"
 #include "action.h"
 #include "game_state.h"
@@ -31,7 +31,7 @@ GAME_ACTION test_for_start_jump( void* data )
   attr = *attr_address;
 
   if( (attr & 0x38) != PAPER_RED ) {
-    if( MODULO8(game_state->player_xpos) )
+    if( MODULO8(game_state->player_xpos) == 0 )
       return NO_ACTION;
       
     attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos+8  );
@@ -66,14 +66,9 @@ GAME_ACTION test_for_falling( void* data )
   if( (attr & 0x38) != PAPER_WHITE )
     return NO_ACTION;
 
-  if( MODULO8(game_state->player_xpos) )
-    return NO_ACTION;
+  /* So player is on a clear block. If aligned to the cell, fall through */
+  if( MODULO8(game_state->player_xpos) == 0 )
+    return MOVE_DOWN;
 
-  attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos+8  );
-  attr = *attr_address;
-
-  if( (attr & 0x38) != PAPER_WHITE )
-    return NO_ACTION;
-
-  return MOVE_DOWN;
+  return NO_ACTION;
 }

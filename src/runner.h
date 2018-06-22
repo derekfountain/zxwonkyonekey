@@ -1,6 +1,8 @@
 #ifndef __RUNNER_H
 #define __RUNNER_H
 
+#include "action.h"
+
 #define NOT_JUMPING (uint8_t)(0xFF)
 
 /* Directions. Up and down will probably be added */
@@ -24,5 +26,6 @@ RUNNER_STATE* create_runner_sprite( RUNNER_DIRECTION initial_direction );
 void position_runner( uint8_t* x, uint8_t* y );
 void toggle_runner_direction( void );
 void start_runner_jumping( void );
+GAME_ACTION move_sideways( void* data );
 
 #endif
