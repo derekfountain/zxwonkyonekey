@@ -18,5 +18,4 @@ void level1(void)
     sp1_PrintAt(13,i,PAPER_GREEN|INK_BLACK,' ');
 
   sp1_PrintAt(13,15,PAPER_RED|INK_BLACK,' ');
-  sp1_PrintAt(13,16,PAPER_RED|INK_BLACK,' ');
 }

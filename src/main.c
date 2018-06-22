@@ -18,9 +18,10 @@ GAME_STATE game_state;
 
 LOOP_ACTION game_actions[] =
   {
-    {test_for_keypress, &game_state},
-    {NULL, NULL}
+    {test_for_start_jump,       &game_state},
+    {test_for_direction_change, &game_state},
   };
+#define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
 int main()
 {
@@ -31,7 +32,7 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
 
-  create_runner_sprite( RUNNER_RIGHT );
+  game_state.runner_state = create_runner_sprite( RUNNER_RIGHT );
 
   level1();
 
@@ -55,13 +56,22 @@ int main()
       game_state.key_processed = 0;
     }
 
-    for( i=0; i < 1; i++ ) {
+    for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
       action = (game_actions[i].test_action)(game_actions[i].data);
+      if( action != NO_ACTION )
+	break;
     }
 
-    if( action == TOGGLE_DIRECTION )
+    switch( action )
+    {
+    case TOGGLE_DIRECTION:
+      toggle_runner_direction();
+      break;
+
+    case JUMP:
       start_runner_jumping();
-//      toggle_runner_direction();
+      break;
+    }
 
     position_runner( &game_state.player_xpos, &game_state.player_ypos );
 

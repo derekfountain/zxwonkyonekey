@@ -3,10 +3,14 @@
 
 #include <stdint.h>
 
+#include "runner.h"
+
 typedef struct _game_state
 {
   uint8_t key_pressed;
   uint8_t key_processed;
+
+  RUNNER_STATE* runner_state;
 
   uint8_t player_xpos;
   uint8_t player_ypos;

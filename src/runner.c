@@ -21,21 +21,12 @@ extern uint8_t runner_left_f6[];
 extern uint8_t runner_left_f7[];
 extern uint8_t runner_left_f8[];
 
-#define NOT_JUMPING (uint8_t)(0xFF)
 int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
 			     1, 1 , 1 , 1 ,    1 , 1 , 1 ,  0,
                                 0,  0,  0,  0,   0,  0,  0,  0,
 			        0,  -1, -1, -1,  -1, -1, -1, -1,
 			     -1, -1, -1, -2,  -2,  -2,-2, -2};
 
-typedef struct _runner_state
-{
-  struct sp1_ss*   sprite;
-
-  RUNNER_DIRECTION direction;
-  uint8_t          jump_offset;
-}
-RUNNER_STATE;
 RUNNER_STATE runner;
 
 /*
@@ -57,13 +48,15 @@ const struct sp1_Rect runner_screen = {0, 0, 32, 24};
 static const uint16_t runner_frame_size = 16;
 
 
-void create_runner_sprite( RUNNER_DIRECTION initial_direction )
+RUNNER_STATE* create_runner_sprite( RUNNER_DIRECTION initial_direction )
 {
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
   runner.direction   = initial_direction;
   runner.jump_offset = NOT_JUMPING;
+
+  return &runner;
 }
 
 void position_runner( uint8_t* x, uint8_t* y )
@@ -108,6 +101,11 @@ void position_runner( uint8_t* x, uint8_t* y )
 void toggle_runner_direction(void)
 {
   runner.direction = !runner.direction;
+
+  if( runner.jump_offset != NOT_JUMPING )
+    if( runner.jump_offset < sizeof(jump_y_offsets)/2 )
+      runner.jump_offset = sizeof(jump_y_offsets) - runner.jump_offset;
+
 }
 
 void start_runner_jumping(void)
