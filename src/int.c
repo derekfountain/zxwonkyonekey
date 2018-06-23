@@ -5,6 +5,10 @@
 #include <im2.h>
 #include <string.h>
 
+/*
+ * Not sure what to do with the interrupt as yet.
+ */
+
 uint8_t ticker = 0;
 
 IM2_DEFINE_ISR(isr)
@@ -12,6 +16,9 @@ IM2_DEFINE_ISR(isr)
   ticker++;
 }
 
+/*
+ * Standard SP1 interrupt set up for now.
+ */
 #define TABLE_HIGH_BYTE        ((unsigned int)0xD0)
 #define JUMP_POINT_HIGH_BYTE   ((unsigned int)0xD1)
 

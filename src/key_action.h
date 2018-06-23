@@ -3,6 +3,10 @@
 
 #include "action.h"
 
+/*
+ * Information on these is in the C code file.
+ */
+
 GAME_ACTION test_for_direction_change( void* data );
 GAME_ACTION test_for_start_jump( void* data );
 GAME_ACTION test_for_falling( void* data );

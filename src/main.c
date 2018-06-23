@@ -97,6 +97,6 @@ int main()
 
     sp1_UpdateNow();
     intrinsic_halt();
-    z80_delay_ms(25);
+//    z80_delay_ms(25);
   }
 }

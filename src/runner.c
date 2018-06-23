@@ -106,7 +106,7 @@ void position_runner( uint8_t x, uint8_t* y )
     runner_data = runner_left_f1+offset_to_frame;
   }
 
-  if( RUNNER_JUMPING ) {
+  if( RUNNER_JUMPING(runner.jump_offset) ) {
     *y -= jump_y_offsets[runner.jump_offset];
     if( ++runner.jump_offset == sizeof(jump_y_offsets) ) {
       runner.jump_offset = NOT_JUMPING;
@@ -131,7 +131,7 @@ void toggle_runner_direction(void)
    * turned around in midair. This was determined empirically;
    * the resultant animation and positioning feel right.
    */
-  if( RUNNER_JUMPING )
+  if( RUNNER_JUMPING(runner.jump_offset) )
     if( runner.jump_offset < sizeof(jump_y_offsets)/2 )
       runner.jump_offset = sizeof(jump_y_offsets) - runner.jump_offset;
 }

@@ -14,7 +14,7 @@
 /*
  * Macro for readability. :)
  */
-#define RUNNER_JUMPING (runner.jump_offset != NOT_JUMPING)
+#define RUNNER_JUMPING(offset) (((uint8_t)(offset)) != NOT_JUMPING)
 
 /*
  * Directions. Up and down may be added at some point.
