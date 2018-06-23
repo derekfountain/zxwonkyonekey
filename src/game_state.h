@@ -10,7 +10,7 @@ typedef struct _game_state
   uint8_t key_pressed;
   uint8_t key_processed;
 
-  RUNNER_STATE* runner_state;
+  RUNNER* runner;
 
   uint8_t player_xpos;
   uint8_t player_ypos;

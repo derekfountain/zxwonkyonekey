@@ -11,7 +11,7 @@ GAME_ACTION test_for_direction_change( void* data )
   uint8_t     attr;
 
   if( MODULO8(game_state->player_xpos) == 0 ) {
-    if( game_state->runner_state->direction == RUNNER_RIGHT )
+    if( game_state->runner->facing == RIGHT )
       attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos );
     else
       attr_address = zx_pxy2aaddr( game_state->player_xpos-8, game_state->player_ypos );
@@ -36,7 +36,7 @@ GAME_ACTION test_for_start_jump( void* data )
   uint8_t     attr;
 
   /* Are we already jumping? If so, no action */
-  if( game_state->runner_state->jump_offset != NOT_JUMPING )
+  if( game_state->runner->jump_offset != NOT_JUMPING )
     return NO_ACTION;
 
   /* Are we on a trampoline block? If not, no action */
@@ -69,7 +69,7 @@ GAME_ACTION test_for_falling( void* data )
   uint8_t     attr;
 
   /* Are we in the middle of a jump? If so, no action */
-  if( game_state->runner_state->jump_offset != NOT_JUMPING )
+  if( game_state->runner->jump_offset != NOT_JUMPING )
     return NO_ACTION;
 
   /* Are we on a coloured block? If not, no action */

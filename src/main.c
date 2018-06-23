@@ -34,7 +34,7 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
 
-  game_state.runner_state = create_runner_sprite( RUNNER_RIGHT );
+  game_state.runner = create_runner( RIGHT );
 
   level1();
   sp1_Invalidate(&full_screen);
@@ -92,7 +92,7 @@ int main()
 
     }
 
-    position_runner( &game_state.player_xpos, &game_state.player_ypos );
+    position_runner( game_state.player_xpos, &game_state.player_ypos );
 
     sp1_UpdateNow();
     intrinsic_halt();
