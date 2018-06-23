@@ -38,6 +38,9 @@ typedef struct _runner
 {
   struct sp1_ss*   sprite;
 
+  uint8_t          xpos;
+  uint8_t          ypos;
+
   DIRECTION        facing;
   uint8_t          jump_offset;
 }
@@ -50,6 +53,12 @@ RUNNER* create_runner( DIRECTION initial_direction );
 
 /*
  * Position the runner at the given screen coordinates.
+ *
+ * The runner code holds a structure with the character's
+ * nominal screen position, but it's this code which places
+ * him on screen, taking into account jumping and whatever
+ * else might modify his actual x,y screen position.
+ *
  * y-pos is a pointer because the positioning code takes
  * jumping into account and may have to move the sprite
  * above the requested position. In this case the sprite's

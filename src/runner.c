@@ -71,6 +71,8 @@ RUNNER* create_runner( DIRECTION initial_direction )
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
+  runner.xpos = 0;
+  runner.ypos = 0;
   runner.facing      = initial_direction;
   runner.jump_offset = NOT_JUMPING;
 

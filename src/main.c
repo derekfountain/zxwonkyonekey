@@ -39,13 +39,14 @@ int main()
   level1();
   sp1_Invalidate(&full_screen);
   sp1_UpdateNow();
- 
+
+  /* Wait in case the user is holding down the control key */
   while( in_key_pressed( IN_KEY_SCANCODE_SPACE ) );
   game_state.key_pressed = 0;
   game_state.key_processed = 0;
 
-  game_state.player_xpos = 0;
-  game_state.player_ypos = 96;
+  game_state.runner->xpos = 0;
+  game_state.runner->ypos = 96;
 
   while(1) {
     uint8_t i;
@@ -75,24 +76,24 @@ int main()
       break;
 
     case MOVE_DOWN:
-      game_state.player_ypos++;
+      game_state.runner->ypos++;
       break;
 
     case MOVE_UP:
-      game_state.player_ypos--;
+      game_state.runner->ypos--;
       break;
 
     case MOVE_RIGHT:
-      game_state.player_xpos++;
+      game_state.runner->xpos++;
       break;
 
     case MOVE_LEFT:
-      game_state.player_xpos--;
+      game_state.runner->xpos--;
       break;
 
     }
 
-    position_runner( game_state.player_xpos, &game_state.player_ypos );
+    position_runner( game_state.runner->xpos, &game_state.runner->ypos );
 
     sp1_UpdateNow();
     intrinsic_halt();

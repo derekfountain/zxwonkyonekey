@@ -10,11 +10,11 @@ GAME_ACTION test_for_direction_change( void* data )
   uint8_t*    attr_address;
   uint8_t     attr;
 
-  if( MODULO8(game_state->player_xpos) == 0 ) {
+  if( MODULO8(game_state->runner->xpos) == 0 ) {
     if( game_state->runner->facing == RIGHT )
-      attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos );
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos );
     else
-      attr_address = zx_pxy2aaddr( game_state->player_xpos-8, game_state->player_ypos );
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos );
     attr = *attr_address;
   
     if( (attr & 0x38) != PAPER_WHITE )
@@ -40,14 +40,14 @@ GAME_ACTION test_for_start_jump( void* data )
     return NO_ACTION;
 
   /* Are we on a trampoline block? If not, no action */
-  attr_address = zx_pxy2aaddr( game_state->player_xpos, game_state->player_ypos+8  );
+  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
   attr = *attr_address;
 
   if( (attr & 0x38) != PAPER_RED ) {
-    if( MODULO8(game_state->player_xpos) == 0 )
+    if( MODULO8(game_state->runner->xpos) == 0 )
       return NO_ACTION;
       
-    attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos+8  );
+    attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
     attr = *attr_address;
 
     if( (attr & 0x38) != PAPER_RED )
@@ -73,14 +73,14 @@ GAME_ACTION test_for_falling( void* data )
     return NO_ACTION;
 
   /* Are we on a coloured block? If not, no action */
-  attr_address = zx_pxy2aaddr( game_state->player_xpos, game_state->player_ypos+8  );
+  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
   attr = *attr_address;
   
   if( (attr & 0x38) != PAPER_WHITE )
     return NO_ACTION;
 
   /* So player is on a clear block. If aligned to the cell, fall through */
-  if( MODULO8(game_state->player_xpos) == 0 )
+  if( MODULO8(game_state->runner->xpos) == 0 )
     return MOVE_DOWN;
 
   return NO_ACTION;

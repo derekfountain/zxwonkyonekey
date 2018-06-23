@@ -11,9 +11,6 @@ typedef struct _game_state
   uint8_t key_processed;
 
   RUNNER* runner;
-
-  uint8_t player_xpos;
-  uint8_t player_ypos;
 }
 GAME_STATE;
 
