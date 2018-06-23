@@ -7,6 +7,19 @@
 GAME_ACTION test_for_direction_change( void* data )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
+  uint8_t*    attr_address;
+  uint8_t     attr;
+
+  if( MODULO8(game_state->player_xpos) == 0 ) {
+    if( game_state->runner_state->direction == RUNNER_RIGHT )
+      attr_address = zx_pxy2aaddr( game_state->player_xpos+8, game_state->player_ypos );
+    else
+      attr_address = zx_pxy2aaddr( game_state->player_xpos-8, game_state->player_ypos );
+    attr = *attr_address;
+  
+    if( (attr & 0x38) != PAPER_WHITE )
+      return TOGGLE_DIRECTION;
+  }
 
   if( game_state->key_pressed && ! game_state->key_processed ) {
     game_state->key_processed = 1;
