@@ -11,6 +11,7 @@
 #include "action.h"
 #include "key_action.h"
 #include "levels.h"
+#include "tracetable.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -27,6 +28,16 @@ LOOP_ACTION game_actions[] =
 
 int main()
 {
+  if( is_rom_writable() ) {
+    /* Flicker the border if ROM is being used for trace */
+
+    zx_border(INK_RED);
+    z80_delay_ms(100);
+    zx_border(INK_BLUE);
+    z80_delay_ms(100);
+    zx_border(INK_WHITE);
+  }
+
   zx_border(INK_BLACK);
   setup_int();
 
