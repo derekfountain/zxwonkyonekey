@@ -17,7 +17,6 @@ GAME_ACTION;
 typedef struct _loop_action
 {
   GAME_ACTION (*test_action)(void* data);
-  void*         data;
 }
 LOOP_ACTION;
 

@@ -11,19 +11,11 @@
 #include "action.h"
 #include "key_action.h"
 #include "levels.h"
+#include "gameloop.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
 GAME_STATE game_state;
-
-LOOP_ACTION game_actions[] =
-  {
-    {test_for_falling,          &game_state},
-    {test_for_start_jump,       &game_state},
-    {test_for_direction_change, &game_state},
-    {move_sideways,             &game_state},
-  };
-#define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
 int main()
 {
@@ -36,67 +28,23 @@ int main()
 
   game_state.runner = create_runner( RIGHT );
 
-  level1();
-  sp1_Invalidate(&full_screen);
-  sp1_UpdateNow();
+  while( 1 ) {
 
-  /* Wait in case the user is holding down the control key */
-  while( in_key_pressed( IN_KEY_SCANCODE_SPACE ) );
-  game_state.key_pressed = 0;
-  game_state.key_processed = 0;
-
-  game_state.runner->xpos = 0;
-  game_state.runner->ypos = 96;
-
-  while(1) {
-    uint8_t i;
-    GAME_ACTION action;
-
-    if( in_key_pressed( IN_KEY_SCANCODE_SPACE ) ) {
-      game_state.key_pressed = 1;
-    } else {
-      game_state.key_pressed = 0;
-      game_state.key_processed = 0;
-    }
-
-    for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
-      action = (game_actions[i].test_action)(game_actions[i].data);
-      if( action != NO_ACTION )
-	break;
-    }
-
-    switch( action )
-    {
-    case TOGGLE_DIRECTION:
-      toggle_runner_direction();
-      break;
-
-    case JUMP:
-      start_runner_jumping();
-      break;
-
-    case MOVE_DOWN:
-      game_state.runner->ypos++;
-      break;
-
-    case MOVE_UP:
-      game_state.runner->ypos--;
-      break;
-
-    case MOVE_RIGHT:
-      game_state.runner->xpos++;
-      break;
-
-    case MOVE_LEFT:
-      game_state.runner->xpos--;
-      break;
-
-    }
-
-    position_runner( game_state.runner->xpos, &game_state.runner->ypos );
-
+    /* Draw the level */
+    level1();
+    sp1_Invalidate(&full_screen);
     sp1_UpdateNow();
-    intrinsic_halt();
-//    z80_delay_ms(25);
+
+    /* Wait in case the user is holding down the control key */
+    while( in_key_pressed( IN_KEY_SCANCODE_SPACE ) );
+    game_state.key_pressed = 0;
+    game_state.key_processed = 0;
+
+    /* Runner at start point */
+    game_state.runner->xpos = 0;
+    game_state.runner->ypos = 96;
+
+    /* Enter game loop, exit when player dies */
+    gameloop( &game_state );
   }
 }
