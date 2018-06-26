@@ -22,6 +22,7 @@ OBJECTS = levels.o \
           int.o \
 	  runner.o \
 	  runner_sprite.o \
+          gameloop.o \
           tracetable.o
 
 %.o: %.c $(PRAGMA_FILE)

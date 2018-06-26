@@ -10,6 +10,23 @@
 #include "action.h"
 #include "key_action.h"
 #include "levels.h"
+#include "tracetable.h"
+
+typedef enum _gameloop_tracetype
+{
+  ENTER,
+  KEY_STATE,
+  ACTION,
+  EXIT,
+} GAMELOOP_TRACETYPE;
+
+typedef struct _gameloop_trace
+{
+  GAMELOOP_TRACETYPE tracetype;
+  uint8_t            key_pressed;
+  uint8_t            key_processed;
+  GAME_ACTION        action;
+} GAMELOOP_TRACE;
 
 LOOP_ACTION game_actions[] =
   {
