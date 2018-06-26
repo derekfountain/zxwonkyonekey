@@ -2,6 +2,7 @@
 #include <arch/zx/sp1.h>
 #include <intrinsic.h>
 #include <input.h>
+#include <string.h>
 #include <stdint.h>
 #include <z80.h>
 
@@ -11,6 +12,8 @@
 #include "key_action.h"
 #include "levels.h"
 #include "tracetable.h"
+
+#include <stdio.h>
 
 typedef enum _gameloop_tracetype
 {
@@ -31,7 +34,25 @@ typedef struct _gameloop_trace
 #define GAMELOOP_TRACE_ENTRIES 50
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
-GAMELOOP_TRACE* gameloop_tracetable = NULL;
+GAMELOOP_TRACE* gameloop_tracetable = 0xFFFF;
+GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
+
+void gameloop_add_trace( GAMELOOP_TRACETYPE type, uint8_t kpressed, uint8_t kprocessed, GAME_ACTION act )
+{
+  GAMELOOP_TRACE glt;
+
+  /* TODO This will be faster to load the fields in the caller and pass a pointer to the struct? */
+  glt.tracetype =     type; 
+  glt.key_pressed =   kpressed;
+  glt.key_processed = kprocessed;
+  glt.action =        act;
+  memcpy(gameloop_next_trace, &glt, sizeof(glt));
+
+  gameloop_next_trace = (void*)((uint8_t*)gameloop_next_trace + sizeof(glt));
+
+  if( gameloop_next_trace == (void*)((uint8_t*)gameloop_tracetable+GAMELOOP_TRACETABLE_SIZE) )
+      gameloop_next_trace = gameloop_tracetable;
+}
 
 LOOP_ACTION game_actions[] =
   {
@@ -44,8 +65,8 @@ LOOP_ACTION game_actions[] =
 
 void gameloop( GAME_STATE* game_state )
 {
-  if( gameloop_tracetable == NULL )
-    gameloop_tracetable = allocate_tracetable(GAMELOOP_TRACETABLE_SIZE);
+  if( gameloop_tracetable == (GAMELOOP_TRACE*)0xFFFF )
+    gameloop_tracetable = gameloop_next_trace = allocate_tracetable(GAMELOOP_TRACETABLE_SIZE);
 
   while(1) {
     uint8_t     i;
@@ -63,6 +84,8 @@ void gameloop( GAME_STATE* game_state )
       if( action != NO_ACTION )
 	break;
     }
+
+    gameloop_add_trace(ACTION, game_state->key_pressed, game_state->key_processed, action);
 
     switch( action )
     {
