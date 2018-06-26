@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdint.h>
 #include <z80.h>
 
@@ -23,6 +24,20 @@ void add_trace( TRACE_ENTRY* trace )
 
   tracetable_head += sizeof(TRACE_ENTRY);
 }
+
+void* allocate_tracetable( size_t size )
+{
+  void* allocated_block;
+
+  if( (size_t)tracetable_head + size > MAX_TRACE_MEMORY )
+    return NULL;
+
+  allocated_block = tracetable_head;
+  tracetable_head += size;
+
+  return allocated_block;
+}
+
 
 uint8_t is_rom_writable(void)
 {
