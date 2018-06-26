@@ -16,13 +16,13 @@ ASFLAGS=$(TARGET) $(VERBOSITY) -c
 EXEC=zxrunner.tap
 EXEC_OUTPUT=zxrunner
 
-OBJECTS = levels.o \
+OBJECTS = gameloop.o \
+          levels.o \
           key_action.o \
           main.o \
           int.o \
 	  runner.o \
 	  runner_sprite.o \
-          gameloop.o \
           tracetable.o
 
 %.o: %.c $(PRAGMA_FILE)
