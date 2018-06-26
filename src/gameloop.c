@@ -28,6 +28,11 @@ typedef struct _gameloop_trace
   GAME_ACTION        action;
 } GAMELOOP_TRACE;
 
+#define GAMELOOP_TRACE_ENTRIES 50
+#define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
+
+GAMELOOP_TRACE* gameloop_tracetable = NULL;
+
 LOOP_ACTION game_actions[] =
   {
     {test_for_falling               },
@@ -39,6 +44,9 @@ LOOP_ACTION game_actions[] =
 
 void gameloop( GAME_STATE* game_state )
 {
+  if( gameloop_tracetable == NULL )
+    gameloop_tracetable = allocate_tracetable(GAMELOOP_TRACETABLE_SIZE);
+
   while(1) {
     uint8_t     i;
     GAME_ACTION action;

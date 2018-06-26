@@ -3,6 +3,6 @@
 
 #include "game_state.h"
 
-void gameloop( GAME_STATE* game_state );
+void  gameloop( GAME_STATE* game_state );
 
 #endif

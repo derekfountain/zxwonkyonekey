@@ -13,4 +13,11 @@
  */
 uint8_t is_rom_writable(void);
 
+/*
+ * Allocate memory to hold a tracetable of 'size' bytes.
+ * Returns a pointer to the zeroth byte (i.e. the first
+ * trace entry).
+ */
+void* allocate_tracetable( size_t size );
+
 #endif

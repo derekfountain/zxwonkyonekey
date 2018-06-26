@@ -4,6 +4,12 @@
 
 #include "tracetable.h"
 
+/*
+trace entry is a client thing. the structure of the entry, plus
+the tracetable, plus the index of the slot for the next entry,
+all need to go into the client code.
+use macros to build all this in a generic way?
+ */
 typedef struct _trace_entry
 {
   uint8_t i8;
@@ -29,7 +35,7 @@ void* allocate_tracetable( size_t size )
 {
   void* allocated_block;
 
-  if( (size_t)tracetable_head + size > MAX_TRACE_MEMORY )
+  if( (!is_rom_writable()) || (size_t)tracetable_head + size > MAX_TRACE_MEMORY )
     return NULL;
 
   allocated_block = tracetable_head;
@@ -38,19 +44,12 @@ void* allocate_tracetable( size_t size )
   return allocated_block;
 }
 
-
+/*
+ * TODO This needs to go into a utility.c file
+ */
 uint8_t is_rom_writable(void)
 {
   uint8_t byte0 = z80_bpeek(0);
-
-  TRACE_ENTRY t;
-
-  t.i8 = 0x55;
-  t.i16 = 0xAAAA;
-  t.ptr = (void*)add_trace;
-
-  add_trace( &t );
-  while(1);
 
   z80_bpoke( 0, ~byte0 );
   if( z80_bpeek(0) == byte0 )
