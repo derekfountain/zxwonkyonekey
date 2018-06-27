@@ -13,13 +13,22 @@
 #include "levels.h"
 #include "tracetable.h"
 
-#include <stdio.h>
+/***
+ *      _______             _             
+ *     |__   __|           (_)            
+ *        | |_ __ __ _  ___ _ _ __   __ _ 
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/ 
+ */
 
 typedef enum _gameloop_tracetype
 {
   ENTER,
   KEY_STATE,
-  GLT_ACTION,
+  ACTION,
   EXIT,
 } GAMELOOP_TRACETYPE;
 
@@ -39,7 +48,7 @@ typedef struct _gameloop_trace
 GAMELOOP_TRACE* gameloop_tracetable = 0xFFFF;
 GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
 
-/* I think it's quicker to do this with a macro, as long as it's only used once or twice */
+/* It's quicker to do this with a macro, as long as it's only used once or twice */
 #define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act) {  \
  GAMELOOP_TRACE    glt;   \
  glt.tracetype     = ttype; \
@@ -60,6 +69,8 @@ void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
   if( gameloop_next_trace == (void*)((uint8_t*)gameloop_tracetable+GAMELOOP_TRACETABLE_SIZE) )
       gameloop_next_trace = gameloop_tracetable;
 }
+
+
 
 LOOP_ACTION game_actions[] =
   {
@@ -92,11 +103,11 @@ void gameloop( GAME_STATE* game_state )
 	break;
     }
 
-    GAMELOOP_TRACE_CREATE(GLT_ACTION, game_state->key_pressed,
-                                      game_state->key_processed,
-                                      game_state->runner->xpos,
-                                      game_state->runner->ypos,
-                                      action);
+    GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
+                                  game_state->key_processed,
+                                  game_state->runner->xpos,
+                                  game_state->runner->ypos,
+                                  action);
 
     switch( action )
     {

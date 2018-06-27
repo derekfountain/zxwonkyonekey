@@ -1,0 +1,112 @@
+def INT struct
+  {
+   n16  hex  "INT"
+  }
+
+def PTR struct
+  {
+   n16  sym  "PTR"
+  }
+
+def BOOLEAN struct
+  {
+   n8  hex  "boolean"
+  }
+
+def boolean_t struct
+  {
+   n8  hex  "boolean_t"
+  }
+
+def size_t struct
+  {
+   n16  hex  "size_t"
+  }
+
+def int struct
+  {
+   n16  hex  "int"
+  }
+
+def intptr_t struct
+  {
+   n16  hex  "intptr_t"
+  }
+
+def uintptr_t struct
+  {
+   n16  hex  "uintptr_t"
+  }
+
+def long struct
+  {
+   n32  hex  "long"
+  }
+
+def uint64_t struct
+  {
+   n64  hex  "uint64_t"
+  }
+
+def uint32_t struct
+  {
+   n32  hex  "uint32_t"
+  }
+
+def uint16_t struct
+  {
+   n16  hex  "uint16_t"
+  }
+
+def uint8_t struct
+  {
+   n8  hex  "uint8_t"
+  }
+
+def int64_t struct
+  {
+   n64  hex  "int64_t"
+  }
+
+def int32_t struct
+  {
+   n32  hex  "int32_t"
+  }
+
+def int16_t struct
+  {
+   n16  hex  "int16_t"
+  }
+
+def int8_t struct
+  {
+   n8  hex  "int8_t"
+  }
+
+def char struct
+  {
+   n8  asc  "char"
+  }
+
+def STRING struct
+  {
+     union
+     {
+       buf 1024 asc zterm  "string"
+       expr "." ptr DUMP suppress "  string as DUMP"
+     }
+   }
+
+def BYTES struct
+  {
+  buf 16 asc   "bytes"
+  }
+
+def LE_ADDR struct
+{
+  n16 le "addr"
+}
+
+def NullDef struct
+  {
+  }
