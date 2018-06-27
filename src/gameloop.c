@@ -19,7 +19,7 @@ typedef enum _gameloop_tracetype
 {
   ENTER,
   KEY_STATE,
-  ACTION,
+  GLT_ACTION,
   EXIT,
 } GAMELOOP_TRACETYPE;
 
@@ -28,27 +28,34 @@ typedef struct _gameloop_trace
   GAMELOOP_TRACETYPE tracetype;
   uint8_t            key_pressed;
   uint8_t            key_processed;
+  uint8_t            xpos;
+  uint8_t            ypos;
   GAME_ACTION        action;
 } GAMELOOP_TRACE;
 
-#define GAMELOOP_TRACE_ENTRIES 50
+#define GAMELOOP_TRACE_ENTRIES 250
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
 GAMELOOP_TRACE* gameloop_tracetable = 0xFFFF;
 GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
 
-void gameloop_add_trace( GAMELOOP_TRACETYPE type, uint8_t kpressed, uint8_t kprocessed, GAME_ACTION act )
+/* I think it's quicker to do this with a macro, as long as it's only used once or twice */
+#define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act) {  \
+ GAMELOOP_TRACE    glt;   \
+ glt.tracetype     = ttype; \
+ glt.key_pressed   = keypressed; \
+ glt.key_processed = keyprocessed; \
+ glt.xpos          = x; \
+ glt.ypos          = y; \
+ glt.action        = act; \
+ gameloop_add_trace(&glt); \
+}
+
+void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
 {
-  GAMELOOP_TRACE glt;
+  memcpy(gameloop_next_trace, glt_ptr, sizeof(GAMELOOP_TRACE));
 
-  /* TODO This will be faster to load the fields in the caller and pass a pointer to the struct? */
-  glt.tracetype =     type; 
-  glt.key_pressed =   kpressed;
-  glt.key_processed = kprocessed;
-  glt.action =        act;
-  memcpy(gameloop_next_trace, &glt, sizeof(glt));
-
-  gameloop_next_trace = (void*)((uint8_t*)gameloop_next_trace + sizeof(glt));
+  gameloop_next_trace = (void*)((uint8_t*)gameloop_next_trace + sizeof(GAMELOOP_TRACE));
 
   if( gameloop_next_trace == (void*)((uint8_t*)gameloop_tracetable+GAMELOOP_TRACETABLE_SIZE) )
       gameloop_next_trace = gameloop_tracetable;
@@ -85,7 +92,11 @@ void gameloop( GAME_STATE* game_state )
 	break;
     }
 
-    gameloop_add_trace(ACTION, game_state->key_pressed, game_state->key_processed, action);
+    GAMELOOP_TRACE_CREATE(GLT_ACTION, game_state->key_pressed,
+                                      game_state->key_processed,
+                                      game_state->runner->xpos,
+                                      game_state->runner->ypos,
+                                      action);
 
     switch( action )
     {
