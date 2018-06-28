@@ -46,6 +46,7 @@ typedef struct _runner
 }
 RUNNER;
 
+
 /*
  * Create the runner, initially facing in the direction given.
  */
@@ -64,6 +65,10 @@ RUNNER* create_runner( DIRECTION initial_direction );
  * above the requested position. In this case the sprite's
  * actual y-coordinate is returned.
  */
+/* TODO I need to fix this offset thing. Currently the y position
+ of the runner, which is traced, isn't the y position at all if
+ he's jumping!
+*/
 void position_runner( uint8_t x, uint8_t* y );
 
 /*

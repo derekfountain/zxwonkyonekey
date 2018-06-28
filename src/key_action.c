@@ -13,8 +13,15 @@ Level data needs to be in the game state.
 
  */
 
-
-/*
+/***
+ *      _____  _               _   _                _____ _                            
+ *     |  __ \(_)             | | (_)              / ____| |                           
+ *     | |  | |_ _ __ ___  ___| |_ _  ___  _ __   | |    | |__   __ _ _ __   __ _  ___ 
+ *     | |  | | | '__/ _ \/ __| __| |/ _ \| '_ \  | |    | '_ \ / _` | '_ \ / _` |/ _ \
+ *     | |__| | | | |  __| (__| |_| | (_) | | | | | |____| | | | (_| | | | | (_| |  __/
+ *     |_____/|_|_|  \___|\___|\__|_|\___/|_| |_|  \_____|_| |_|\__,_|_| |_|\__, |\___|
+ *                                                                           __/ |     
+ *                                                                          |___/      
  * Test for direction change.
  *
  * Runner changes direction if he hits a wall or the user
@@ -49,13 +56,23 @@ GAME_ACTION test_for_direction_change( void* data )
   return NO_ACTION;
 }
 
-/*
+
+
+/***
+ *           _                      ___  
+ *          | |                    |__ \ 
+ *          | |_   _ _ __ ___  _ __   ) |
+ *      _   | | | | | '_ ` _ \| '_ \ / / 
+ *     | |__| | |_| | | | | | | |_) |_|  
+ *      \____/ \__,_|_| |_| |_| .__/(_)  
+ *                            | |        
+ *                            |_|        
  * Test for making runner jump.
  *
  * Runner jumps if:
  *
- *  he's not already jumping
- *  part of him is on a trampoline block
+ *  he's not already jumping; and
+ *  part of him is on a trampoline block; and
  *  player hits the control key
  */
 GAME_ACTION test_for_start_jump( void* data )
@@ -93,13 +110,23 @@ GAME_ACTION test_for_start_jump( void* data )
   return NO_ACTION;
 }
 
-/*
+
+
+
+/***
+ *      ______    _ _ ___  
+ *     |  ____|  | | |__ \ 
+ *     | |__ __ _| | |  ) |
+ *     |  __/ _` | | | / / 
+ *     | | | (_| | | ||_|  
+ *     |_|  \__,_|_|_|(_)  
+ *                         
  * Test for making runner fall:
  *
  * Runner falls if:
  *
- *  he's not in the middle of a jump
- *  the attribute cell underneath him is clear
+ *  he's not in the middle of a jump; and
+ *  the attribute cell underneath him is clear; and
  *  he's aligned on top of that cell
  */
 GAME_ACTION test_for_falling( void* data )

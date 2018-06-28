@@ -24,6 +24,8 @@
  *        |_|_|  \__,_|\___|_|_| |_|\__, |
  *                                   __/ |
  *                                  |___/ 
+ *
+ * This defines the game loop's trace table.
  */
 
 typedef enum _gameloop_tracetype
@@ -72,6 +74,24 @@ void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
       gameloop_next_trace = gameloop_tracetable;
 }
 
+
+
+
+/***
+ *       _____                                     _   _                 
+ *      / ____|                          /\       | | (_)                
+ *     | |  __  __ _ _ __ ___   ___     /  \   ___| |_ _  ___  _ __  ___ 
+ *     | | |_ |/ _` | '_ ` _ \ / _ \   / /\ \ / __| __| |/ _ \| '_ \/ __|
+ *     | |__| | (_| | | | | | |  __/  / ____ | (__| |_| | (_) | | | \__ \
+ *      \_____|\__,_|_| |_| |_|\___| /_/    \_\___|\__|_|\___/|_| |_|___/
+ *                                                                       
+ *                                                                       
+ * Game actions are the actions which happen every game loop. This is a carefully
+ * ordered list of functions, called each time round the loop. When one returns
+ * a value which isn't NO_ACTION the list processing stops and what was returned
+ * is the action to take for this time round the game loop.
+ */
+
 LOOP_ACTION game_actions[] =
   {
     {test_for_falling               },
@@ -81,6 +101,19 @@ LOOP_ACTION game_actions[] =
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
+
+
+
+/***
+ *      _______ _             _____                        _                       
+ *     |__   __| |           / ____|                      | |                      
+ *        | |  | |__   ___  | |  __  __ _ _ __ ___   ___  | |     ___   ___  _ __  
+ *        | |  | '_ \ / _ \ | | |_ |/ _` | '_ ` _ \ / _ \ | |    / _ \ / _ \| '_ \ 
+ *        | |  | | | |  __/ | |__| | (_| | | | | | |  __/ | |___| (_) | (_) | |_) |
+ *        |_|  |_| |_|\___|  \_____|\__,_|_| |_| |_|\___| |______\___/ \___/| .__/ 
+ *                                                                          | |    
+ *                                                                          |_|    
+ */
 void gameloop( GAME_STATE* game_state )
 {
   if( gameloop_tracetable == (GAMELOOP_TRACE*)0xFFFF )

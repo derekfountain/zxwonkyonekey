@@ -4,7 +4,7 @@
 #include "action.h"
 
 /*
- * Information on these is in the C code file.
+ * Information on these game action functions is in the C code file.
  */
 
 GAME_ACTION test_for_direction_change( void* data );

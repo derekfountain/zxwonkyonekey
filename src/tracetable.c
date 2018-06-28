@@ -6,31 +6,10 @@
 #include "tracetable.h"
 
 /*
-trace entry is a client thing. the structure of the entry, plus
-the tracetable, plus the index of the slot for the next entry,
-all need to go into the client code.
-use macros to build all this in a generic way?
+ * Still not quite sure how this is going to hang together.
  */
-typedef struct _trace_entry
-{
-  uint8_t i8;
-  uint16_t i16;
-  void* ptr;
-} TRACE_ENTRY;
 
-
-static TRACE_ENTRY* tracetable_head = 0;
-
-void add_trace( TRACE_ENTRY* trace )
-{
-  TRACE_ENTRY* trace_addr = tracetable_head;
-  
-  trace_addr->i8 = trace->i8;
-  trace_addr->i16 = trace->i16;
-  trace_addr->ptr = trace->ptr;
-
-  tracetable_head += sizeof(TRACE_ENTRY);
-}
+static uint8_t* tracetable_head = (void*)0;
 
 void* allocate_tracetable( size_t size )
 {

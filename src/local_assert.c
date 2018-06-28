@@ -18,7 +18,7 @@
  *
  * grep the map file for the local_assert_bp
  * symbol and put a breakpoint on it. With a recent
- * fuse, which supports the python debugger interface
+ * fuse, which supports the python debugger interface,
  * something like this:
  *
  * PYTHONPATH=. ./fuse --debugger-command "break $(grep -P '^_local_assert_bp' zxrunner.map | perl -ne '/(\$\w\w\w\w)/ && print "$1"')"

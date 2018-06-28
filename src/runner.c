@@ -28,7 +28,16 @@ extern uint8_t runner_left_f8[];
  */
 const struct sp1_Rect runner_screen = {0, 0, 32, 24};
 
-/*
+
+/***
+ *           _                        __     __   ____   __  __          _       
+ *          | |                       \ \   / /  / __ \ / _|/ _|        | |      
+ *          | |_   _ _ __ ___  _ __    \ \_/ /  | |  | | |_| |_ ___  ___| |_ ___ 
+ *      _   | | | | | '_ ` _ \| '_ \    \   /   | |  | |  _|  _/ __|/ _ | __/ __|
+ *     | |__| | |_| | | | | | | |_) |    | |    | |__| | | | | \__ |  __| |_\__ \
+ *      \____/ \__,_|_| |_| |_| .__/     |_|     \____/|_| |_| |___/\___|\__|___/
+ *                            | |                                                
+ *                            |_|                                                
  * Table of offsets in the y-position the runner takes as he
  * goes through the jump animation.
  * This data set makes the jump 5 chars wide, with a sharp
@@ -44,6 +53,9 @@ const int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
 			          -1, -1, -1, -2,   -2, -2, -2, -2 };
 
 /*
+ * Size in bytes of one frame of the runner sprite graphic. It's currently
+ * bytes of data plus 8 bytes of padding.
+ *
  * For flexibility I want to do something like:
  *
  *  static const uint16_t runner_frame_size = runner_right_f2-runner_right_f1;
@@ -61,23 +73,26 @@ const int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
  */
 #define RUNNER_FRAME_SIZE (uint16_t)16
 
+
 /*
  * Structure to look after the runner character.
  */
 static RUNNER runner;
+
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
-  runner.xpos = 0;
-  runner.ypos = 0;
+  runner.xpos        = 0;
+  runner.ypos        = 0;
   runner.facing      = initial_direction;
   runner.jump_offset = NOT_JUMPING;
 
   return &runner;
 }
+
 
 void position_runner( uint8_t x, uint8_t* y )
 {
@@ -106,6 +121,7 @@ void position_runner( uint8_t x, uint8_t* y )
     runner_data = runner_left_f1+offset_to_frame;
   }
 
+  /* TODO Break this out of here, it's wrong */
   if( RUNNER_JUMPING(runner.jump_offset) ) {
     *y -= jump_y_offsets[runner.jump_offset];
     if( ++runner.jump_offset == sizeof(jump_y_offsets) ) {
@@ -115,6 +131,7 @@ void position_runner( uint8_t x, uint8_t* y )
 
   sp1_MoveSprPix(runner.sprite, &runner_screen, runner_data, x, *y);
 }
+
 
 void toggle_runner_direction(void)
 {
@@ -136,10 +153,12 @@ void toggle_runner_direction(void)
       runner.jump_offset = sizeof(jump_y_offsets) - runner.jump_offset;
 }
 
+
 void start_runner_jumping(void)
 {
   runner.jump_offset = 0;
 }
+
 
 GAME_ACTION move_sideways( void* data )
 {

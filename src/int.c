@@ -9,7 +9,11 @@
  * Not sure what to do with the interrupt as yet.
  */
 
-uint8_t ticker = 0;
+/*
+ * The "getter" for this is currently a macro, so don't make this
+ * static.
+ */
+uint16_t ticker = 0;
 
 IM2_DEFINE_ISR(isr)
 {

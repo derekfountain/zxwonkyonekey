@@ -43,4 +43,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map zcc_opt.def *~ /tmp/tmpXX* 
+	rm -f *.o *.bin *.tap *.map *.ss zcc_opt.def *~ /tmp/tmpXX*
+	rm -rf __pycache__
