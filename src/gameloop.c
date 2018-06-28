@@ -12,6 +12,8 @@
 #include "key_action.h"
 #include "levels.h"
 #include "tracetable.h"
+#include "local_assert.h"
+
 
 /***
  *      _______             _             
@@ -69,8 +71,6 @@ void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
   if( gameloop_next_trace == (void*)((uint8_t*)gameloop_tracetable+GAMELOOP_TRACETABLE_SIZE) )
       gameloop_next_trace = gameloop_tracetable;
 }
-
-
 
 LOOP_ACTION game_actions[] =
   {

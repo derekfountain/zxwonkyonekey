@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <z80.h>
+#include <string.h>
 
 #include "tracetable.h"
 
@@ -56,5 +57,9 @@ uint8_t is_rom_writable(void)
     return 0;
 
   z80_bpoke( 0, byte0 );
+
+  /* TODO Move this. It can't be here in case this routine ends up in a fast loop. */
+  memset(0, 0, 0x4000);
+
   return 1;
 }
