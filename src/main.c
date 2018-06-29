@@ -41,12 +41,13 @@ int main()
 {
   if( is_rom_writable() ) {
     /* Flicker the border if ROM is being used for trace */
-
     zx_border(INK_RED);
     z80_delay_ms(100);
     zx_border(INK_BLUE);
     z80_delay_ms(100);
     zx_border(INK_WHITE);
+
+    clear_trace_area();    
   }
 
   zx_border(INK_BLACK);

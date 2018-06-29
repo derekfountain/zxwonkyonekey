@@ -32,6 +32,7 @@
 #include "levels.h"
 #include "tracetable.h"
 #include "local_assert.h"
+#include "int.h"
 
 
 /***
@@ -57,6 +58,7 @@ typedef enum _gameloop_tracetype
 
 typedef struct _gameloop_trace
 {
+  uint16_t           ticker;
   GAMELOOP_TRACETYPE tracetype;
   uint8_t            key_pressed;
   uint8_t            key_processed;
@@ -68,19 +70,22 @@ typedef struct _gameloop_trace
 #define GAMELOOP_TRACE_ENTRIES 250
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
-GAMELOOP_TRACE* gameloop_tracetable = 0xFFFF;
+GAMELOOP_TRACE* gameloop_tracetable = TRACING_UNINITIALISED;
 GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
 
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
 #define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act) {  \
- GAMELOOP_TRACE    glt;   \
- glt.tracetype     = ttype; \
- glt.key_pressed   = keypressed; \
- glt.key_processed = keyprocessed; \
- glt.xpos          = x; \
- glt.ypos          = y; \
- glt.action        = act; \
- gameloop_add_trace(&glt); \
+    if( gameloop_tracetable != TRACING_INACTIVE ) { \
+      GAMELOOP_TRACE    glt;   \
+      glt.ticker        = GET_TICKER; \
+      glt.tracetype     = ttype; \
+      glt.key_pressed   = keypressed; \
+      glt.key_processed = keyprocessed; \
+      glt.xpos          = x; \
+      glt.ypos          = y; \
+      glt.action        = act; \
+      gameloop_add_trace(&glt); \
+    } \
 }
 
 void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
@@ -135,7 +140,7 @@ LOOP_ACTION game_actions[] =
  */
 void gameloop( GAME_STATE* game_state )
 {
-  if( gameloop_tracetable == (GAMELOOP_TRACE*)0xFFFF )
+  if( gameloop_tracetable == TRACING_UNINITIALISED )
     gameloop_tracetable = gameloop_next_trace = allocate_tracetable(GAMELOOP_TRACETABLE_SIZE);
 
   while(1) {

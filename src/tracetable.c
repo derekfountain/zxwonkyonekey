@@ -25,7 +25,11 @@
 #include "tracetable.h"
 
 /*
+ * TODO
  * Still not quite sure how this is going to hang together.
+ * I can't return "inactive" if there are several tables active
+ * but no room for one more. I need an index of where they all
+ * are so I can find them in the memory map. Etc.
  */
 
 static uint8_t* tracetable_head = (void*)0;
@@ -35,7 +39,7 @@ void* allocate_tracetable( size_t size )
   void* allocated_block;
 
   if( (!is_rom_writable()) || (size_t)tracetable_head + size > MAX_TRACE_MEMORY )
-    return NULL;
+    return TRACING_INACTIVE;
 
   allocated_block = tracetable_head;
   tracetable_head += size;
@@ -43,8 +47,15 @@ void* allocate_tracetable( size_t size )
   return allocated_block;
 }
 
+void* clear_trace_area(void)
+{
+  memset(TRACE_MEMORY_START, 0, MAX_TRACE_MEMORY);
+}
+
 /*
- * TODO This needs to go into a utility.c file
+ * Utility function to see if the ROM area is writable. In this program
+ * the ROM area is used for a tracetable, so this is a reasonable place
+ * for this function.
  */
 uint8_t is_rom_writable(void)
 {
@@ -55,9 +66,6 @@ uint8_t is_rom_writable(void)
     return 0;
 
   z80_bpoke( 0, byte0 );
-
-  /* TODO Move this. It can't be here in case this routine ends up in a fast loop. */
-  memset(0, 0, 0x4000);
 
   return 1;
 }

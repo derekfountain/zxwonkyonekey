@@ -22,6 +22,8 @@
 
 #include <stdint.h>
 
+extern uint16_t ticker;
+
 void setup_int(void);
 
 /*

@@ -22,12 +22,13 @@ map _GAME_ACTION
 
 def GAMELOOP_TRACE struct
 {
-  n8 map _GAMELOOP_TRACETYPE "trace type"
-  n8 hex                     "key pressed"      
-  n8 hex                     "key processed"      
-  n8 dec                     "xpos"      
-  n8 dec                     "ypos"      
-  n8 map _GAME_ACTION        "action"
+  n16 dec                     "50Hz ticker"
+  n8  map _GAMELOOP_TRACETYPE "trace type"
+  n8  hex                     "key pressed"      
+  n8  hex                     "key processed"      
+  n8  dec                     "xpos"      
+  n8  dec                     "ypos"      
+  n8  map _GAME_ACTION        "action"
 }
  
 def GAMELOOP_TRACE_TABLE

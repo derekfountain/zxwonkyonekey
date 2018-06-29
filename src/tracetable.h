@@ -20,6 +20,15 @@
 #ifndef __TRACETABLE_H
 #define __TRACETABLE_H
 
+#define TRACING_UNINITIALISED ((void*)0xFFFF)
+#define TRACING_INACTIVE      ((void*)0xFFFE)
+
+/*
+ * Start of memory area used for trace table. Spectrum's ROM starts
+ * at zero.
+ */
+#define TRACE_MEMORY_START ((uint16_t)0)
+
 /*
  * Maximum amount of memory to allocate to tracetables.
  * We use the ROM area, so 16K.
@@ -31,6 +40,12 @@
  * Answers 1 if it is, or 0 if not.
  */
 uint8_t is_rom_writable(void);
+
+/*
+ * Clear or otherwise initialise the area of memory all the
+ * tracing will go into.
+ */
+void* clear_trace_area(void);
 
 /*
  * Allocate memory to hold a tracetable of 'size' bytes.

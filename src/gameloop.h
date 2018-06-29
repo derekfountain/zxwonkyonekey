@@ -26,6 +26,6 @@
  * This function is the main game loop. It exits when the player dies
  * or completes the level.
  */
-void  gameloop( GAME_STATE* game_state );
+void gameloop( GAME_STATE* game_state );
 
 #endif
