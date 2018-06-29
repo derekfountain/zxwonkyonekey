@@ -30,8 +30,8 @@ CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -compiler sdcc -clib=sdcc_iy -pr
 LDFLAGS=$(TARGET) $(VERBOSITY) -m -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
 ASFLAGS=$(TARGET) $(VERBOSITY) -c
 
-EXEC=zxrunner.tap
-EXEC_OUTPUT=zxrunner
+EXEC=wonky.tap
+EXEC_OUTPUT=wonky
 
 OBJECTS = gameloop.o \
           levels.o \

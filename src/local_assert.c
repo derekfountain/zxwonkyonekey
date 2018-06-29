@@ -40,7 +40,7 @@
  * fuse, which supports the python debugger interface,
  * something like this:
  *
- * PYTHONPATH=. ./fuse --debugger-command "break $(grep -P '^_local_assert_bp' zxrunner.map | perl -ne '/(\$\w\w\w\w)/ && print "$1"')"
+ * PYTHONPATH=. ./fuse --debugger-command "break $(grep -P '^_local_assert_bp' wonky.map | perl -ne '/(\$\w\w\w\w)/ && print "$1"')"
  */
 
 void local_assert_bp(void)
