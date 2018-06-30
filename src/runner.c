@@ -18,10 +18,13 @@
  */
 
 #include <stdint.h>
+#include <string.h>
 #include <arch/zx/sp1.h>
 
 #include "runner.h"
 #include "game_state.h"
+#include "tracetable.h"
+#include "int.h"
 
 extern uint8_t runner_right_f1[];
 extern uint8_t runner_right_f2[];
@@ -40,6 +43,65 @@ extern uint8_t runner_left_f5[];
 extern uint8_t runner_left_f6[];
 extern uint8_t runner_left_f7[];
 extern uint8_t runner_left_f8[];
+
+/***
+ *      _______             _             
+ *     |__   __|           (_)            
+ *        | |_ __ __ _  ___ _ _ __   __ _ 
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/ 
+ *
+ * This defines the runner's trace table.
+ */
+
+typedef enum _runner_tracetype
+{
+  JUMP_START,
+  JUMPING,
+  JUMP_LAST,
+} RUNNER_TRACETYPE;
+
+typedef struct _runner_trace
+{
+  uint16_t           ticker;
+  RUNNER_TRACETYPE   tracetype;
+  uint8_t            xpos;
+  uint8_t            ypos;
+   int8_t            ydelta;
+} RUNNER_TRACE;
+
+#define RUNNER_TRACE_ENTRIES 50
+#define RUNNER_TRACETABLE_SIZE ((size_t)sizeof(RUNNER_TRACE)*RUNNER_TRACE_ENTRIES)
+
+RUNNER_TRACE* runner_tracetable = TRACING_UNINITIALISED;
+RUNNER_TRACE* runner_next_trace = 0xFFFF;
+
+#define RUNNER_TRACE_CREATE(ttype,x,y,yd) {  \
+    if( runner_tracetable != TRACING_INACTIVE ) { \
+      RUNNER_TRACE  rt; \
+      rt.ticker     = GET_TICKER; \
+      rt.tracetype  = ttype; \
+      rt.xpos       = x; \
+      rt.ypos       = y; \
+      rt.ydelta     = yd; \
+      runner_add_trace(&rt); \
+    } \
+}
+
+void runner_add_trace( RUNNER_TRACE* rt_ptr )
+{
+  memcpy(runner_next_trace, rt_ptr, sizeof(RUNNER_TRACE));
+
+  runner_next_trace = (void*)((uint8_t*)runner_next_trace + sizeof(RUNNER_TRACE));
+
+  if( runner_next_trace == (void*)((uint8_t*)runner_tracetable+RUNNER_TRACETABLE_SIZE) )
+    runner_next_trace = runner_tracetable;
+}
+
+
 
 /*
  * Runner has access to full screen for now. It'll be faster
@@ -101,6 +163,9 @@ static RUNNER runner;
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {
+  if( runner_tracetable == TRACING_UNINITIALISED )
+    runner_tracetable = runner_next_trace = allocate_tracetable(RUNNER_TRACETABLE_SIZE);
+
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
@@ -140,12 +205,20 @@ void position_runner( uint8_t x, uint8_t* y )
     runner_data = runner_left_f1+offset_to_frame;
   }
 
-  /* TODO Break this out of here, it's wrong */
   if( RUNNER_JUMPING(runner.jump_offset) ) {
-    *y -= jump_y_offsets[runner.jump_offset];
+    int8_t y_delta = jump_y_offsets[runner.jump_offset];
+
     if( ++runner.jump_offset == sizeof(jump_y_offsets) ) {
       runner.jump_offset = NOT_JUMPING;
-    }    
+
+      /* Note that this trace is logged *before* the final y adjustment */
+      RUNNER_TRACE_CREATE(JUMP_LAST, x, *y, y_delta);
+    }
+    else {
+      RUNNER_TRACE_CREATE(JUMPING, x, *y, y_delta);
+    }
+
+    *y -= y_delta;
   }
 
   sp1_MoveSprPix(runner.sprite, &runner_screen, runner_data, x, *y);
@@ -176,6 +249,8 @@ void toggle_runner_direction(void)
 void start_runner_jumping(void)
 {
   runner.jump_offset = 0;
+
+  RUNNER_TRACE_CREATE(JUMP_START, 0, 0, 0);
 }
 
 

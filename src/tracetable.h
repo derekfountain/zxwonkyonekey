@@ -20,6 +20,8 @@
 #ifndef __TRACETABLE_H
 #define __TRACETABLE_H
 
+#include <unistd.h>
+
 #define TRACING_UNINITIALISED ((void*)0xFFFF)
 #define TRACING_INACTIVE      ((void*)0xFFFE)
 

@@ -33,10 +33,32 @@ def GAMELOOP_TRACE struct
  
 def GAMELOOP_TRACE_TABLE
 {
-  250 GAMELOOP_TRACE open "trace table"
+  250 GAMELOOP_TRACE open "gameloop trace table"
+}
+
+map _RUNNER_TRACETYPE
+{
+  "JUMP_START" .
+  "JUMPING" .
+  "JUMP_LAST" .
+}
+
+def RUNNER_TRACE
+{
+  n16 dec                     "50Hz ticker"
+  n8  map _RUNNER_TRACETYPE   "trace type"
+  n8 dec                      "xpos"
+  n8 dec                      "ypos before delta"
+  n8 dec signed               "y delta"
+}
+
+def RUNNER_TRACE_TABLE struct
+{
+  50 RUNNER_TRACE open "runner trace table"
 }
 
 def main struct
 {
+  RUNNER_TRACE_TABLE   open "runner"
   GAMELOOP_TRACE_TABLE open "gameloop"
 }
