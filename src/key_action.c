@@ -169,3 +169,48 @@ GAME_ACTION test_for_falling( void* data )
 
   return NO_ACTION;
 }
+
+
+
+
+/***
+ *     __          __   _ _            _               _          _    _ _ _         ___  
+ *     \ \        / /  | | |          | |             | |        | |  (_| | |       |__ \ 
+ *      \ \  /\  / __ _| | | _____  __| |   ___  _ __ | |_ ___   | | ___| | | ___ _ __ ) |
+ *       \ \/  \/ / _` | | |/ / _ \/ _` |  / _ \| '_ \| __/ _ \  | |/ | | | |/ _ | '__/ / 
+ *        \  /\  | (_| | |   |  __| (_| | | (_) | | | | || (_) | |   <| | | |  __| | |_|  
+ *         \/  \/ \__,_|_|_|\_\___|\__,_|  \___/|_| |_|\__\___/  |_|\_|_|_|_|\___|_| (_)  
+ *                                                                                        
+ *                                                                                        
+ */
+GAME_ACTION test_for_killer( void* data )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+  uint8_t*    attr_address;
+
+  /* Are we in the middle of a jump? If so, no action */
+  if( RUNNER_JUMPING(game_state->runner->jump_offset) )
+    return NO_ACTION;
+
+  /* Are we on a killer block? If not, no action */
+  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+  
+  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_BLUE )
+  {
+    /* If the cell below isn't a killer, and he's aligned right on top of it, he's fine */
+    if( MODULO8(game_state->runner->xpos) == 0 )
+      return NO_ACTION;
+
+    /* He's moved onto the next character cell. Is that a killer? */
+    if( game_state->runner->facing == RIGHT )
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8 );
+  
+    if( (*attr_address & ATTR_MASK_PAPER) == PAPER_BLUE )
+      return DIE;
+    else
+      return NO_ACTION;
+  }
+
+  return DIE;
+}
+

@@ -102,6 +102,11 @@ void toggle_runner_direction( void );
 void start_runner_jumping( void );
 
 /*
+ * Start the runner dead sequence.
+ */
+void runner_dead(void);
+
+/*
  * An action function to move the runner sideways.
  * i.e. left or right, depending on game state.
  */

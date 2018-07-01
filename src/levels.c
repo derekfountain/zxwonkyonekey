@@ -36,7 +36,17 @@ void level1(void)
   for(i=0;i<32;i++)
     sp1_PrintAt(13,i,PAPER_GREEN|INK_BLACK,' ');
 
+  /* Trampoline */
   sp1_PrintAt(13,15,PAPER_RED|INK_BLACK,' ');
 
+  /* Gap */
   sp1_PrintAt(13,19,PAPER_WHITE|INK_BLACK,' ');
+
+  /* Killer */
+  /* Trampoline */
+  sp1_PrintAt(13,22,PAPER_RED|INK_BLACK,' ');
+  sp1_PrintAt(13,23,PAPER_BLUE|INK_BLACK,' ');
+  sp1_PrintAt(13,24,PAPER_BLUE|INK_BLACK,' ');
+  sp1_PrintAt(13,25,PAPER_RED|INK_BLACK,' ');
+
 }

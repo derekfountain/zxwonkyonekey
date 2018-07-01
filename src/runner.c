@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
 #include "runner.h"
@@ -251,6 +252,13 @@ void start_runner_jumping(void)
   runner.jump_offset = 0;
 
   RUNNER_TRACE_CREATE(JUMP_START, 0, 0, 0);
+}
+
+
+void runner_dead(void)
+{
+  zx_border(INK_RED);
+  while(1);
 }
 
 

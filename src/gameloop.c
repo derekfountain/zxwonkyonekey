@@ -114,10 +114,15 @@ void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
  * ordered list of functions, called each time round the loop. When one returns
  * a value which isn't NO_ACTION the list processing stops and what was returned
  * is the action to take for this time round the game loop.
+ *
+ * This loop starts as the player has just been moved and resrawn in his new
+ * place, so the first checks should be to see if he's moved onto a killer
+ * block, or a gap to fall through, etc.
  */
 
 LOOP_ACTION game_actions[] =
   {
+    {test_for_killer                },
     {test_for_falling               },
     {test_for_start_jump            },
     {test_for_direction_change      },
@@ -192,6 +197,9 @@ void gameloop( GAME_STATE* game_state )
       game_state->runner->xpos--;
       break;
 
+    case DIE:
+      runner_dead();
+      break;
     }
 
     position_runner( game_state->runner->xpos, &game_state->runner->ypos );
