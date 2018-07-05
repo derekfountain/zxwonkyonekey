@@ -30,5 +30,6 @@ GAME_ACTION test_for_direction_change( void* data );
 GAME_ACTION test_for_start_jump( void* data );
 GAME_ACTION test_for_falling( void* data );
 GAME_ACTION test_for_killer( void* data );
+GAME_ACTION test_for_finish( void* data );
 
 #endif

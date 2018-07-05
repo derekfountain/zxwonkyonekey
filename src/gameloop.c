@@ -122,6 +122,7 @@ void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
 
 LOOP_ACTION game_actions[] =
   {
+    {test_for_finish                },
     {test_for_killer                },
     {test_for_falling               },
     {test_for_start_jump            },
@@ -131,7 +132,12 @@ LOOP_ACTION game_actions[] =
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
 
-
+void finish_level(void)
+{
+  /* TODO... */
+  zx_border( INK_GREEN );
+  while(1);
+}
 
 /***
  *      _______ _             _____                        _                       
@@ -199,6 +205,10 @@ void gameloop( GAME_STATE* game_state )
 
     case DIE:
       runner_dead();
+      break;
+
+    case FINISH:
+      finish_level();
       break;
     }
 

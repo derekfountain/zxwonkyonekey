@@ -214,3 +214,29 @@ GAME_ACTION test_for_killer( void* data )
   return DIE;
 }
 
+
+GAME_ACTION test_for_finish( void* data )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+  uint8_t*    attr_address;
+
+  /* Are we in the middle of a jump? If so, no action */
+  if( RUNNER_JUMPING(game_state->runner->jump_offset) )
+    return NO_ACTION;
+
+  /* If he's not on a character cell boundary he can't be up against a wall */
+  if( MODULO8(game_state->runner->xpos) == 0 ) {
+
+    /* Pick up the attributes of the char cell he's facing and about to move into */
+    if( game_state->runner->facing == RIGHT )
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos );
+    else
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos );
+  
+    if( (*attr_address & ATTR_MASK_PAPER) == PAPER_YELLOW )
+      return FINISH;
+  }
+
+  return NO_ACTION;
+}
+

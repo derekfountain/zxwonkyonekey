@@ -73,7 +73,7 @@ int main()
 
     /* Runner at start point */
     game_state.runner->xpos = 0;
-    game_state.runner->ypos = 96;
+    game_state.runner->ypos = 136;
 
     /* Enter game loop, exit when player dies */
     gameloop( &game_state );
