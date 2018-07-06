@@ -172,6 +172,15 @@ RUNNER* create_runner( DIRECTION initial_direction )
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
+  /*
+   * The sprite is actually 6 pixels wide, not 8, so it can be rotated
+   * 2 pixels horizontally without crossing into the next cell and requiring
+   * the rightmost column to be drawn. The x-threshold is therefore 3:
+   * the rightmost column needs drawing if the sprite is rotated 3 more
+   * more pixels.
+   */
+  runner.sprite->xthresh = 3;
+
   /* These will be initialised from level data. Just make them sane here. */
   /* TODO Direction needs to come from the level data too, so I need a runner init() function */
   runner.xpos        = 0;

@@ -52,25 +52,40 @@ Level data needs to be in the game state.
 GAME_ACTION test_for_direction_change( void* data )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
-  uint8_t*    attr_address;
+  uint8_t*    attr_address = NULL;
 
-  /* If he's not on a character cell boundary he can't be up against a wall */
-  if( MODULO8(game_state->runner->xpos) == 0 ) {
-
-    /* Pick up the attributes of the char cell he's facing and about to move into */
-    if( game_state->runner->facing == RIGHT )
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos );
-    else
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos );
-  
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE )
-      return TOGGLE_DIRECTION;
-  }
-
+  /* If the user pressed the button, turn him */
   if( game_state->key_pressed && ! game_state->key_processed ) {
     game_state->key_processed = 1;
     return TOGGLE_DIRECTION;
   }
+
+  /*
+   * Does he need to bounce off a wall he's facing?
+   *
+   * The complication is that the sprite is 6 pixels wide, left aligned
+   * within the 8 pixel wide cell. So if he's facing right he needs to be
+   * on, say, pixel 2, or pixel 10, to be up against the wall he's facing.
+   * Facing left is more straightforward.
+   *
+   * If he's up against the edge of a cell, pick up the attributes of the
+   * cell he's facing and about to move into. If it's a wall, bounce him.
+   */
+  if( game_state->runner->facing == RIGHT ) {
+
+    if( MODULO8(game_state->runner->xpos) == 2 ) {
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos );
+    }
+  }
+  else {  /* He's facing left */
+
+    if( MODULO8(game_state->runner->xpos) == 0 ) {
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos );
+    }
+  }
+  
+  if( attr_address && ((*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE) )
+    return TOGGLE_DIRECTION;
 
   return NO_ACTION;
 }
@@ -98,11 +113,68 @@ GAME_ACTION test_for_start_jump( void* data )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address;
+  uint8_t     on_jump_block = 0;
 
-  /* Are we already jumping? If so, no action */
+  /*
+   * Are we already jumping? If so, no action. Don't process any keypress so
+   * it can still turn him around in midair.
+   */
   if( RUNNER_JUMPING(game_state->runner->jump_offset) )
     return NO_ACTION;
 
+  /*
+   * If the key hasn't been pressed, or it has but it's already been processed,
+   * there's no jump to even potentially kick off
+   */
+  if( !game_state->key_pressed || game_state->key_processed )
+    return NO_ACTION;
+
+  /* Is the cell directly below him a trampoline block? */
+  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
+
+    /* No, so check the block below and to the right, which the sprite might have rotated into */
+    if( (MODULO8(game_state->runner->xpos) < 3) ) {
+      /* Sprite hasn't rotated far enough to stray onto next block */
+      return NO_ACTION;
+    }
+
+   attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
+   if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
+     /* Block the sprite is rotated onto isn't a jump block either. */
+     return NO_ACTION;
+   }
+
+   /* His heel or toe is on top of a jump block so drop through */
+  }
+  else {
+    /* He's directly on top of a jump block, so drop through */
+  }
+
+  game_state->key_processed = 1;
+  return JUMP;
+
+
+#if 0
+
+  /* Is the cell directly below him a trampoline block? */
+  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+  if( (*attr_address & ATTR_MASK_PAPER) == PAPER_RED ) {
+
+    /* He's right on top of a jump block */
+    on_jump_block = 1;
+  }
+  /* Check the block below and to the right, which the sprite might have rotated into */
+  else if( (MODULO8(game_state->runner->xpos) >= 3) ) {
+
+    attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
+    if( (*attr_address & ATTR_MASK_PAPER) == PAPER_RED ) {
+      /* His heel or toe is on top of a jump block */
+      on_jump_block = 1;
+    }
+  }
+#endif
+#if 0
   /* Is the cell below him a trampoline block? If not, no action */
   attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
 
@@ -120,13 +192,13 @@ GAME_ACTION test_for_start_jump( void* data )
       return NO_ACTION;
   }
 
-  /* If we get here, at least part of him is on a trampoline */
-  if( game_state->key_pressed && ! game_state->key_processed ) {
+  if( on_jump_block ) {
     game_state->key_processed = 1;
     return JUMP;
   }
-
-  return NO_ACTION;
+  else
+    return NO_ACTION;
+#endif
 }
 
 
