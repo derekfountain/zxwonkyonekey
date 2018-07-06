@@ -230,10 +230,10 @@ GAME_ACTION test_for_falling( void* data )
     else {
 
       /*
-       * He's over on the right side of his cell, so if the cell below his heels
+       * He's over on the right side of his cell, so the cell below his heels
        * must be solid, otherwise he'll fall
        */
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos+8  );
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
         return NO_ACTION;
       }
