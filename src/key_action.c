@@ -153,52 +153,6 @@ GAME_ACTION test_for_start_jump( void* data )
 
   game_state->key_processed = 1;
   return JUMP;
-
-
-#if 0
-
-  /* Is the cell directly below him a trampoline block? */
-  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
-  if( (*attr_address & ATTR_MASK_PAPER) == PAPER_RED ) {
-
-    /* He's right on top of a jump block */
-    on_jump_block = 1;
-  }
-  /* Check the block below and to the right, which the sprite might have rotated into */
-  else if( (MODULO8(game_state->runner->xpos) >= 3) ) {
-
-    attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
-    if( (*attr_address & ATTR_MASK_PAPER) == PAPER_RED ) {
-      /* His heel or toe is on top of a jump block */
-      on_jump_block = 1;
-    }
-  }
-#endif
-#if 0
-  /* Is the cell below him a trampoline block? If not, no action */
-  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
-
-  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
-
-    /* If the cell below isn't a trampoline, and he's aligned right on top of it, no jump */
-    if( MODULO8(game_state->runner->xpos) == 0 )
-      return NO_ACTION;
-      
-    /* He's not aligned, so check the cell he's partially over too */
-    attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
-
-    /* If that's not a a trampoline, no jump */
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED )
-      return NO_ACTION;
-  }
-
-  if( on_jump_block ) {
-    game_state->key_processed = 1;
-    return JUMP;
-  }
-  else
-    return NO_ACTION;
-#endif
 }
 
 
@@ -219,26 +173,76 @@ GAME_ACTION test_for_start_jump( void* data )
  *  he's not in the middle of a jump; and
  *  the attribute cell underneath him is clear; and
  *  he's aligned on top of that cell
+ *
+ * If he's facing left he must move the 2 pixels of alignment on the
+ * right side of the sprite.
+ *
+ * He might have fallen onto the block he's on, so it's possible he's
+ * facing right and is on left pixel 0, 1 or 2 of the cell. In which
+ * case fall through.
  */
 GAME_ACTION test_for_falling( void* data )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
-  uint8_t*    attr_address;
+  uint8_t*    attr_address = NULL;
 
   /* Are we in the middle of a jump? If so, no action */
   if( RUNNER_JUMPING(game_state->runner->jump_offset) )
     return NO_ACTION;
 
-  /* Are we on a coloured block? If not, no action */
-  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+  if( game_state->runner->facing == RIGHT ) {
+
+    /* Is the cell below him solid? If so, he's supported */
+    attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8 );
+    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      return NO_ACTION;
+    }
+
+    /*
+     * If he's facing right and hasn't rotated onto the cell to his right (in front of him)
+     * then he's only supported by the cell directly underneath him which we know isn't solid.
+     */
+    if( MODULO8(game_state->runner->xpos) < 3 ) {
+      return MOVE_DOWN;
+    }
+
+    /*
+     * He's rotated onto the cell in front of him, to the right. If that cell is solid
+     * then his toes are supported
+     */
+    attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8 );
+    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      return MOVE_DOWN;
+    }
+  }
+  else {  /* Facing left */
+
+    /* If he's over to the left side of his cell his heels can't be supported */
+    if( MODULO8(game_state->runner->xpos) < 3 ) {
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        return NO_ACTION;
+      }
+      else {
+        return MOVE_DOWN;
+      }
+    }
+    else {
+
+      /*
+       * He's over on the right side of his cell, so if the cell below his heels
+       * must be solid, otherwise he'll fall
+       */
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos+8  );
+      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        return NO_ACTION;
+      }
+      else {
+        return MOVE_DOWN;
+      }
+    }
+  }
   
-  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE )
-    return NO_ACTION;
-
-  /* So player is on a clear block. If aligned to the cell, fall through */
-  if( MODULO8(game_state->runner->xpos) == 0 )
-    return MOVE_DOWN;
-
   return NO_ACTION;
 }
 
