@@ -32,9 +32,9 @@
  * are so I can find them in the memory map. Etc.
  */
 
-static uint8_t* tracetable_head = (void*)0;
+static uint8_t* tracetable_head = TRACE_MEMORY_START;
 
-void* allocate_tracetable( size_t size )
+void* allocate_tracememory( size_t size )
 {
   void* allocated_block;
 
@@ -49,7 +49,7 @@ void* allocate_tracetable( size_t size )
 
 void* clear_trace_area(void)
 {
-  memset(TRACE_MEMORY_START, 0, MAX_TRACE_MEMORY);
+  memset((void*)TRACE_MEMORY_START, 0, MAX_TRACE_MEMORY);
 }
 
 /*

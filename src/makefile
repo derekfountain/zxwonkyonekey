@@ -30,8 +30,12 @@ CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -preserve -compiler sdcc -clib=s
 LDFLAGS=$(TARGET) $(VERBOSITY) -m -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
 ASFLAGS=$(TARGET) $(VERBOSITY) -c
 
+SYMBOLS_GENERATOR=./generate_symbols.pl
+MAP=wonky.map
+
 EXEC=wonky.tap
 EXEC_OUTPUT=wonky
+SYM_OUTPUT=wonky.sym
 
 OBJECTS = gameloop.o \
           levels.o \
@@ -52,7 +56,8 @@ OBJECTS = gameloop.o \
 all : clean_tmp $(EXEC)
 
 $(EXEC) : $(OBJECTS)
-	 $(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
+	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
+	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
 
 .PHONY: clean_tmp
 clean_tmp:
@@ -60,5 +65,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.ss zcc_opt.def *~ /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.ss zcc_opt.def *~ /tmp/tmpXX*
 	rm -rf __pycache__

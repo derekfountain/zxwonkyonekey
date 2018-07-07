@@ -82,7 +82,13 @@ typedef struct _runner_trace
 RUNNER_TRACE* runner_tracetable = TRACING_UNINITIALISED;
 RUNNER_TRACE* runner_next_trace = 0xFFFF;
 
-#define RUNNER_TRACE_CREATE(ttype,x,y,yd) {  \
+#if 0
+/*
+ * This macro works best if there are only 1 or 2 tracing points, otherwise
+ * it produces quite a lot of inline code. In that case a subroutine call
+ * is more efficient (slower, but uses much less memory).
+ */
+#define RUNNER_TRACE_CREATE(ttype,x,y,yd) {	  \
     if( runner_tracetable != TRACING_INACTIVE ) { \
       RUNNER_TRACE  rt; \
       rt.ticker     = GET_TICKER; \
@@ -93,6 +99,7 @@ RUNNER_TRACE* runner_next_trace = 0xFFFF;
       runner_add_trace(&rt); \
     } \
 }
+#endif
 
 void runner_add_trace( RUNNER_TRACE* rt_ptr )
 {
@@ -104,7 +111,18 @@ void runner_add_trace( RUNNER_TRACE* rt_ptr )
     runner_next_trace = runner_tracetable;
 }
 
-
+void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t yd )
+{
+  if( runner_tracetable != TRACING_INACTIVE ) {
+    RUNNER_TRACE  rt;		  
+    rt.ticker     = GET_TICKER;			
+    rt.tracetype  = ttype; 
+    rt.xpos       = x;	 
+    rt.ypos       = y;	  
+    rt.ydelta     = yd;	     
+    runner_add_trace(&rt);			
+  }						
+}
 
 /*
  * Runner has access to full screen for now. It'll be faster
@@ -163,11 +181,10 @@ const int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
  */
 static RUNNER runner;
 
-
 RUNNER* create_runner( DIRECTION initial_direction )
 {
   if( runner_tracetable == TRACING_UNINITIALISED )
-    runner_tracetable = runner_next_trace = allocate_tracetable(RUNNER_TRACETABLE_SIZE);
+    runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
 
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
