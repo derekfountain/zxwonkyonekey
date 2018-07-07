@@ -151,8 +151,9 @@ void finish_level(void)
  */
 void gameloop( GAME_STATE* game_state )
 {
-  if( gameloop_tracetable == TRACING_UNINITIALISED )
-    gameloop_tracetable = gameloop_next_trace = allocate_tracetable(GAMELOOP_TRACETABLE_SIZE);
+  if( gameloop_tracetable == TRACING_UNINITIALISED ) {
+    gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
+  }
 
   while(1) {
     uint8_t     i;

@@ -25,10 +25,6 @@
 #include <string.h>
 
 /*
- * Not sure what to do with the interrupt as yet.
- */
-
-/*
  * The "getter" for this is currently a macro, so don't make this
  * static.
  */
@@ -36,6 +32,10 @@ uint16_t ticker = 0;
 
 IM2_DEFINE_ISR(isr)
 {
+  /*
+   * This write happens with the interrupt still disabled so
+   * it doesn't need atomic protection.
+   */
   ticker++;
 }
 

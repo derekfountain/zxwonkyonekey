@@ -21,6 +21,7 @@
 #define __INT_H
 
 #include <stdint.h>
+#include <intrinsic.h>
 
 extern uint16_t ticker;
 
@@ -29,7 +30,10 @@ void setup_int(void);
 /*
  * Macro (quicker than a function) to return the current
  * ticker value. This is essentially a 50Hz counter.
+ *
+ * It's 16 bits so will compile to separate load instructions
+ * on the Z80, hence it needs the atomic wrapper.
  */
-#define GET_TICKER ((uint16_t)ticker)
+#define GET_TICKER ((uint16_t)intrinsic_load16(_ticker))
 
 #endif
