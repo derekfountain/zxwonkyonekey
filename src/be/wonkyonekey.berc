@@ -39,7 +39,8 @@ def GAMELOOP_TRACE_TABLE
 map _RUNNER_TRACETYPE
 {
   "JUMP_START" .
-  "JUMPING" .
+  "JUMPING_UPWARDS" .
+  "JUMPING_DOWNWARDS" .
   "JUMP_LAST" .
 }
 
@@ -59,6 +60,10 @@ def RUNNER_TRACE_TABLE struct
 
 def main struct
 {
-  RUNNER_TRACE_TABLE   open "runner"
-  GAMELOOP_TRACE_TABLE open "gameloop"
+  at _gameloop_tracetable
+  n16 ptr GAMELOOP_TRACE_TABLE "gameloop"
+
+  at _runner_tracetable
+  n16 ptr RUNNER_TRACE_TABLE   "runner"
+
 }

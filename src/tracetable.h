@@ -27,15 +27,16 @@
 
 /*
  * Start of memory area used for trace table. Spectrum's ROM starts
- * at zero.
+ * at zero but I can't use byte zero because BE thinks that's the
+ * result of a null dereference. So use 1.
  */
-#define TRACE_MEMORY_START ((uint16_t)0)
+#define TRACE_MEMORY_START ((uint16_t)1)
 
 /*
  * Maximum amount of memory to allocate to tracetables.
- * We use the ROM area, so 16K.
+ * We use the ROM area, so 16K minus the 1 discussed above.
  */
-#define MAX_TRACE_MEMORY ((uint16_t)16384)
+#define MAX_TRACE_MEMORY ((uint16_t)16383)
 
 /*
  * Find out if the ROM is writable. In some emulators it can be.
@@ -54,6 +55,6 @@ void* clear_trace_area(void);
  * Returns a pointer to the zeroth byte (i.e. the first
  * trace entry).
  */
-void* allocate_tracetable( size_t size );
+void* allocate_tracememory( size_t size );
 
 #endif
