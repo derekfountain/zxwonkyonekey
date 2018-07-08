@@ -190,6 +190,11 @@ GAME_ACTION test_for_falling( void* data )
   if( RUNNER_JUMPING(game_state->runner->jump_offset) )
     return NO_ACTION;
 
+  /*
+   * TODO I can probably optimise this for space but pulling out
+   * the repeated zx_pxy2aaddr() calls.
+   */
+
   if( game_state->runner->facing == RIGHT ) {
 
     /* Is the cell below him solid? If so, he's supported */
@@ -214,36 +219,30 @@ GAME_ACTION test_for_falling( void* data )
     if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
       return MOVE_DOWN;
     }
+    else {
+      return NO_ACTION;
+    }
   }
   else {  /* Facing left */
 
-    /* If he's over to the left side of his cell his heels can't be supported */
     if( MODULO8(game_state->runner->xpos) < 3 ) {
+
+      /* If he's over to the left side of his cell his heels can't be supported */
       attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return NO_ACTION;
-      }
-      else {
-        return MOVE_DOWN;
-      }
     }
     else {
 
-      /*
-       * He's over on the right side of his cell, so the cell below his heels
-       * must be solid, otherwise he'll fall
-       */
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return NO_ACTION;
-      }
-      else {
-        return MOVE_DOWN;
-      }
+      /* If he's over on the right side of his cell, his heels are supported */
+      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
+    }
+
+    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      return NO_ACTION;
+    }
+    else {
+      return MOVE_DOWN;
     }
   }
-  
-  return NO_ACTION;
 }
 
 

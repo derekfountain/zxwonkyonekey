@@ -28,7 +28,7 @@
  * The "getter" for this is currently a macro, so don't make this
  * static.
  */
-uint16_t ticker = 0;
+volatile uint16_t ticker = 0;
 
 IM2_DEFINE_ISR(isr)
 {
