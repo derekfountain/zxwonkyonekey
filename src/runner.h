@@ -72,23 +72,28 @@ RUNNER;
 RUNNER* create_runner( DIRECTION initial_direction );
 
 /*
- * Position the runner at the given screen coordinates.
- *
- * The runner code holds a structure with the character's
- * nominal screen position, but it's this code which places
- * him on screen, taking into account jumping and whatever
- * else might modify his actual x,y screen position.
- *
- * y-pos is a pointer because the positioning code takes
- * jumping into account and may have to move the sprite
- * above the requested position. In this case the sprite's
- * actual y-coordinate is returned.
+ * Runner screen movement getters and setters.
  */
-/* TODO I need to fix this offset thing. Currently the y position
- of the runner, which is traced, isn't the y position at all if
- he's jumping!
-*/
-void position_runner( uint8_t x, uint8_t* y );
+uint8_t   get_runner_xpos( void );
+uint8_t   get_runner_ypos( void );
+void      set_runner_xpos( uint8_t pos );
+void      set_runner_ypos( uint8_t pos );
+void      move_runner_xpos( int8_t delta );
+void      move_runner_ypos( int8_t delta );
+DIRECTION get_runner_facing( void );
+uint8_t   get_runner_jump_offset( void );
+
+/*
+ * Adjust the runner's screen position depending on where he
+ * is in the cycle of the jump animation, if at all.
+ */
+void adjust_for_jump(void);
+
+/*
+ * Draw the runner at the screen coordinates in the controlling
+ * structure
+ */
+void draw_runner( void );
 
 /*
  * Switch the runner's direction, left or right. If up and

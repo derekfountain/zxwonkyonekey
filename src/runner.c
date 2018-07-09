@@ -209,34 +209,48 @@ RUNNER* create_runner( DIRECTION initial_direction )
   return &runner;
 }
 
-
-void position_runner( uint8_t x, uint8_t* y )
+uint8_t get_runner_xpos( void )
 {
-  uint8_t* runner_data;
-  uint16_t offset_to_frame;
+  return runner.xpos;
+}
 
-  /*
-   * Frame number is calculated from the lowest 8 bits of the x position.
-   * This won't be flexible enough if the animation gets more complex
-   * but for now it's fast and simple.
-   *
-   * The calculation is, for example:
-   * 
-   *  frame_num   = x & 0x0007;
-   *  runner_data = runner_right_f1+(RUNNER_FRAME_SIZE*frame_num);
-   *
-   * The implementation below doesn't use the intermediate variable and
-   * generates more succinct code.
-   */
-  offset_to_frame = RUNNER_FRAME_SIZE * (x & 0x0007);
+uint8_t get_runner_ypos( void )
+{
+  return runner.ypos;
+}
 
-  if( runner.facing == RIGHT ) {
-    runner_data = runner_right_f1+offset_to_frame;
-  }
-  else {
-    runner_data = runner_left_f1+offset_to_frame;
-  }
+void set_runner_xpos( uint8_t pos )
+{
+  runner.xpos = pos;
+}
 
+void set_runner_ypos( uint8_t pos )
+{
+  runner.ypos = pos;
+}
+
+void move_runner_xpos( int8_t delta )
+{
+  runner.xpos += delta;
+}
+
+void move_runner_ypos( int8_t delta )
+{
+  runner.ypos += delta;
+}
+
+DIRECTION get_runner_facing( void )
+{
+  return runner.facing;
+}
+
+uint8_t get_runner_jump_offset( void )
+{
+  return runner.jump_offset;
+}
+
+void adjust_for_jump(void)
+{
   if( RUNNER_JUMPING(runner.jump_offset) ) {
     int8_t y_delta = jump_y_offsets[runner.jump_offset];
 
@@ -248,7 +262,7 @@ void position_runner( uint8_t x, uint8_t* y )
       runner.jump_offset = NOT_JUMPING;
 
       /* Note that this trace is logged *before* the final y adjustment */
-      RUNNER_TRACE_CREATE(JUMP_LAST, x, *y, y_delta);
+      RUNNER_TRACE_CREATE(JUMP_LAST, runner.xpos, runner.ypos, y_delta);
     }
     else {
       uint8_t*    attr_address;
@@ -261,11 +275,11 @@ void position_runner( uint8_t x, uint8_t* y )
        */
       if( y_delta < 0 ) {
 
-	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, x, *y, y_delta);
+	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta);
 
 	/* If there's something solid under him, stop the jump */
-	if( MODULO8(*y) == 0 ) {
-	  attr_address = zx_pxy2aaddr( x, (*y)+8  );
+	if( MODULO8(runner.ypos) == 0 ) {
+	  attr_address = zx_pxy2aaddr( runner.xpos, runner.ypos+8  );
 
 	  /*
 	   * TODO Something not quite right here. When he's falling he's probably moving
@@ -283,11 +297,11 @@ void position_runner( uint8_t x, uint8_t* y )
 	}
       }
       else {
-	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, x, *y, y_delta);
+	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta);
 
 	/* If there's something solid above him, stop the jump */
-	if( MODULO8(*y) == 0 ) {
-	  attr_address = zx_pxy2aaddr( x, (*y)-8  );
+	if( MODULO8(runner.ypos) == 0 ) {
+	  attr_address = zx_pxy2aaddr( runner.xpos, runner.ypos-8  );
   
 	  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
 	    y_delta = 0;
@@ -298,10 +312,39 @@ void position_runner( uint8_t x, uint8_t* y )
       }
     }
 
-    *y -= y_delta;
+    runner.ypos -= y_delta;
+  }
+}
+
+
+void draw_runner(void)
+{
+  uint8_t* runner_data;
+  uint16_t offset_to_frame;
+
+  /*
+   * Frame number is calculated from the lowest 8 bits of the x position.
+   * This won't be flexible enough if the animation gets more complex
+   * but for now it's fast and simple.
+   *
+   * The calculation is, for example:
+   * 
+   *  frame_num   = x & 0x0007;
+   *  runner_data = runner_right_f1+(RUNNER_FRAME_SIZE*frame_num);
+   *
+   * The implementation below doesn't use the intermediate variable and
+   * generates more succinct code.
+   */
+  offset_to_frame = RUNNER_FRAME_SIZE * (runner.xpos & 0x0007);
+
+  if( runner.facing == RIGHT ) {
+    runner_data = runner_right_f1+offset_to_frame;
+  }
+  else {
+    runner_data = runner_left_f1+offset_to_frame;
   }
 
-  sp1_MoveSprPix(runner.sprite, &runner_screen, runner_data, x, *y);
+  sp1_MoveSprPix(runner.sprite, &runner_screen, runner_data, runner.xpos, runner.ypos);
 }
 
 
@@ -341,11 +384,11 @@ void runner_dead(void)
 }
 
 
-GAME_ACTION move_sideways( void* data )
+GAME_ACTION move_sideways(void* data)
 {
-  GAME_STATE* game_state = (GAME_STATE*)data;
+  (void)data;  /* Unused parameter, stop the compiler warning */
 
-  if( game_state->runner->facing == RIGHT ) {
+  if( runner.facing == RIGHT ) {
     return MOVE_RIGHT;
   }
   else {

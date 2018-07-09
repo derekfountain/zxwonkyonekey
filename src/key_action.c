@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "utils.h"
 #include "action.h"
+#include "runner.h"
 #include "game_state.h"
 
 /*
@@ -54,6 +55,9 @@ GAME_ACTION test_for_direction_change( void* data )
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address = NULL;
 
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+
   /* If the user pressed the button, turn him */
   if( game_state->key_pressed && ! game_state->key_processed ) {
     game_state->key_processed = 1;
@@ -71,16 +75,16 @@ GAME_ACTION test_for_direction_change( void* data )
    * If he's up against the edge of a cell, pick up the attributes of the
    * cell he's facing and about to move into. If it's a wall, bounce him.
    */
-  if( game_state->runner->facing == RIGHT ) {
+  if( get_runner_facing() == RIGHT ) {
 
-    if( MODULO8(game_state->runner->xpos) == 2 ) {
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos );
+    if( MODULO8( xpos ) == 2 ) {
+      attr_address = zx_pxy2aaddr( xpos+8, ypos );
     }
   }
   else {  /* He's facing left */
 
-    if( MODULO8(game_state->runner->xpos) == 0 ) {
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos );
+    if( MODULO8( xpos ) == 0 ) {
+      attr_address = zx_pxy2aaddr( xpos-8, ypos );
     }
   }
   
@@ -115,11 +119,14 @@ GAME_ACTION test_for_start_jump( void* data )
   uint8_t*    attr_address;
   uint8_t     on_jump_block = 0;
 
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+
   /*
    * Are we already jumping? If so, no action. Don't process any keypress so
    * it can still turn him around in midair.
    */
-  if( RUNNER_JUMPING(game_state->runner->jump_offset) )
+  if( RUNNER_JUMPING( get_runner_jump_offset() ) )
     return NO_ACTION;
 
   /*
@@ -130,16 +137,16 @@ GAME_ACTION test_for_start_jump( void* data )
     return NO_ACTION;
 
   /* Is the cell directly below him a trampoline block? */
-  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+  attr_address = zx_pxy2aaddr( xpos, ypos+8  );
   if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
 
     /* No, so check the block below and to the right, which the sprite might have rotated into */
-    if( (MODULO8(game_state->runner->xpos) < 3) ) {
+    if( (MODULO8( xpos ) < 3) ) {
       /* Sprite hasn't rotated far enough to stray onto next block */
       return NO_ACTION;
     }
 
-   attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
+   attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
      /* Block the sprite is rotated onto isn't a jump block either. */
      return NO_ACTION;
@@ -186,8 +193,11 @@ GAME_ACTION test_for_falling( void* data )
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address = NULL;
 
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+
   /* Are we in the middle of a jump? If so, no action */
-  if( RUNNER_JUMPING(game_state->runner->jump_offset) )
+  if( RUNNER_JUMPING( get_runner_jump_offset() ) )
     return NO_ACTION;
 
   /*
@@ -195,10 +205,10 @@ GAME_ACTION test_for_falling( void* data )
    * the repeated zx_pxy2aaddr() calls.
    */
 
-  if( game_state->runner->facing == RIGHT ) {
+  if( get_runner_facing() == RIGHT ) {
 
     /* Is the cell below him solid? If so, he's supported */
-    attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8 );
+    attr_address = zx_pxy2aaddr( xpos, ypos+8 );
     if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
       return NO_ACTION;
     }
@@ -207,7 +217,7 @@ GAME_ACTION test_for_falling( void* data )
      * If he's facing right and hasn't rotated onto the cell to his right (in front of him)
      * then he's only supported by the cell directly underneath him which we know isn't solid.
      */
-    if( MODULO8(game_state->runner->xpos) < 3 ) {
+    if( MODULO8(xpos) < 3 ) {
       return MOVE_DOWN;
     }
 
@@ -215,7 +225,7 @@ GAME_ACTION test_for_falling( void* data )
      * He's rotated onto the cell in front of him, to the right. If that cell is solid
      * then his toes are supported
      */
-    attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8 );
+    attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
     if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
       return MOVE_DOWN;
     }
@@ -225,15 +235,15 @@ GAME_ACTION test_for_falling( void* data )
   }
   else {  /* Facing left */
 
-    if( MODULO8(game_state->runner->xpos) < 3 ) {
+    if( MODULO8( xpos ) < 3 ) {
 
       /* If he's over to the left side of his cell his heels can't be supported */
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+      attr_address = zx_pxy2aaddr( xpos, ypos+8  );
     }
     else {
 
       /* If he's over on the right side of his cell, his heels are supported */
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8  );
+      attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
     }
 
     if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
@@ -263,22 +273,25 @@ GAME_ACTION test_for_killer( void* data )
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address;
 
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+
   /* Are we in the middle of a jump? If so, no action */
-  if( RUNNER_JUMPING(game_state->runner->jump_offset) )
+  if( RUNNER_JUMPING( get_runner_jump_offset() ) )
     return NO_ACTION;
 
   /* Are we on a killer block? If not, no action */
-  attr_address = zx_pxy2aaddr( game_state->runner->xpos, game_state->runner->ypos+8  );
+  attr_address = zx_pxy2aaddr( xpos, ypos+8  );
   
   if( (*attr_address & ATTR_MASK_PAPER) != PAPER_BLUE )
   {
     /* If the cell below isn't a killer, and he's aligned right on top of it, he's fine */
-    if( MODULO8(game_state->runner->xpos) == 0 )
+    if( MODULO8( xpos ) == 0 )
       return NO_ACTION;
 
     /* He's moved onto the next character cell. Is that a killer? */
-    if( game_state->runner->facing == RIGHT )
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos+8 );
+    if( get_runner_facing() == RIGHT )
+      attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
   
     if( (*attr_address & ATTR_MASK_PAPER) == PAPER_BLUE )
       return DIE;
@@ -295,18 +308,21 @@ GAME_ACTION test_for_finish( void* data )
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address;
 
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+
   /* Are we in the middle of a jump? If so, no action */
-  if( RUNNER_JUMPING(game_state->runner->jump_offset) )
+  if( RUNNER_JUMPING( get_runner_jump_offset() ) )
     return NO_ACTION;
 
   /* If he's not on a character cell boundary he can't be up against a wall */
-  if( MODULO8(game_state->runner->xpos) == 0 ) {
+  if( MODULO8( xpos ) == 0 ) {
 
     /* Pick up the attributes of the char cell he's facing and about to move into */
-    if( game_state->runner->facing == RIGHT )
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos+8, game_state->runner->ypos );
+    if( get_runner_facing() == RIGHT )
+      attr_address = zx_pxy2aaddr( xpos+8, ypos );
     else
-      attr_address = zx_pxy2aaddr( game_state->runner->xpos-8, game_state->runner->ypos );
+      attr_address = zx_pxy2aaddr( xpos-8, ypos );
   
     if( (*attr_address & ATTR_MASK_PAPER) == PAPER_YELLOW )
       return FINISH;

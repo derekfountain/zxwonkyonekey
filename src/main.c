@@ -57,7 +57,7 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
 
-  game_state.runner = create_runner( RIGHT );
+  create_runner( RIGHT );
 
   while( 1 ) {
 
@@ -72,8 +72,8 @@ int main()
     game_state.key_processed = 0;
 
     /* Runner at start point */
-    game_state.runner->xpos = 0;
-    game_state.runner->ypos = 136;
+    set_runner_xpos(0);
+    set_runner_ypos(136);
 
     /* Enter game loop, exit when player dies */
     gameloop( &game_state );

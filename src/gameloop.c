@@ -174,8 +174,8 @@ void gameloop( GAME_STATE* game_state )
 
     GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
                                   game_state->key_processed,
-                                  game_state->runner->xpos,
-                                  game_state->runner->ypos,
+                                  get_runner_xpos(),
+                                  get_runner_ypos(),
                                   action);
 
     switch( action )
@@ -189,19 +189,19 @@ void gameloop( GAME_STATE* game_state )
       break;
 
     case MOVE_DOWN:
-      game_state->runner->ypos++;
+      move_runner_ypos(1);
       break;
 
     case MOVE_UP:
-      game_state->runner->ypos--;
+      move_runner_ypos(-1);
       break;
 
     case MOVE_RIGHT:
-      game_state->runner->xpos++;
+      move_runner_xpos(1);
       break;
 
     case MOVE_LEFT:
-      game_state->runner->xpos--;
+      move_runner_xpos(-1);
       break;
 
     case DIE:
@@ -213,9 +213,10 @@ void gameloop( GAME_STATE* game_state )
       break;
     }
 
-    position_runner( game_state->runner->xpos, &game_state->runner->ypos );
+    adjust_for_jump();
+    draw_runner();
 
-    sp1_UpdateNow();
     intrinsic_halt();
+    sp1_UpdateNow();
   }
 }
