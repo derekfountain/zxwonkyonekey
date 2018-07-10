@@ -20,6 +20,13 @@
 #ifndef __ACTION_H
 #define __ACTION_H
 
+typedef enum _processing_flag
+{
+  KEEP_PROCESSING,
+  STOP_PROCESSING,
+}
+PROCESSING_FLAG;
+
 typedef enum _game_action
 {
   NO_ACTION,
@@ -36,7 +43,7 @@ GAME_ACTION;
 
 typedef struct _loop_action
 {
-  GAME_ACTION (*test_action)(void* data);
+  PROCESSING_FLAG (*test_action)(void* input_data, GAME_ACTION* output_action); //, void* output_data);
 }
 LOOP_ACTION;
 

@@ -115,6 +115,6 @@ void runner_dead(void);
  * An action function to move the runner sideways.
  * i.e. left or right, depending on game state.
  */
-GAME_ACTION move_sideways( void* data );
+PROCESSING_FLAG move_sideways( void* data, GAME_ACTION* output_action );
 
 #endif

@@ -384,14 +384,15 @@ void runner_dead(void)
 }
 
 
-GAME_ACTION move_sideways(void* data)
+PROCESSING_FLAG move_sideways(void* data, GAME_ACTION* output_action)
 {
   (void)data;  /* Unused parameter, stop the compiler warning */
 
   if( runner.facing == RIGHT ) {
-    return MOVE_RIGHT;
+    *output_action = MOVE_RIGHT;
   }
   else {
-    return MOVE_LEFT;
+    *output_action = MOVE_LEFT;
   }
+  return KEEP_PROCESSING;
 }

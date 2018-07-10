@@ -65,25 +65,27 @@ typedef struct _gameloop_trace
   uint8_t            xpos;
   uint8_t            ypos;
   GAME_ACTION        action;
+  PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
 
-#define GAMELOOP_TRACE_ENTRIES 250
+#define GAMELOOP_TRACE_ENTRIES 1000
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
 GAMELOOP_TRACE* gameloop_tracetable = TRACING_UNINITIALISED;
 GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
 
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
-#define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act) {  \
+#define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act,pflag) { \
     if( gameloop_tracetable != TRACING_INACTIVE ) { \
-      GAMELOOP_TRACE    glt;   \
-      glt.ticker        = GET_TICKER; \
-      glt.tracetype     = ttype; \
-      glt.key_pressed   = keypressed; \
-      glt.key_processed = keyprocessed; \
-      glt.xpos          = x; \
-      glt.ypos          = y; \
-      glt.action        = act; \
+      GAMELOOP_TRACE      glt;   \
+      glt.ticker          = GET_TICKER; \
+      glt.tracetype       = ttype; \
+      glt.key_pressed     = keypressed; \
+      glt.key_processed   = keyprocessed; \
+      glt.xpos            = x; \
+      glt.ypos            = y; \
+      glt.action          = act; \
+      glt.processing_flag = pflag; \
       gameloop_add_trace(&glt); \
     } \
 }
@@ -157,7 +159,6 @@ void gameloop( GAME_STATE* game_state )
 
   while(1) {
     uint8_t     i;
-    GAME_ACTION action;
 
     if( in_key_pressed( IN_KEY_SCANCODE_SPACE ) ) {
       game_state->key_pressed = 1;
@@ -167,50 +168,55 @@ void gameloop( GAME_STATE* game_state )
     }
 
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
-      action = (game_actions[i].test_action)(game_state);
-      if( action != NO_ACTION )
+      PROCESSING_FLAG flag;
+      GAME_ACTION     required_action;
+
+      flag = (game_actions[i].test_action)(game_state, &required_action);
+
+      GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
+                                    game_state->key_processed,
+                                    get_runner_xpos(),
+                                    get_runner_ypos(),
+                                    required_action,
+                                    flag);
+
+      switch( required_action )
+        {
+        case TOGGLE_DIRECTION:
+          toggle_runner_direction();
+          break;
+
+        case JUMP:
+          start_runner_jumping();
+          break;
+
+        case MOVE_DOWN:
+          move_runner_ypos(1);
+          break;
+
+        case MOVE_UP:
+          move_runner_ypos(-1);
+          break;
+
+        case MOVE_RIGHT:
+          move_runner_xpos(1);
+          break;
+
+        case MOVE_LEFT:
+          move_runner_xpos(-1);
+          break;
+
+        case DIE:
+          runner_dead();
+          break;
+
+        case FINISH:
+          finish_level();
+          break;
+        }
+
+      if( flag == STOP_PROCESSING )
 	break;
-    }
-
-    GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
-                                  game_state->key_processed,
-                                  get_runner_xpos(),
-                                  get_runner_ypos(),
-                                  action);
-
-    switch( action )
-    {
-    case TOGGLE_DIRECTION:
-      toggle_runner_direction();
-      break;
-
-    case JUMP:
-      start_runner_jumping();
-      break;
-
-    case MOVE_DOWN:
-      move_runner_ypos(1);
-      break;
-
-    case MOVE_UP:
-      move_runner_ypos(-1);
-      break;
-
-    case MOVE_RIGHT:
-      move_runner_xpos(1);
-      break;
-
-    case MOVE_LEFT:
-      move_runner_xpos(-1);
-      break;
-
-    case DIE:
-      runner_dead();
-      break;
-
-    case FINISH:
-      finish_level();
-      break;
     }
 
     adjust_for_jump();
