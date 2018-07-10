@@ -19,10 +19,74 @@
 
 #include <arch/zx.h>
 #include <stdio.h>
+#include <string.h>
 #include "utils.h"
 #include "action.h"
 #include "runner.h"
 #include "game_state.h"
+#include "tracetable.h"
+#include "int.h"
+
+/***
+ *      _______             _             
+ *     |__   __|           (_)            
+ *        | |_ __ __ _  ___ _ _ __   __ _ 
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/ 
+ *
+ * Key action tracing. Bit scattered, but can be handy.
+ */
+
+typedef enum _key_action_tracetype
+{
+  TEST_DIR_CHG,
+  TEST_JUMP,
+  TEST_FALL,
+  TEST_KILLER,
+  TEST_FINISH,
+} KEY_ACTION_TRACETYPE;
+
+typedef struct _key_action_trace
+{
+  uint16_t               ticker;
+  KEY_ACTION_TRACETYPE   tracetype;
+} KEY_ACTION_TRACE;
+
+#define KEY_ACTION_TRACE_ENTRIES   25
+#define KEY_ACTION_TRACETABLE_SIZE ((size_t)sizeof(KEY_ACTION_TRACE)*KEY_ACTION_TRACE_ENTRIES)
+
+KEY_ACTION_TRACE* key_action_tracetable = TRACING_UNINITIALISED;
+KEY_ACTION_TRACE* key_action_next_trace = 0xFFFF;
+
+void key_action_add_trace( KEY_ACTION_TRACE* ka_ptr )
+{
+  memcpy(key_action_next_trace, ka_ptr, sizeof(KEY_ACTION_TRACE));
+
+  key_action_next_trace = (void*)((uint8_t*)key_action_next_trace + sizeof(KEY_ACTION_TRACE));
+
+  if( key_action_next_trace == (void*)((uint8_t*)key_action_tracetable+KEY_ACTION_TRACETABLE_SIZE) )
+    key_action_next_trace = key_action_tracetable;
+}
+
+void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype )
+{
+  if( key_action_tracetable != TRACING_INACTIVE ) {
+    KEY_ACTION_TRACE  ka;		  
+    ka.ticker       = GET_TICKER;			
+    ka.tracetype    = ttype;
+    key_action_add_trace(&ka);			
+  }						
+}
+
+void init_key_action_trace(void)
+{
+  if( key_action_tracetable == TRACING_UNINITIALISED )
+    key_action_tracetable = key_action_next_trace = allocate_tracememory(KEY_ACTION_TRACETABLE_SIZE);
+}
+
 
 /*
 TODO
@@ -62,6 +126,9 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
   if( game_state->key_pressed && ! game_state->key_processed ) {
     game_state->key_processed = 1;
     *output_action = TOGGLE_DIRECTION;
+
+    KEY_ACTION_TRACE_CREATE( TEST_DIR_CHG );
+
     return KEEP_PROCESSING;
   }
 

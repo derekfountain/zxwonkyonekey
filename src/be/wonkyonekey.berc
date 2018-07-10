@@ -26,6 +26,15 @@ map _GAME_ACTION
   "DIE" .
 }
 
+map _KEY_ACTION_TRACETYPE
+{
+  "TEST_DIR_CHG" .
+  "TEST_JUMP" .
+  "TEST_FALL" .
+  "TEST_KILLER" .
+  "TEST_FINISH" .
+}
+
 def GAMELOOP_TRACE struct
 {
   n16 dec                     "50Hz ticker"
@@ -60,9 +69,20 @@ def RUNNER_TRACE
   n8 dec signed               "y delta"
 }
 
+def KEY_ACTION_TRACE
+{
+  n16 dec                        "50Hz ticker"
+  n8  map _KEY_ACTION_TRACETYPE  "trace type"
+}
+
 def RUNNER_TRACE_TABLE struct
 {
   50 RUNNER_TRACE open "runner trace table"
+}
+
+def KEY_ACTION_TRACE_TABLE struct
+{
+  25 KEY_ACTION_TRACE open "key action trace table"
 }
 
 def main struct
@@ -73,4 +93,6 @@ def main struct
   at _runner_tracetable
   n16 ptr RUNNER_TRACE_TABLE   "runner"
 
+  at _key_action_tracetable
+  n16 ptr KEY_ACTION_TRACE_TABLE   "key action"
 }

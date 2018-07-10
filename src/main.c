@@ -57,6 +57,7 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
 
+  init_key_action_trace();
   create_runner( RIGHT );
 
   while( 1 ) {

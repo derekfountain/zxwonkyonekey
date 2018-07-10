@@ -173,12 +173,14 @@ void gameloop( GAME_STATE* game_state )
 
       flag = (game_actions[i].test_action)(game_state, &required_action);
 
-      GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
-                                    game_state->key_processed,
-                                    get_runner_xpos(),
-                                    get_runner_ypos(),
-                                    required_action,
-                                    flag);
+      if( required_action != NO_ACTION ) {
+	GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
+			              game_state->key_processed,
+                                      get_runner_xpos(),
+                                      get_runner_ypos(),
+                                      required_action,
+                                      flag);
+      }
 
       switch( required_action )
         {

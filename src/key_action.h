@@ -23,6 +23,11 @@
 #include "action.h"
 
 /*
+ * Initialise trace table for key actions
+ */
+void init_key_action_trace(void);
+
+/*
  * Information on these game action functions is in the C code file.
  */
 
