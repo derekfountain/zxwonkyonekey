@@ -1,54 +1,19 @@
 include "be/stdint.berc"
 
-map _GAMELOOP_TRACETYPE
-{
-  "ENTER" .
-  "KEY_STATE" .
-  "ACTION" .
-  "EXIT" .
-}
-
-map _PROCESSING_FLAG
-{
-  "KEEP_PROCESSING" .
-  "STOP_PROCESSING" .
-}
-
-map _GAME_ACTION
-{
-  "NO_ACTION" .
-  "MOVE_RIGHT" .
-  "MOVE_LEFT" .
-  "MOVE_UP" .
-  "MOVE_DOWN" .
-  "TOGGLE_DIRECTION" .
-  "JUMP" .
-  "DIE" .
-}
-
-map _KEY_ACTION_TRACETYPE
-{
-  "TEST_DIR_CHG_BOUNCE" .
-  "TEST_DIR_CHG_KEY" .
-  "TEST_JUMP_ON_BLOCK" .
-  "TEST_JUMP_PARTIAL_ON_BLOCK" .
-  "TEST_FALL_RIGHT_UNROTATED" .
-  "TEST_FALL_RIGHT_NO_TOE_SUPPORT" .
-  "TEST_FALL_LEFT_HEEL_SUPPORT" .
-  "TEST_KILLER" .
-  "TEST_FINISH" .
-}
+// This is generated. The structure defs isn't as yet.
+//
+include "be/be_enums.inc"
 
 def GAMELOOP_TRACE struct
 {
   n16 dec                     "50Hz ticker"
-  n8  map _GAMELOOP_TRACETYPE "tracetype"
+  n8  map GAMELOOP_TRACETYPE  "tracetype"
   n8  hex                     "key pressed"      
   n8  hex                     "key processed"      
   n8  dec                     "xpos"      
   n8  dec                     "ypos"      
-  n8  map _GAME_ACTION        "action"
-  n8  map _PROCESSING_FLAG    "processing flag"
+  n8  map GAME_ACTION         "action"
+  n8  map PROCESSING_FLAG     "processing flag"
 }
  
 def GAMELOOP_TRACE_TABLE
@@ -56,18 +21,10 @@ def GAMELOOP_TRACE_TABLE
   1000 GAMELOOP_TRACE open "gameloop trace table"
 }
 
-map _RUNNER_TRACETYPE
-{
-  "JUMP_START" .
-  "JUMPING_UPWARDS" .
-  "JUMPING_DOWNWARDS" .
-  "JUMP_LAST" .
-}
-
 def RUNNER_TRACE
 {
   n16 dec                     "50Hz ticker"
-  n8  map _RUNNER_TRACETYPE   "tracetype"
+  n8  map RUNNER_TRACETYPE    "tracetype"
   n8 dec                      "xpos"
   n8 dec                      "ypos before delta"
   n8 dec signed               "y delta"
@@ -76,7 +33,7 @@ def RUNNER_TRACE
 def KEY_ACTION_TRACE
 {
   n16 dec                        "50Hz ticker"
-  n8  map _KEY_ACTION_TRACETYPE  "tracetype"
+  n8  map KEY_ACTION_TRACETYPE   "tracetype"
   union
   {
     n16 dec valid "tracetype==TEST_DIR_CHG_BOUNCE"         "bounced"

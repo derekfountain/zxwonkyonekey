@@ -43,10 +43,9 @@
  */
 typedef enum _direction
 {
-  RIGHT=0,
-  LEFT =1,
-}
-DIRECTION;
+  RIGHT,
+  LEFT ,
+} DIRECTION;
 
 /*
  * This structure defines the runner - i.e. the player's

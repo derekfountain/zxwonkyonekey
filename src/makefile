@@ -33,6 +33,9 @@ ASFLAGS=$(TARGET) $(VERBOSITY) -c
 SYMBOLS_GENERATOR=./generate_symbols.pl
 MAP=wonky.map
 
+BE_MAP_EXTRACTOR=./be/extract_enums.tcl
+BE_ENUMS=./be/be_enums.inc
+
 EXEC=wonky.tap
 EXEC_OUTPUT=wonky
 SYM_OUTPUT=wonky.sym
@@ -58,6 +61,7 @@ all : clean_tmp $(EXEC)
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
+	$(BE_MAP_EXTRACTOR) *.h *.c > $(BE_ENUMS)
 
 .PHONY: clean_tmp
 clean_tmp:
@@ -65,5 +69,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.ss zcc_opt.def *~ /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.ss zcc_opt.def *~ $(BE_ENUMS) /tmp/tmpXX*
 	rm -rf __pycache__

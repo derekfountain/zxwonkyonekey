@@ -24,8 +24,7 @@ typedef enum _processing_flag
 {
   KEEP_PROCESSING,
   STOP_PROCESSING,
-}
-PROCESSING_FLAG;
+} PROCESSING_FLAG;
 
 typedef enum _game_action
 {
@@ -38,8 +37,7 @@ typedef enum _game_action
   JUMP,
   DIE,
   FINISH,
-}
-GAME_ACTION;
+} GAME_ACTION;
 
 typedef struct _loop_action
 {
