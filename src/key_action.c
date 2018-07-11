@@ -42,9 +42,13 @@
 
 typedef enum _key_action_tracetype
 {
-  TEST_DIR_CHG,
-  TEST_JUMP,
-  TEST_FALL,
+  TEST_DIR_CHG_BOUNCE,
+  TEST_DIR_CHG_KEY,
+  TEST_JUMP_ON_BLOCK,
+  TEST_JUMP_PARTIAL_ON_BLOCK,
+  TEST_FALL_RIGHT_UNROTATED,
+  TEST_FALL_RIGHT_NO_TOE_SUPPORT,
+  TEST_FALL_LEFT_HEEL_SUPPORT,
   TEST_KILLER,
   TEST_FINISH,
 } KEY_ACTION_TRACETYPE;
@@ -53,9 +57,16 @@ typedef struct _key_action_trace
 {
   uint16_t               ticker;
   KEY_ACTION_TRACETYPE   tracetype;
+  uint16_t               data;
+  /*
+  union {
+    uint16_t             key_pressed;
+    uint16_t             bounced;
+  };
+  */
 } KEY_ACTION_TRACE;
 
-#define KEY_ACTION_TRACE_ENTRIES   25
+#define KEY_ACTION_TRACE_ENTRIES   100
 #define KEY_ACTION_TRACETABLE_SIZE ((size_t)sizeof(KEY_ACTION_TRACE)*KEY_ACTION_TRACE_ENTRIES)
 
 KEY_ACTION_TRACE* key_action_tracetable = TRACING_UNINITIALISED;
@@ -71,12 +82,20 @@ void key_action_add_trace( KEY_ACTION_TRACE* ka_ptr )
     key_action_next_trace = key_action_tracetable;
 }
 
-void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype )
+void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype, uint16_t d )
 {
   if( key_action_tracetable != TRACING_INACTIVE ) {
     KEY_ACTION_TRACE  ka;		  
     ka.ticker       = GET_TICKER;			
     ka.tracetype    = ttype;
+    ka.data         = d;
+    /*
+    if( d == 0 ) {
+      ka.bounced    = 1;
+    } else {
+      ka.key_pressed= 1;
+    }
+    */
     key_action_add_trace(&ka);			
   }						
 }
@@ -127,7 +146,7 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
     game_state->key_processed = 1;
     *output_action = TOGGLE_DIRECTION;
 
-    KEY_ACTION_TRACE_CREATE( TEST_DIR_CHG );
+    KEY_ACTION_TRACE_CREATE( TEST_DIR_CHG_KEY, 0 );
 
     return KEEP_PROCESSING;
   }
@@ -158,6 +177,9 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
   
   if( attr_address && ((*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE) ) {
     *output_action = TOGGLE_DIRECTION;
+
+    KEY_ACTION_TRACE_CREATE( TEST_DIR_CHG_BOUNCE, MODULO8( xpos ) );
+
     return KEEP_PROCESSING;
   }
 
@@ -216,23 +238,26 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
   if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
 
     /* No, so check the block below and to the right, which the sprite might have rotated into */
-    if( (MODULO8( xpos ) < 3) ) {
+    if( MODULO8( xpos ) < 3 ) {
       /* Sprite hasn't rotated far enough to stray onto next block */
       *output_action = NO_ACTION;
       return KEEP_PROCESSING;
     }
 
-   attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
-   if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
-     /* Block the sprite is rotated onto isn't a jump block either. */
-     *output_action = NO_ACTION;
-     return KEEP_PROCESSING;
-   }
+    attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
+    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
+      /* Block the sprite is rotated onto isn't a jump block either. */
+      *output_action = NO_ACTION;
+      return KEEP_PROCESSING;
+    }
 
-   /* His heel or toe is on top of a jump block so drop through */
+    /* His heel or toe is on top of a jump block so drop through */
+    KEY_ACTION_TRACE_CREATE( TEST_JUMP_PARTIAL_ON_BLOCK, MODULO8( xpos ) );
   }
   else {
     /* He's directly on top of a jump block, so drop through */
+
+    KEY_ACTION_TRACE_CREATE( TEST_JUMP_ON_BLOCK, 0 );
   }
 
   game_state->key_processed = 1;
@@ -285,14 +310,14 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
    * the repeated zx_pxy2aaddr() calls.
    */
 
-  if( get_runner_facing() == RIGHT ) {
+  /* Is the cell below him solid? If so, he's supported */
+  attr_address = zx_pxy2aaddr( xpos, ypos+8 );
+  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+    *output_action = NO_ACTION;
+    return KEEP_PROCESSING;
+  }
 
-    /* Is the cell below him solid? If so, he's supported */
-    attr_address = zx_pxy2aaddr( xpos, ypos+8 );
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-      *output_action = NO_ACTION;
-      return KEEP_PROCESSING;
-    }
+  if( get_runner_facing() == RIGHT ) {
 
     /*
      * If he's facing right and hasn't rotated onto the cell to his right (in front of him)
@@ -300,6 +325,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
      */
     if( MODULO8(xpos) < 3 ) {
       *output_action = MOVE_DOWN;
+      KEY_ACTION_TRACE_CREATE( TEST_FALL_RIGHT_UNROTATED, MODULO8(xpos) );
       return STOP_PROCESSING;
     }
 
@@ -309,35 +335,35 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
      */
     attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
     if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-      *output_action = MOVE_DOWN;
-      return STOP_PROCESSING;
-    }
-    else {
       *output_action = NO_ACTION;
       return KEEP_PROCESSING;
+    }
+    else {
+      *output_action = MOVE_DOWN;
+      KEY_ACTION_TRACE_CREATE( TEST_FALL_RIGHT_NO_TOE_SUPPORT, 0 );
+      return STOP_PROCESSING;
     }
   }
   else {  /* Facing left */
 
-    if( MODULO8( xpos ) < 3 ) {
+    /*
+     * If he's over on the right side of his cell, check if his heels are supported.
+     * If not he should fall.
+     */
+    if( MODULO8( xpos ) >= 3 ) {
 
-      /* If he's over to the left side of his cell his heels can't be supported */
-      attr_address = zx_pxy2aaddr( xpos, ypos+8  );
-    }
-    else {
-
-      /* If he's over on the right side of his cell, his heels are supported */
       attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
+
+      KEY_ACTION_TRACE_CREATE( TEST_FALL_LEFT_HEEL_SUPPORT, MODULO8( xpos ) );
+
+      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        *output_action = NO_ACTION;
+        return KEEP_PROCESSING;
+      }
     }
 
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-      *output_action = NO_ACTION;
-      return KEEP_PROCESSING;
-    }
-    else {
-      *output_action = MOVE_DOWN;
-      return STOP_PROCESSING;
-    }
+    *output_action = MOVE_DOWN;
+    return STOP_PROCESSING;
   }
 }
 
