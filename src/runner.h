@@ -28,12 +28,12 @@
  * Jump offset value is an index into an array. This value
  * means not jumping.
  */
-#define NOT_JUMPING (uint8_t)(0xFF)
+#define NO_JUMP (uint8_t)(0xFF)
 
 /*
  * Macro for readability. :)
  */
-#define RUNNER_JUMPING(offset) (((uint8_t)(offset)) != NOT_JUMPING)
+#define RUNNER_JUMPING(offset) (((uint8_t)(offset)) != NO_JUMP)
 
 /*
  * Directions. Up and down may be added at some point.
@@ -44,8 +44,29 @@
 typedef enum _direction
 {
   RIGHT,
-  LEFT ,
+  LEFT,
 } DIRECTION;
+
+
+typedef enum _corner
+{
+  TOP_RIGHT,
+  BOTTOM_RIGHT,
+  BOTTOM_LEFT,
+  TOP_LEFT,
+} CORNER;
+
+
+typedef enum _jump_status
+{
+  NOT_JUMPING,
+  RIGHT_RISING,
+  RIGHT_FLAT,
+  RIGHT_FALLING,
+  LEFT_RISING,
+  LEFT_FLAT,
+  LEFT_FALLING,
+} JUMP_STATUS;
 
 /*
  * This structure defines the runner - i.e. the player's
@@ -73,14 +94,15 @@ RUNNER* create_runner( DIRECTION initial_direction );
 /*
  * Runner screen movement getters and setters.
  */
-uint8_t   get_runner_xpos( void );
-uint8_t   get_runner_ypos( void );
-void      set_runner_xpos( uint8_t pos );
-void      set_runner_ypos( uint8_t pos );
-void      move_runner_xpos( int8_t delta );
-void      move_runner_ypos( int8_t delta );
-DIRECTION get_runner_facing( void );
-uint8_t   get_runner_jump_offset( void );
+uint8_t     get_runner_xpos( void );
+uint8_t     get_runner_ypos( void );
+void        set_runner_xpos( uint8_t pos );
+void        set_runner_ypos( uint8_t pos );
+void        move_runner_xpos( int8_t delta );
+void        move_runner_ypos( int8_t delta );
+DIRECTION   get_runner_facing( void );
+uint8_t     get_runner_jump_offset( void );
+JUMP_STATUS get_runner_jump_status(void);
 
 /*
  * Adjust the runner's screen position depending on where he
@@ -115,5 +137,7 @@ void runner_dead(void);
  * i.e. left or right, depending on game state.
  */
 PROCESSING_FLAG move_sideways( void* data, GAME_ACTION* output_action );
+
+void find_corner_pixel( uint8_t* x, uint8_t* y, CORNER corner );
 
 #endif

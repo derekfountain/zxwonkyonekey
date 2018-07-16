@@ -128,8 +128,9 @@ LOOP_ACTION game_actions[] =
     {test_for_killer                },
     {test_for_falling               },
     {test_for_start_jump            },
-    {test_for_direction_change      },
-    {move_sideways                  },
+    {update_xy_delta            },
+/*    {test_for_direction_change      },
+      {move_sideways                  },*/
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 

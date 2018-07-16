@@ -204,7 +204,7 @@ RUNNER* create_runner( DIRECTION initial_direction )
   runner.ypos        = 0;
   runner.facing      = initial_direction;
 
-  runner.jump_offset = NOT_JUMPING;
+  runner.jump_offset = NO_JUMP;
 
   return &runner;
 }
@@ -249,6 +249,84 @@ uint8_t get_runner_jump_offset( void )
   return runner.jump_offset;
 }
 
+JUMP_STATUS get_runner_jump_status( void )
+{
+  if( RUNNER_JUMPING(runner.jump_offset) ) {
+
+    int8_t y_delta = jump_y_offsets[runner.jump_offset];
+    if( y_delta < 0 ) {
+      if( runner.facing == RIGHT ) {
+	return RIGHT_FALLING;
+      }
+      else {
+	return LEFT_FALLING;
+      }
+    }
+    else if( y_delta == 0 ) {
+      if( runner.facing == RIGHT ) {
+	return RIGHT_FLAT;
+      }
+      else {
+	return LEFT_FLAT;
+      }
+    } else {
+      if( runner.facing == RIGHT ) {
+	return RIGHT_RISING;
+      }
+      else {
+	return LEFT_RISING;
+      }
+    }
+  }
+  else {
+    return NOT_JUMPING;
+  }
+}
+
+/*
+ * This needs to find the corner pixel based on which way he's moving.
+ * It currently finds the one above his head even when he's walking on the flat
+ * which means he can't walk under things. In that case it should find
+ * the pixel in front, not above.
+ * The snag is that in the flat part of his jump it needs to check if his
+ * head is going to hit something, or his feet, which means it needs to
+ * make 2 checks.
+ * So, work out where he is in the jump and which direction he's moving,
+ * and have it return a direction change. Bounce, bounce in jump, etc.
+ * I think create a new file called collisions or soemthing. I'm writing
+ * a lot of code and none of it is working first time. I need to stop
+ * throwing it away.
+ */
+void find_corner_pixel( uint8_t* x, uint8_t* y, CORNER corner )
+{
+  *x = runner.xpos;
+  *y = runner.ypos;
+
+  switch( corner )
+  {
+  case TOP_RIGHT:
+    *x += 6;
+    *y -= 1;
+    return;
+    
+  case BOTTOM_RIGHT:
+    *x += 6;
+    *y += 8;
+    return;
+
+  case TOP_LEFT:
+    *x -= 1;
+    *y -= 1;
+    return;
+
+  case BOTTOM_LEFT:
+    *x -= 1;
+    *y += 8;
+    return;
+  }
+}
+
+
 void adjust_for_jump(void)
 {
   if( RUNNER_JUMPING(runner.jump_offset) ) {
@@ -259,7 +337,7 @@ void adjust_for_jump(void)
      * he's no longer jumping.
      */
     if( ++runner.jump_offset == sizeof(jump_y_offsets) ) {
-      runner.jump_offset = NOT_JUMPING;
+      runner.jump_offset = NO_JUMP;
 
       /* Note that this trace is logged *before* the final y adjustment */
       RUNNER_TRACE_CREATE(JUMP_LAST, runner.xpos, runner.ypos, y_delta);
@@ -292,7 +370,7 @@ void adjust_for_jump(void)
   
 	  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
 	    y_delta = 0;
-	    runner.jump_offset = NOT_JUMPING;
+	    runner.jump_offset = NO_JUMP;
 	  }
 	}
       }
@@ -305,7 +383,7 @@ void adjust_for_jump(void)
   
 	  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
 	    y_delta = 0;
-	    runner.jump_offset = NOT_JUMPING;
+	    runner.jump_offset = NO_JUMP;
 	  }
 	}
 

@@ -37,4 +37,6 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action );
 PROCESSING_FLAG test_for_killer( void* data, GAME_ACTION* output_action );
 PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action );
 
+PROCESSING_FLAG update_xy_delta( void* data, GAME_ACTION* output_action );
+
 #endif

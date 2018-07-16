@@ -19,12 +19,12 @@ CC=zcc
 AS=zcc
 TARGET=+zx
 VERBOSITY=-vn
-CRT=31
+CRT=4
 
 PRAGMA_FILE=zpragma.inc
 
-#C_OPT_FLAGS=-SO3 --max-allocs-per-node200000 -DNDEBUG --std-c99
-C_OPT_FLAGS=-no-cleanup --c-code-in-asm --std-c99
+#C_OPT_FLAGS=-SO3 --max-allocs-per-node200000 -DNDEBUG --std-c99 --list
+C_OPT_FLAGS=-no-cleanup --c-code-in-asm --std-c99 --list
 
 CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -preserve -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
 LDFLAGS=$(TARGET) $(VERBOSITY) -m -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
@@ -69,5 +69,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.ss zcc_opt.def *~ $(BE_ENUMS) /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.lis *.ss zcc_opt.def *~ $(BE_ENUMS) /tmp/tmpXX*
 	rm -rf __pycache__
