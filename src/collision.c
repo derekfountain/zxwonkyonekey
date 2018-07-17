@@ -57,7 +57,7 @@ typedef struct _collision_trace
   REACTION            reaction;
 } COLLISION_TRACE;
 
-#define COLLISION_TRACE_ENTRIES 500
+#define COLLISION_TRACE_ENTRIES 250
 #define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
 
 COLLISION_TRACE* collision_tracetable = TRACING_UNINITIALISED;
@@ -311,12 +311,18 @@ PROCESSING_FLAG update_xy_delta( void* data, GAME_ACTION* output_action )
   DIRECTION   facing = get_runner_facing();
   DIRECTION   jump_status = get_runner_jump_status();
 
+  (void)data;
+
   reaction = test_direction_blocked( xpos, ypos, facing, jump_status );
   switch( reaction )
   {
   case BOUNCE:
     *output_action = TOGGLE_DIRECTION;
     return STOP_PROCESSING;
+
+  case DROP_VERTICALLY:
+    *output_action = STOP_JUMP;
+    return STOP_PROCESSING;    
   }
 
   *output_action = NO_ACTION;

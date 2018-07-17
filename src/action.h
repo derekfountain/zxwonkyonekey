@@ -35,6 +35,7 @@ typedef enum _game_action
   MOVE_DOWN,
   TOGGLE_DIRECTION,
   JUMP,
+  STOP_JUMP,
   DIE,
   FINISH,
 } GAME_ACTION;

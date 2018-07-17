@@ -99,7 +99,9 @@ JUMP_STATUS get_runner_jump_status(void);
  * Adjust the runner's screen position depending on where he
  * is in the cycle of the jump animation, if at all.
  */
+#if 0
 void adjust_for_jump(void);
+#endif
 
 /*
  * Draw the runner at the screen coordinates in the controlling
@@ -117,6 +119,11 @@ void toggle_runner_direction( void );
  * Start the jumping sequence.
  */
 void start_runner_jumping( void );
+
+/*
+ * Stop the jumping sequence.
+ */
+void stop_runner_jumping( void );
 
 /*
  * Start the runner dead sequence.

@@ -69,7 +69,7 @@ typedef struct _gameloop_trace
   PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
 
-#define GAMELOOP_TRACE_ENTRIES 1000
+#define GAMELOOP_TRACE_ENTRIES 250
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
 GAMELOOP_TRACE* gameloop_tracetable = TRACING_UNINITIALISED;
@@ -192,6 +192,10 @@ void gameloop( GAME_STATE* game_state )
 
         case JUMP:
           start_runner_jumping();
+          break;
+
+        case STOP_JUMP:
+          stop_runner_jumping();
           break;
 
         case MOVE_DOWN:

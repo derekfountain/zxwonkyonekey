@@ -63,6 +63,7 @@ extern uint8_t runner_left_f8[];
 typedef enum _runner_tracetype
 {
   JUMP_START,
+  JUMP_STOP,
   JUMPING_UPWARDS,
   JUMPING_DOWNWARDS,
   JUMP_LAST,
@@ -284,10 +285,9 @@ JUMP_STATUS get_runner_jump_status( void )
   }
 }
 
+#if 0
 void adjust_for_jump(void)
 {
-  test_direction_blocked( runner.xpos, runner.ypos, runner.facing, get_runner_jump_status() )  ;
-
   if( RUNNER_JUMPING(runner.jump_offset) ) {
     int8_t y_delta = jump_y_offsets[runner.jump_offset];
 
@@ -352,7 +352,7 @@ void adjust_for_jump(void)
     runner.ypos -= y_delta;
   }
 }
-
+#endif
 
 void draw_runner(void)
 {
@@ -411,6 +411,14 @@ void start_runner_jumping(void)
   runner.jump_offset = 0;
 
   RUNNER_TRACE_CREATE(JUMP_START, 0, 0, 0);
+}
+
+
+void stop_runner_jumping(void)
+{
+  runner.jump_offset = NO_JUMP;
+
+  RUNNER_TRACE_CREATE(JUMP_STOP, 0, 0, 0);
 }
 
 
