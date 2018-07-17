@@ -33,6 +33,7 @@
 #include "tracetable.h"
 #include "local_assert.h"
 #include "int.h"
+#include "collision.h"
 
 
 /***
@@ -128,7 +129,8 @@ LOOP_ACTION game_actions[] =
     {test_for_killer                },
     {test_for_falling               },
     {test_for_start_jump            },
-    {test_for_direction_change      },
+/*  {test_for_direction_change      },*/
+    {update_xy_delta                },
     {move_sideways                  },
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
@@ -221,7 +223,7 @@ void gameloop( GAME_STATE* game_state )
 	break;
     }
 
-    adjust_for_jump();
+    //    adjust_for_jump();
     draw_runner();
 
     intrinsic_halt();

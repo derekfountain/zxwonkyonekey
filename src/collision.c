@@ -302,6 +302,26 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
   return result;
 }
 
+PROCESSING_FLAG update_xy_delta( void* data, GAME_ACTION* output_action )
+{
+  REACTION    reaction;
+
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+  DIRECTION   facing = get_runner_facing();
+  DIRECTION   jump_status = get_runner_jump_status();
+
+  reaction = test_direction_blocked( xpos, ypos, facing, jump_status );
+  switch( reaction )
+  {
+  case BOUNCE:
+    *output_action = TOGGLE_DIRECTION;
+    return STOP_PROCESSING;
+  }
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}
 
 #if 0
 This can be useful when trying to see what is where
