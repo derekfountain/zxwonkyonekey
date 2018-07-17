@@ -48,7 +48,8 @@ OBJECTS = gameloop.o \
 	  runner.o \
 	  runner_sprite.o \
           tracetable.o \
-	  local_assert.o
+	  local_assert.o \
+	  collision.o
 
 %.o: %.c $(PRAGMA_FILE)
 	$(CC) $(CFLAGS) -o $@ $<
