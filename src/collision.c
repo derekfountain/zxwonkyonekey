@@ -23,8 +23,10 @@
 
 #include "utils.h"
 #include "local_assert.h"
+#include "int.h"
 #include "collision.h"
 #include "tracetable.h"
+#include "runner.h"
 
 /***
  *      _______             _             
@@ -41,7 +43,7 @@
 
 typedef enum _collision_tracetype
 {
-  CHECK,
+  CHECK_BLOCKED,
 } COLLISION_TRACETYPE;
 
 typedef struct _collision_trace
@@ -50,28 +52,34 @@ typedef struct _collision_trace
   COLLISION_TRACETYPE tracetype;
   uint8_t             xpos;
   uint8_t             ypos;
+  DIRECTION           direction;
+  JUMP_STATUS         jump_status;
+  REACTION            reaction;
 } COLLISION_TRACE;
 
-#define COLLISION_TRACE_ENTRIES 100
+#define COLLISION_TRACE_ENTRIES 500
 #define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
 
 COLLISION_TRACE* collision_tracetable = TRACING_UNINITIALISED;
 COLLISION_TRACE* collision_next_trace = 0xFFFF;
 
-#define COLLISION_TRACE_CREATE(ttype,x,y) { \
+#define COLLISION_TRACE_CREATE(ttype,x,y,d,js,r) {    \
     if( collision_tracetable != TRACING_INACTIVE ) { \
-      COLLISION_TRACE      glt;   \
-      glt.ticker          = GET_TICKER; \
-      glt.tracetype       = ttype; \
-      glt.xpos            = x; \
-      glt.ypos            = y; \
-      collision_add_trace(&glt); \
+      COLLISION_TRACE      ct;   \
+      ct.ticker          = GET_TICKER; \
+      ct.tracetype       = ttype; \
+      ct.xpos            = x; \
+      ct.ypos            = y; \
+      ct.direction       = d; \
+      ct.jump_status     = js; \
+      ct.reaction        = r; \
+      collision_add_trace(&ct); \
     } \
 }
 
-void collision_add_trace( COLLISION_TRACE* glt_ptr )
+void collision_add_trace( COLLISION_TRACE* ct_ptr )
 {
-  memcpy(collision_next_trace, glt_ptr, sizeof(COLLISION_TRACE));
+  memcpy(collision_next_trace, ct_ptr, sizeof(COLLISION_TRACE));
 
   collision_next_trace = (void*)((uint8_t*)collision_next_trace + sizeof(COLLISION_TRACE));
 
@@ -94,6 +102,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
   uint8_t  check_x;
   uint8_t  check_y;
   uint8_t* attr_address;
+  REACTION result;
 
   if( jump_status == NOT_JUMPING ) {
 
@@ -107,10 +116,10 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
     }
     attr_address = zx_pxy2aaddr( check_x, check_y  );
     if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-      return BOUNCE;
+      result = BOUNCE;
     }
     else {
-      return NO_REACTION;
+      result = NO_REACTION;
     }
 
   }
@@ -125,7 +134,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
+        result = BOUNCE;
       }
       else {
         /* OK, check if he's about to bang his foot */
@@ -133,10 +142,10 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
         if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-          return BOUNCE;
+          result = BOUNCE;
         }
         else {
-          return NO_REACTION;
+          result = NO_REACTION;
         }
       }
       break;
@@ -148,7 +157,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
+        result = BOUNCE;
       }
       else {
         /* OK, check if he's about to bang his foot */
@@ -156,10 +165,10 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
         if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-          return BOUNCE;
+          result = BOUNCE;
         }
         else {
-          return NO_REACTION;
+          result = NO_REACTION;
         }
       }
       break;
@@ -169,30 +178,33 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_x = x+SPRITE_WIDTH;
       check_y = y;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
-      }
-
-      /* Check if he's about to bang his foot */
-      check_x = x+SPRITE_WIDTH;
-      check_y = y+SPRITE_HEIGHT-1;
+      result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
-      }
-
-      /* Check if he's about to bang his head */
-      check_x = x+SPRITE_WIDTH;
-      check_y = y-1;
-
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return DROP_VERTICALLY;
+        result = BOUNCE;
       }
       else {
-        return NO_REACTION;
+
+        /* Check if he's about to bang his foot */
+        check_x = x+SPRITE_WIDTH;
+        check_y = y+SPRITE_HEIGHT-1;
+
+        attr_address = zx_pxy2aaddr( check_x, check_y  );
+        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          result = BOUNCE;
+        }
+        else {
+
+          /* Check if he's about to bang his head */
+          check_x = x+SPRITE_WIDTH;
+          check_y = y-1;
+
+          attr_address = zx_pxy2aaddr( check_x, check_y  );
+          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+            result = DROP_VERTICALLY;
+          }
+        }
       }
       break;
 
@@ -201,30 +213,33 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_x = x-1;
       check_y = y;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
-      }
-
-      /* Check if he's about to bang his foot */
-      check_x = x-1;
-      check_y = y+SPRITE_HEIGHT-1;
+      result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
-      }
-
-      /* Check if he's about to bang his head */
-      check_x = x-1;
-      check_y = y-1;
-
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return DROP_VERTICALLY;
+        result = BOUNCE;
       }
       else {
-        return NO_REACTION;
+
+        /* Check if he's about to bang his foot */
+        check_x = x-1;
+        check_y = y+SPRITE_HEIGHT-1;
+
+        attr_address = zx_pxy2aaddr( check_x, check_y  );
+        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          result = BOUNCE;
+        }
+        else {
+
+          /* Check if he's about to bang his head */
+          check_x = x-1;
+          check_y = y-1;
+
+          attr_address = zx_pxy2aaddr( check_x, check_y  );
+          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+            result = DROP_VERTICALLY;
+          }
+        }
       }
       break;
 
@@ -233,21 +248,23 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_x = x+SPRITE_WIDTH;
       check_y = y;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
-      }
-
-      /* Check if he's about to bang his foot */
-      check_x = x+SPRITE_WIDTH;
-      check_y = y+SPRITE_HEIGHT-1;
+      result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
+        result = BOUNCE;
       }
+      else {
 
-      return NO_REACTION;
+        /* Check if he's about to bang his foot */
+        check_x = x+SPRITE_WIDTH;
+        check_y = y+SPRITE_HEIGHT-1;
+
+        attr_address = zx_pxy2aaddr( check_x, check_y  );
+        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          result = BOUNCE;
+        }
+      }
       break;
 
     case LEFT_FALLING:
@@ -255,21 +272,23 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_x = x-1;
       check_y = y;
 
+      result = NO_REACTION;
+
       attr_address = zx_pxy2aaddr( check_x, check_y  );
       if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
+        result = BOUNCE;
       }
+      else {
 
       /* Check if he's about to bang his foot */
-      check_x = x-1;
-      check_y = y+SPRITE_HEIGHT-1;
+        check_x = x-1;
+        check_y = y+SPRITE_HEIGHT-1;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-        return BOUNCE;
+        attr_address = zx_pxy2aaddr( check_x, check_y  );
+        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          result = BOUNCE;
+        }
       }
-
-      return NO_REACTION;
       break;
 
     default:
@@ -278,7 +297,9 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
     }
   }
 
-  return NO_REACTION;
+  COLLISION_TRACE_CREATE( CHECK_BLOCKED, x, y, facing, jump_status, result);
+
+  return result;
 }
 
 

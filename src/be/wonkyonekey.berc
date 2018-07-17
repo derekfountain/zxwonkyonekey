@@ -44,6 +44,17 @@ def KEY_ACTION_TRACE
   }
 }
 
+def COLLISION_TRACE
+{
+  n16 dec                     "50Hz ticker"
+  n8  map COLLISION_TRACETYPE    "tracetype"
+  n8 dec                      "xpos"
+  n8 dec                      "ypos before delta"
+  n8 map DIRECTION               "facing"
+  n8 map JUMP_STATUS             "jump status"
+  n8 map REACTION              "reaction result"
+}
+
 def RUNNER_TRACE_TABLE struct
 {
   50 RUNNER_TRACE open "runner trace table"
@@ -52,6 +63,11 @@ def RUNNER_TRACE_TABLE struct
 def KEY_ACTION_TRACE_TABLE struct
 {
   100 KEY_ACTION_TRACE open "key action trace table"
+}
+
+def COLLISION_TRACE_TABLE struct
+{
+  500 COLLISION_TRACE open "collision trace table"
 }
 
 def main struct
@@ -64,4 +80,7 @@ def main struct
 
   at _key_action_tracetable
   n16 ptr KEY_ACTION_TRACE_TABLE   "key action"
+
+  at _collision_tracetable
+  n16 ptr COLLISION_TRACE_TABLE   "collision"
 }
