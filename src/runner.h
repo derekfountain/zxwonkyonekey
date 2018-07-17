@@ -48,15 +48,6 @@ typedef enum _direction
 } DIRECTION;
 
 
-typedef enum _corner
-{
-  TOP_RIGHT,
-  BOTTOM_RIGHT,
-  BOTTOM_LEFT,
-  TOP_LEFT,
-} CORNER;
-
-
 typedef enum _jump_status
 {
   NOT_JUMPING,
@@ -137,7 +128,5 @@ void runner_dead(void);
  * i.e. left or right, depending on game state.
  */
 PROCESSING_FLAG move_sideways( void* data, GAME_ACTION* output_action );
-
-void find_corner_pixel( uint8_t* x, uint8_t* y, CORNER corner );
 
 #endif

@@ -30,6 +30,16 @@ typedef enum _reaction
   DROP_VERTICALLY,
 } REACTION;
 
+
+typedef enum _corner
+{
+  TOP_RIGHT,
+  BOTTOM_RIGHT,
+  BOTTOM_LEFT,
+  TOP_LEFT,
+} CORNER;
+
+
 REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_STATUS jump_status );
 
 #endif
