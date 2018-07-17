@@ -18,11 +18,73 @@
  */
 
 #include <stdint.h>
+#include <string.h>
 #include <arch/zx.h>
 
 #include "utils.h"
 #include "local_assert.h"
 #include "collision.h"
+#include "tracetable.h"
+
+/***
+ *      _______             _             
+ *     |__   __|           (_)            
+ *        | |_ __ __ _  ___ _ _ __   __ _ 
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/ 
+ *
+ * This defines the collision checker trace table.
+ */
+
+typedef enum _collision_tracetype
+{
+  CHECK,
+} COLLISION_TRACETYPE;
+
+typedef struct _collision_trace
+{
+  uint16_t            ticker;
+  COLLISION_TRACETYPE tracetype;
+  uint8_t             xpos;
+  uint8_t             ypos;
+} COLLISION_TRACE;
+
+#define COLLISION_TRACE_ENTRIES 100
+#define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
+
+COLLISION_TRACE* collision_tracetable = TRACING_UNINITIALISED;
+COLLISION_TRACE* collision_next_trace = 0xFFFF;
+
+#define COLLISION_TRACE_CREATE(ttype,x,y) { \
+    if( collision_tracetable != TRACING_INACTIVE ) { \
+      COLLISION_TRACE      glt;   \
+      glt.ticker          = GET_TICKER; \
+      glt.tracetype       = ttype; \
+      glt.xpos            = x; \
+      glt.ypos            = y; \
+      collision_add_trace(&glt); \
+    } \
+}
+
+void collision_add_trace( COLLISION_TRACE* glt_ptr )
+{
+  memcpy(collision_next_trace, glt_ptr, sizeof(COLLISION_TRACE));
+
+  collision_next_trace = (void*)((uint8_t*)collision_next_trace + sizeof(COLLISION_TRACE));
+
+  if( collision_next_trace == (void*)((uint8_t*)collision_tracetable+COLLISION_TRACETABLE_SIZE) )
+      collision_next_trace = collision_tracetable;
+}
+
+void init_collision_trace(void)
+{
+  if( collision_tracetable == TRACING_UNINITIALISED )
+    collision_tracetable = collision_next_trace = allocate_tracememory(COLLISION_TRACETABLE_SIZE);
+}
+
 
 #define SPRITE_WIDTH  6
 #define SPRITE_HEIGHT 8

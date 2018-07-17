@@ -32,6 +32,7 @@
 #include "levels.h"
 #include "tracetable.h"
 #include "gameloop.h"
+#include "collision.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -58,6 +59,7 @@ int main()
                   ' ' );
 
   init_key_action_trace();
+  init_collision_trace();
   create_runner( RIGHT );
 
   while( 1 ) {

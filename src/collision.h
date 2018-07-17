@@ -40,6 +40,11 @@ typedef enum _corner
 } CORNER;
 
 
+/*
+ * Initialise trace table for collision detection
+ */
+void init_collision_trace(void);
+
 REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_STATUS jump_status );
 
 #endif
