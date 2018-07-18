@@ -69,7 +69,7 @@ typedef enum _runner_tracetype
   JUMP_LAST,
 } RUNNER_TRACETYPE;
 
-typedef struct skipbe_runner_trace
+typedef struct _runner_trace
 {
   uint16_t           ticker;
   RUNNER_TRACETYPE   tracetype;

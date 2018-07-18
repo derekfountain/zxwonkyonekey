@@ -5,7 +5,12 @@
 #
 # Give it the filenames on the command line:
 #
-#  ./extract_enums.tcl *.h *.c > maps.inc
+#  ./extract_enums.tcl  [--enum-list <file>] *.h *.c > maps.inc
+#
+# If you specify the enum list file, the names found in it will
+# be assumed to be map definitions. This file would normally be
+# created by extract_enums.tcl so this script can recognise
+# enums in the structures.
 #
 # It's not too smart. It needs the C source to look like this:
 #
@@ -71,8 +76,18 @@ proc process_file { filename } {
         # Look for struct entries
         if { $current_struct ne "" } {
 
-            if { [regexp {^\s*uint8_t\s+([^;]+);} $line unused struct_entry_name] } {
-                lappend current_struct_entries "n8 dec \"$struct_entry_name\""
+            if { [regexp {^\s*int8_t\s+([^;]+);} $line unused struct_entry_name] } {
+                lappend current_struct_entries "n8 dec signed \"$struct_entry_name\""
+            } elseif { [regexp {^\s*int16_t\s+([^;]+);} $line unused struct_entry_name] } {
+                lappend current_struct_entries "n16 dec signed \"$struct_entry_name\""
+            } elseif { [regexp {^\s*uint8_t\s+([^;]+);} $line unused struct_entry_name] } {
+                lappend current_struct_entries "n8 dec unsigned \"$struct_entry_name\""
+            } elseif { [regexp {^\s*uint16_t\s+([^;]+);} $line unused struct_entry_name] } {
+                lappend current_struct_entries "n16 dec signed \"$struct_entry_name\""
+            } elseif { [regexp {^\s*(\w+)\s+([^;]+);} $line unused possible_enum struct_entry_name] } {
+                if { [lsearch -exact $::known_enums $possible_enum] } {
+                    lappend current_struct_entries "n8 map $possible_enum open \"$struct_entry_name\""
+                }
             }
         }
         
@@ -83,6 +98,21 @@ proc process_file { filename } {
     close $handle
 }
 
+set usage "extract_structs.tcl \[--enum-list <filename>\] <files>"
+if { [catch {array set opts [concat { --enum-list "" } $argv]}] } {
+    puts stderr $usage
+    exit -1               
+}
+
+set known_enums [list]
+if { $::opts(--enum-list) ne "" } {
+    set handle [open $::opts(--enum-list) "r"]
+    while { [gets $handle line] >= 0 } {
+        lappend known_enums $line
+    }
+    close $handle
+    set argv [lrange $argv 2 end]
+}
 
 foreach filename $argv {
     process_file $filename

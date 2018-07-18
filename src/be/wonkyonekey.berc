@@ -17,15 +17,6 @@ def GAMELOOP_TRACE struct
   n8  map PROCESSING_FLAG     "processing flag"
 }
  
-def RUNNER_TRACE
-{
-  n16 dec                     "50Hz ticker"
-  n8  map RUNNER_TRACETYPE    "tracetype"
-  n8 dec                      "xpos"
-  n8 dec                      "ypos before delta"
-  n8 dec signed               "y delta"
-}
-
 def KEY_ACTION_TRACE
 {
   n16 dec                        "50Hz ticker"
@@ -86,5 +77,5 @@ def main struct
   n16 ptr COLLISION_TRACE_TABLE   "collision"
 
   at _game_state
-  GAME_STATE "game_state"
+  GAME_STATE open "game_state"
 }
