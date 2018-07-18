@@ -127,8 +127,7 @@ Level data needs to be in the game state.
  *                                                                          |___/      
  * Test for direction change.
  *
- * Runner changes direction if he hits a wall or the user
- * presses the control key.
+ * Runner changes direction if the user presses the control key.
  *
  * Returns TOGGLE_DIRECTION if the runner's direction is to
  * be reversed.
@@ -147,38 +146,6 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
     *output_action = TOGGLE_DIRECTION;
 
     KEY_ACTION_TRACE_CREATE( TEST_DIR_CHG_KEY, 0 );
-
-    return KEEP_PROCESSING;
-  }
-
-  /*
-   * Does he need to bounce off a wall he's facing?
-   *
-   * The complication is that the sprite is 6 pixels wide, left aligned
-   * within the 8 pixel wide cell. So if he's facing right he needs to be
-   * on, say, pixel 2, or pixel 10, to be up against the wall he's facing.
-   * Facing left is more straightforward.
-   *
-   * If he's up against the edge of a cell, pick up the attributes of the
-   * cell he's facing and about to move into. If it's a wall, bounce him.
-   */
-  if( get_runner_facing() == RIGHT ) {
-
-    if( MODULO8( xpos ) == 2 ) {
-      attr_address = zx_pxy2aaddr( xpos+8, ypos );
-    }
-  }
-  else {  /* He's facing left */
-
-    if( MODULO8( xpos ) == 0 ) {
-      attr_address = zx_pxy2aaddr( xpos-8, ypos );
-    }
-  }
-  
-  if( attr_address && ((*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE) ) {
-    *output_action = TOGGLE_DIRECTION;
-
-    KEY_ACTION_TRACE_CREATE( TEST_DIR_CHG_BOUNCE, MODULO8( xpos ) );
 
     return KEEP_PROCESSING;
   }

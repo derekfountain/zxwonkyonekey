@@ -302,7 +302,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
   return result;
 }
 
-PROCESSING_FLAG update_xy_delta( void* data, GAME_ACTION* output_action )
+PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
 {
   REACTION    reaction;
 

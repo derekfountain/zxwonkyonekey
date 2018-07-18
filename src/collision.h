@@ -20,7 +20,6 @@
 #ifndef __COLLISION_H
 #define __COLLISION_H
 
-#include "collision.h"
 #include "runner.h"
 
 typedef enum _reaction
@@ -45,6 +44,6 @@ typedef enum _corner
  */
 void init_collision_trace(void);
 
-REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_STATUS jump_status );
+PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action );
 
 #endif
