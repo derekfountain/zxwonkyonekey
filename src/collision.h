@@ -21,12 +21,14 @@
 #define __COLLISION_H
 
 #include "runner.h"
+#include "action.h"
 
 typedef enum _reaction
 {
   NO_REACTION,
   BOUNCE,
   DROP_VERTICALLY,
+  LANDED,
 } REACTION;
 
 

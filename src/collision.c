@@ -21,12 +21,14 @@
 #include <string.h>
 #include <arch/zx.h>
 
+#include "collision.h"
 #include "utils.h"
 #include "local_assert.h"
 #include "int.h"
 #include "collision.h"
 #include "tracetable.h"
 #include "runner.h"
+#include "action.h"
 
 /***
  *      _______             _             
@@ -105,6 +107,8 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
   REACTION result;
 
   if( jump_status == NOT_JUMPING ) {
+
+    /* He's not in a jump so bouncing off walls is the only thing to worry about */
 
     if( facing == RIGHT ) {
       check_x = x+SPRITE_WIDTH;
@@ -264,6 +268,17 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
           result = BOUNCE;
         }
+        else {
+
+          /* Check if he's landed on something */
+          check_x = x+SPRITE_WIDTH-1;
+          check_y = y+SPRITE_HEIGHT;
+
+          attr_address = zx_pxy2aaddr( check_x, check_y  );
+          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+            result = LANDED;
+          }
+        }
       }
       break;
 
@@ -280,13 +295,24 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       }
       else {
 
-      /* Check if he's about to bang his foot */
+        /* Check if he's about to bang his foot */
         check_x = x-1;
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
         if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
           result = BOUNCE;
+        }
+        else {
+
+          /* Check if he's landed on something */
+          check_x = x;
+          check_y = y+SPRITE_HEIGHT;
+
+          attr_address = zx_pxy2aaddr( check_x, check_y  );
+          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+            result = LANDED;
+          }
         }
       }
       break;
@@ -321,6 +347,10 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
     return STOP_PROCESSING;
 
   case DROP_VERTICALLY:
+    *output_action = STOP_JUMP;
+    return STOP_PROCESSING;    
+
+  case LANDED:
     *output_action = STOP_JUMP;
     return STOP_PROCESSING;    
   }
