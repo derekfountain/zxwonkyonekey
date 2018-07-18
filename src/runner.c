@@ -181,7 +181,7 @@ const int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
 /*
  * Structure to look after the runner character.
  */
-static RUNNER runner;
+RUNNER runner;
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {

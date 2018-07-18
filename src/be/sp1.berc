@@ -1,0 +1,94 @@
+def sp1_rect struct
+{
+  n8 dec "row" 
+  n8 dec "col"
+  n8 dec "width" 
+  n8 dec "height" 
+}
+
+def sp1_update struct
+{
+  n8         "nload (bitfield, can do better)"
+  n8         "colour"
+  n16        "tile (could be address, so union?)"
+
+  n16 be ptr sp1_cs "sprite list (something weird about this)"
+  n16 be ptr sp1_update "next update struct in list of update structs queued for draw update list"
+
+  n16        "display file addr"
+}
+
+def sp1_ss struct
+{
+  n8 dec "tile row"
+  n8 dec "tile column"
+  n8 dec "width of sprite in tiles"
+  n8 dec "height of sprite in tiles"
+
+  n8 "vertical rotation (bit field)"
+  n8 "horizontal rotation (bit field)"
+
+  n16 "frame address or offset"
+
+  n8  "res0"
+  n8  "e_hrot"
+  n8  "res1"
+  n16 "e_offset"
+  n8  "res2"
+  n8  "res3"
+
+  n16 be ptr sp1_cs "first"
+
+  n8 dec "x threshold"
+  n8 dec  "y threshold"
+
+  n8 dec "number active sp1_cs cells on display"
+}
+
+def sp1_cs struct
+{
+  n16 be ptr sp1_cs "next sprite char in sprite, row major order"
+  n16 be ptr sp1_update "tile this sprite char occupies"
+
+  n8 "plane sprite occupies, 0 = closest to viewer"
+  n8 "type, bit field"
+  n8 "attr_mask, mapp this?"
+  n8 "attr, ditto"
+
+  n16  "ss_draw, draw function"
+
+  n8 "res0, typically 'LD HL,nn' opcode"
+  n16 "def, graphic definition pointer"
+  n8 "res1,typically 'LD IX,nn' opcode"
+  n8 "res2"
+  n16 "l_def, graphic definition pointer for sprite character to left of this one"
+  n8 "res3, typically 'CALL nn' opcode"
+  n16 "draw function for this sprite char"
+
+  n16 be ptr sp1_cs "next_in_upd, & sp1_cs.attr_mask of next sprite occupying the same tile (MSB = 0 if none)"
+  n16 be ptr sp1_cs "prev_in_upd; & sp1_cs.next_in_upd of previous sprite occupying the same tile"
+}
+
+def sp1_ap struct
+{
+  n8 "attr_mask, attribute mask logically ANDed with underlying attribute = 0xff for transparent"
+  n8 "attr, sprite colour, logically ORed to form final colour = 0 for transparent"
+}
+
+def sp1_tp struct
+{
+  n8  "attr"
+  n16 "tile"
+}
+
+def sp1_pss struct
+{
+  n16 ptr sp1_rect "bounds, rectangular boundary within which printing will be allowed"
+  n8               "flags, bit map"
+  n8               "x, current x coordinate of cursor with respect to top left corner of bounds"
+  n8               "y, current y coordinate of cursor with respect to top left corner of bounds"
+  n8               "attr_mask, current attribute mask"
+  n8               "attr,current attribute"
+  n16 ptr sp1_update "pos, RESERVED struct sp1_update associated with current cursor coordinates"
+  n16              "void *visit, void (*visit)(struct sp1_update *) function, set to 0 for none"   
+}

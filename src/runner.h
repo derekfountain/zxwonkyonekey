@@ -69,7 +69,7 @@ typedef enum _jump_status
  * character. It should be a singleton but that's not enforced
  * in order to save a bit of space.
  */
-typedef struct skipbe_runner
+typedef struct _runner
 {
   struct sp1_ss*   sprite;
 

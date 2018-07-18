@@ -77,18 +77,44 @@ proc process_file { filename } {
         if { $current_struct ne "" } {
 
             if { [regexp {^\s*int8_t\s+([^;]+);} $line unused struct_entry_name] } {
+
+		# int8_t
+		#
                 lappend current_struct_entries "n8 dec signed \"$struct_entry_name\""
+
             } elseif { [regexp {^\s*int16_t\s+([^;]+);} $line unused struct_entry_name] } {
+
+		# int16_t
+		#
                 lappend current_struct_entries "n16 dec signed \"$struct_entry_name\""
+
             } elseif { [regexp {^\s*uint8_t\s+([^;]+);} $line unused struct_entry_name] } {
+
+		# uint8_t
+		#
                 lappend current_struct_entries "n8 dec unsigned \"$struct_entry_name\""
+
             } elseif { [regexp {^\s*uint16_t\s+([^;]+);} $line unused struct_entry_name] } {
+
+		# uint16_t
+		#
                 lappend current_struct_entries "n16 dec signed \"$struct_entry_name\""
-            } elseif { [regexp {^\s*(\w+)\s+([^;]+);} $line unused possible_enum struct_entry_name] } {
+
+            } elseif { [regexp {^\s*struct\s+(\w+)\*\s+([^;]+);} $line unused struct_ptr struct_entry_name] } {
+
+		# struct something* ptr_var
+		#
+		lappend current_struct_entries "n16 ptr $struct_ptr \"$struct_entry_name\""
+	    } elseif { [regexp {^\s*(\w+)\s+([^;]+);} $line unused possible_enum struct_entry_name] } {
+
+		# typedef'ed enum
+		#
                 if { [lsearch -exact $::known_enums $possible_enum] } {
                     lappend current_struct_entries "n8 map $possible_enum open \"$struct_entry_name\""
                 }
-            }
+	    }
+
+
         }
         
 

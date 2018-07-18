@@ -68,7 +68,7 @@ $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
 	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
-	$(BE_STRUCT_EXTRACTOR) *.h *.c > $(BE_STRUCTS)
+	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
 	$(TAGS_GENERATOR) *.h *.c
 
 .PHONY: clean_tmp
