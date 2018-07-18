@@ -36,6 +36,8 @@ MAP=wonky.map
 BE_MAP_EXTRACTOR=./be/extract_enums.tcl
 BE_ENUMS=./be/be_enums.inc
 
+TAGS_GENERATOR=etags
+
 EXEC=wonky.tap
 EXEC_OUTPUT=wonky
 SYM_OUTPUT=wonky.sym
@@ -63,6 +65,7 @@ $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
 	$(BE_MAP_EXTRACTOR) *.h *.c > $(BE_ENUMS)
+	$(TAGS_EXTRACTOR) *.h *.c
 
 .PHONY: clean_tmp
 clean_tmp:
