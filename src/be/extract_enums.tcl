@@ -22,6 +22,7 @@ proc process_file { filename } {
 
     set current_enum ""
     set current_enum_entries [list]
+    set current_enum_indexes [list]
 
     set current_struct ""
     set current_struct_entries [list]
@@ -65,23 +66,29 @@ proc process_file { filename } {
         if { $current_enum ne "" && [regexp {^\s*\}\s*(\w+)\s*;$} $line unused enum_def_name] } {
             # puts "Found end of enum: $enum_name, defined as $enum_def_name"
 
-            # Ideally replace . with index
             puts "map $enum_def_name\n{"
-            foreach enum_entry $current_enum_entries {
-                puts "  \"$enum_entry\" ."
+            foreach enum_entry $current_enum_entries enum_index $current_enum_indexes {
+                puts "  \"$enum_entry\" $enum_index"
             }
             puts "}\n"
 
             set current_enum ""
             set current_enum_entries [list]
+            set current_enum_indexes [list]
             continue
         }
 
-        # Look for enum entries
+        # Look for enum entries. Optional =n at end of declaration is supported
         if { $current_enum ne "" } {
-            # This needs to understand an optional '=n' on the end of each line
-            if { [regexp {^\s*([^,]+),} $line unused enum_entry_name] } {
-                lappend current_enum_entries $enum_entry_name
+
+            if { [regexp {^\s*([^,= ]+)(\s*=\s*(\d+))?,} $line unused enum_entry_name unused2 number] } {
+                if { $number eq "" } {
+                    lappend current_enum_entries $enum_entry_name
+                    lappend current_enum_indexes "."
+                } else {
+                    lappend current_enum_entries $enum_entry_name
+                    lappend current_enum_indexes $number
+                }
                 # puts "enum entry: $enum_entry_name"
             }
         }
