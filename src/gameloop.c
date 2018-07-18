@@ -228,7 +228,6 @@ void gameloop( GAME_STATE* game_state )
 	break;
     }
 
-    //    adjust_for_jump();
     draw_runner();
 
     intrinsic_halt();

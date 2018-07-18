@@ -257,6 +257,9 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
  * He might have fallen onto the block he's on, so it's possible he's
  * facing right and is on left pixel 0, 1 or 2 of the cell. In which
  * case fall through.
+ *
+ * TODO The collision detection code could probably be used instead of
+ * this, saving a few bytes.
  */
 PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
 {

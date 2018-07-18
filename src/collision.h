@@ -46,6 +46,10 @@ typedef enum _corner
  */
 void init_collision_trace(void);
 
+/*
+ * Action function to decide whether the player has collided with something
+ * and what to do about it.
+ */
 PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action );
 
 #endif

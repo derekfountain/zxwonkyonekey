@@ -129,6 +129,11 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
   }
   else {  /* In the middle of a jump */
 
+    /*
+     * TODO So much duplication here... Obvious contender for optimisation
+     * when I need some cycles or space.
+     */
+
     switch( jump_status )
     {
     case RIGHT_FLAT:
@@ -458,85 +463,8 @@ PROCESSING_FLAG update_xy_delta( void* data, GAME_ACTION* output_action )
     }
   }
 
-//  sprite_corner = find_corner_pixel( &xpos, &ypos,  );
+//  sprite_corner = find_corner_pixel( &xpos, &ypos,  ); 
 
-  
-
-  /*
-i think this has to be an update_xy_deltas(). I can't do one then the other.
-
-
-i need to work out the leading pixel based on his movement and then work
-out if that pixel is in a free block.
-
-this is called before the sprite is moved.
-
-so:
-  moving right, leading edge is top right most pixel of sprite 
-    moving into next right pixel
-    toggle direction if pixel is block
-      stop processing
-  moving left, leading edge is top left most pixel of sprite 
-    moving into next left pixel
-    toggle direction if pixel is block
-      stop processing
-  falling vertically, leading edge is bottom left pixel of sprite
-    moving into next lower pixel
-    no action if pixel is block so he stops falling
-      stop processing
-  moving right, rising (i.e. jumping up right), leading edge is top right most pixel of sprite 
-    moving into next right, up one or two pixels
-    invert the jump - toggle direction and switch to falling
-    stop processing
-  moving left, rising (i.e. jumping up left), leading edge is top left most pixel of sprite 
-    moving into next left, up one or two pixels
-    invert the jump - toggle direction and switch to falling
-    stop processing
-  moving right, falling (i.e. jumping down to right), leading edge is bottom right most pixel of sprite 
-    moving into next right, down one pixel
-    invert the jump - toggle direction
-    stop processing
-  moving left, falling (i.e. jumping down to left), leading edge is bottom left most pixel of sprite 
-    moving into next left, down one pixel
-    invert the jump - toggle direction
-    stop processing
-  rising vertically we don't do
-
-so, calculate first pixel to move into new place
-find attribute of that cell
-decide whether it can happen
-
-DOESN'T WORK
-imagine he's falling from his jump. he needs to go down one and along one.
-if the block beneath his is empty he can go down one. if i then find the
-block in front of him is not empty i can't move him along one.
-if jumping
-  if rising side of the jump
-    if facing left
-      if att directly above is empty
-        move_up
-      else
-        stop jump, he should now fall vertically
-     else facing right
-       if att above and right is empty
-        move_up
-      else
-        stop jump, he should now fall vertically
-
-  else if flat part of jump
-    return no_action, keep processing
-
-  else if falling side of the jump
-    if facing left
-      
-    else facing right
-
-else if no ground below feet
-  This is the falling code i already have
-  Might return move_down, if it does stop processing so he doesn't move sideways
-
-
-  */
   return KEEP_PROCESSING;
 }
 */

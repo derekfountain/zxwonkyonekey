@@ -285,6 +285,7 @@ JUMP_STATUS get_runner_jump_status( void )
   }
 }
 
+
 PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
 {
   (void)data;  /* Unused parameter, stop the compiler warning */
@@ -324,74 +325,6 @@ PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
   return KEEP_PROCESSING;
 }
 
-#if 0
-void adjust_for_jump(void)
-{
-  if( RUNNER_JUMPING(runner.jump_offset) ) {
-    int8_t y_delta = jump_y_offsets[runner.jump_offset];
-
-    /*
-     * If the last entry in the jump y-offsets table has been used
-     * he's no longer jumping.
-     */
-    if( ++runner.jump_offset == sizeof(jump_y_offsets) ) {
-      runner.jump_offset = NO_JUMP;
-
-      /* Note that this trace is logged *before* the final y adjustment */
-      RUNNER_TRACE_CREATE(JUMP_LAST, runner.xpos, runner.ypos, y_delta);
-    }
-    else {
-      uint8_t*    attr_address;
-
-      /*
-       * If the jump y-delta is negative he's in the second half of the jump.
-       * i.e. falling. That means he could land on something.
-       * OTOH if the jump y-delta is positive he's in the first half of the
-       * jump. i.e. rising. That means he could hit his head on something.
-       */
-      if( y_delta < 0 ) {
-
-	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta);
-
-	/* If there's something solid under him, stop the jump */
-	if( MODULO8(runner.ypos) == 0 ) {
-	  attr_address = zx_pxy2aaddr( runner.xpos, runner.ypos+8  );
-
-	  /*
-	   * TODO Something not quite right here. When he's falling he's probably moving
-	   * forwards too. If he hits something in front he should bounce off it, as
-	   * opposed to fall through it which is what currently happens.
-	   * I think the bounce code in test_for_direction_change() needs to check whether
-	   * he's not y-aligned, and if not check both cells he's facing. Needs working
-	   * out though.
-	   */
-  
-	  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-	    y_delta = 0;
-	    runner.jump_offset = NO_JUMP;
-	  }
-	}
-      }
-      else {
-	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta);
-
-	/* If there's something solid above him, stop the jump */
-	if( MODULO8(runner.ypos) == 0 ) {
-	  attr_address = zx_pxy2aaddr( runner.xpos, runner.ypos-8  );
-  
-	  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-	    y_delta = 0;
-	    runner.jump_offset = NO_JUMP;
-	  }
-	}
-
-      }
-    }
-
-    runner.ypos -= y_delta;
-  }
-}
-#endif
 
 void draw_runner(void)
 {

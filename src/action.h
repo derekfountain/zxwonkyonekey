@@ -42,7 +42,7 @@ typedef enum _game_action
 
 typedef struct _loop_action
 {
-  PROCESSING_FLAG (*test_action)(void* input_data, GAME_ACTION* output_action); //, void* output_data);
+  PROCESSING_FLAG (*test_action)(void* input_data, GAME_ACTION* output_action);
 }
 LOOP_ACTION;
 

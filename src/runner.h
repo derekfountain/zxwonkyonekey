@@ -48,6 +48,11 @@ typedef enum _direction
 } DIRECTION;
 
 
+/*
+ * Indicator of where the player is in the animated jump sequence.
+ * These are used to decide what sort of bounce or direction
+ * change is appropriate if he's interrupted mid-jump.
+ */
 typedef enum _jump_status
 {
   NOT_JUMPING,

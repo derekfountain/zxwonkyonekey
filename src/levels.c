@@ -40,7 +40,7 @@ void level1(void)
   /* Central area, 2 jumps and a block */
   sp1_PrintAt(23,15,PAPER_RED|INK_BLACK,' ');
   sp1_PrintAt(23,17,PAPER_RED|INK_BLACK,' ');
-  //  sp1_PrintAt(22,16,PAPER_GREEN|INK_BLACK,' ');
+  sp1_PrintAt(22,16,PAPER_GREEN|INK_BLACK,' ');
 
 
   /* Step 1 */
