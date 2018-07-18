@@ -84,4 +84,7 @@ def main struct
 
   at _collision_tracetable
   n16 ptr COLLISION_TRACE_TABLE   "collision"
+
+  at _game_state
+  GAME_STATE "game_state"
 }

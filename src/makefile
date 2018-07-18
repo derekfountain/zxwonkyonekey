@@ -36,7 +36,7 @@ MAP=wonky.map
 BE_MAP_EXTRACTOR=./be/extract_enums.tcl
 BE_ENUMS=./be/be_enums.inc
 BE_STRUCT_EXTRACTOR=./be/extract_structs.tcl
-BE_ENUMS=./be/be_structs.inc
+BE_STRUCTS=./be/be_structs.inc
 
 TAGS_GENERATOR=etags
 

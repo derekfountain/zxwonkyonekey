@@ -1,2 +1,11 @@
+*.o
+*.lis
+*.inc
+*.map
+*.bin
+*.ss
+*.sym
+*.tap
+zcc_opt.def
 TAGS
 *~

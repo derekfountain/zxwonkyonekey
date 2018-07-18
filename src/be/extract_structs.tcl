@@ -57,9 +57,9 @@ proc process_file { filename } {
         if { $current_struct ne "" && [regexp {^\s*\}\s*(\w+)\s*;$} $line unused struct_def_name] } {
             # puts "Found end of struct: $struct_name, defined as $struct_def_name"
 
-            puts "def $struct_def_name\n{"
+            puts "def $struct_def_name struct \n{"
             foreach struct_entry $current_struct_entries {
-                puts "  \"$struct_entry\" $struct_index"
+                puts "  $struct_entry"
             }
             puts "}\n"
 
@@ -68,6 +68,14 @@ proc process_file { filename } {
             continue
         }
 
+        # Look for struct entries
+        if { $current_struct ne "" } {
+
+            if { [regexp {^\s*uint8_t\s+([^;]+);} $line unused struct_entry_name] } {
+                lappend current_struct_entries "n8 dec \"$struct_entry_name\""
+            }
+        }
+        
 
         # puts ">>>>>>> $line"
     }
