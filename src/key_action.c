@@ -53,7 +53,7 @@ typedef enum _key_action_tracetype
   TEST_FINISH,
 } KEY_ACTION_TRACETYPE;
 
-typedef struct _key_action_trace
+typedef struct skipbe_key_action_trace
 {
   uint16_t               ticker;
   KEY_ACTION_TRACETYPE   tracetype;

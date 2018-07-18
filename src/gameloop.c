@@ -57,7 +57,7 @@ typedef enum _gameloop_tracetype
   EXIT,
 } GAMELOOP_TRACETYPE;
 
-typedef struct _gameloop_trace
+typedef struct skipbe_gameloop_trace
 {
   uint16_t           ticker;
   GAMELOOP_TRACETYPE tracetype;
