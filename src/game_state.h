@@ -34,7 +34,6 @@ typedef struct _game_state
 {
   uint8_t key_pressed;
   uint8_t key_processed;
-}
-GAME_STATE;
+} GAME_STATE;
 
 #endif

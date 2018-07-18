@@ -78,8 +78,7 @@ typedef struct _runner
 
   DIRECTION        facing;
   uint8_t          jump_offset;
-}
-RUNNER;
+} RUNNER;
 
 
 /*

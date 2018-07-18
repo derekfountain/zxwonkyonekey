@@ -1,8 +1,9 @@
 include "be/stdint.berc"
 
-// This is generated. The structure defs isn't as yet.
+// These are generated.
 //
 include "be/be_enums.inc"
+include "be/be_structs.inc"
 
 def GAMELOOP_TRACE struct
 {

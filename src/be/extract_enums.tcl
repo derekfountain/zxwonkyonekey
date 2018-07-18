@@ -24,9 +24,6 @@ proc process_file { filename } {
     set current_enum_entries [list]
     set current_enum_indexes [list]
 
-    set current_struct ""
-    set current_struct_entries [list]
-
     if { [catch {set handle [open $filename "r"]} err] } {
         puts stderr "Unable to open file \"$filename\" for reading. Error \"$err\""
         exit -1
