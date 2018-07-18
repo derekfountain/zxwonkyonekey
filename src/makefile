@@ -35,6 +35,7 @@ MAP=wonky.map
 
 BE_MAP_EXTRACTOR=./be/extract_enums.tcl
 BE_ENUMS=./be/be_enums.inc
+BE_ENUMS_LIST=./be/enums_list.lis
 BE_STRUCT_EXTRACTOR=./be/extract_structs.tcl
 BE_STRUCTS=./be/be_structs.inc
 
@@ -66,7 +67,7 @@ all : clean_tmp $(EXEC)
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
-	$(BE_MAP_EXTRACTOR) *.h *.c > $(BE_ENUMS)
+	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
 	$(BE_STRUCT_EXTRACTOR) *.h *.c > $(BE_STRUCTS)
 	$(TAGS_GENERATOR) *.h *.c
 
@@ -76,5 +77,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.lis *.ss zcc_opt.def *~ $(BE_ENUMS) /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.lis *.ss zcc_opt.def *~ $(BE_ENUMS) ./be/*.lis /tmp/tmpXX*
 	rm -rf __pycache__

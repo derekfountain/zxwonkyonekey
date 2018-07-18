@@ -5,7 +5,12 @@
 #
 # Give it the filenames on the command line:
 #
-#  ./extract_enums.tcl *.h *.c > maps.inc
+#  ./extract_enums.tcl [--enum-list <file>] *.h *.c > maps.inc
+#
+# If you specify the enum list file, the names of the enums
+# found will be written to the given file. This is handy for
+# chaining the output of this command into another utility
+# which is interested in what enums this found.
 #
 # It's not too smart. It needs the C source to look like this:
 #
@@ -69,6 +74,12 @@ proc process_file { filename } {
             }
             puts "}\n"
 
+            if { [info exists ::opts(--enum-list)] } {
+                set list_handle [open $::opts(--enum-list) "a"]
+                puts $list_handle $enum_def_name
+                close $list_handle
+            }
+
             set current_enum ""
             set current_enum_entries [list]
             set current_enum_indexes [list]
@@ -96,6 +107,26 @@ proc process_file { filename } {
     close $handle
 }
 
+set usage "extract_enums.tcl \[--enum-list <filename>\] <files>"
+if { [catch {array set opts [concat { --enum-list "" } $argv]}] } {
+    puts stderr $usage
+    exit -1               
+}
+
+if { $::opts(--enum-list) eq "" } {
+    unset ::opts(--enum-list)
+} else {
+    if { [regexp {\.c$} $::opts(--enum-list)] } {
+        puts stderr "Not deleting a C file because it's probably not what you meant. :)"
+        exit -1
+    }
+    if { [regexp {\.h$} $::opts(--enum-list)] } {
+        puts stderr "Not deleting a H file because it's probably not what you meant. :)"
+        exit -1
+    }
+    file delete -force $::opts(--enum-list)
+    set argv [lrange $argv 2 end]
+}
 
 foreach filename $argv {
     process_file $filename
