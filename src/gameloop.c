@@ -69,7 +69,7 @@ typedef struct _gameloop_trace
   PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
 
-#define GAMELOOP_TRACE_ENTRIES 250
+#define GAMELOOP_TRACE_ENTRIES 500
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
 GAMELOOP_TRACE* gameloop_tracetable = TRACING_UNINITIALISED;
@@ -131,6 +131,7 @@ LOOP_ACTION game_actions[] =
     {test_for_start_jump            },
 /*  {test_for_direction_change      },*/
     {update_xy_delta                },
+    {adjust_for_jump                },
     {move_sideways                  },
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
