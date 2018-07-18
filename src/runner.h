@@ -99,9 +99,7 @@ JUMP_STATUS get_runner_jump_status(void);
  * Adjust the runner's screen position depending on where he
  * is in the cycle of the jump animation, if at all.
  */
-#if 0
-void adjust_for_jump(void);
-#endif
+PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action);
 
 /*
  * Draw the runner at the screen coordinates in the controlling

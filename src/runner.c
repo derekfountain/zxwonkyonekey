@@ -285,6 +285,45 @@ JUMP_STATUS get_runner_jump_status( void )
   }
 }
 
+PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
+{
+  (void)data;  /* Unused parameter, stop the compiler warning */
+
+  if( RUNNER_JUMPING(runner.jump_offset) ) {
+    int8_t y_delta = jump_y_offsets[runner.jump_offset];
+
+    /*
+     * If the last entry in the jump y-offsets table has been used
+     * he's no longer jumping.
+     */
+    if( ++runner.jump_offset == sizeof(jump_y_offsets) ) {
+      runner.jump_offset = NO_JUMP;
+
+      /* Note that this trace is logged *before* the final y adjustment */
+      RUNNER_TRACE_CREATE(JUMP_LAST, runner.xpos, runner.ypos, y_delta);
+    }
+    else {
+
+      /*
+       * If the jump y-delta is negative he's in the second half of the jump.
+       * OTOH if the jump y-delta is positive he's in the first half of the
+       */
+      if( y_delta < 0 ) {
+
+	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta);
+      }
+      else {
+	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta);
+      }
+    }
+
+    runner.ypos -= y_delta;
+  }
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}
+
 #if 0
 void adjust_for_jump(void)
 {

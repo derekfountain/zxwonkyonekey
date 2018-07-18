@@ -16,11 +16,6 @@ def GAMELOOP_TRACE struct
   n8  map PROCESSING_FLAG     "processing flag"
 }
  
-def GAMELOOP_TRACE_TABLE
-{
-  1000 GAMELOOP_TRACE open "gameloop trace table"
-}
-
 def RUNNER_TRACE
 {
   n16 dec                     "50Hz ticker"
@@ -53,6 +48,11 @@ def COLLISION_TRACE
   n8 map DIRECTION               "facing"
   n8 map JUMP_STATUS             "jump status"
   n8 map REACTION              "reaction result"
+}
+
+def GAMELOOP_TRACE_TABLE
+{
+  500 GAMELOOP_TRACE open "gameloop trace table"
 }
 
 def RUNNER_TRACE_TABLE struct
