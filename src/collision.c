@@ -48,7 +48,7 @@ typedef enum _collision_tracetype
   CHECK_BLOCKED,
 } COLLISION_TRACETYPE;
 
-typedef struct skipbe_collision_trace
+typedef struct _collision_trace
 {
   uint16_t            ticker;
   COLLISION_TRACETYPE tracetype;

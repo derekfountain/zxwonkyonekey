@@ -28,6 +28,7 @@ proc process_file { filename } {
 
     set current_struct ""
     set current_struct_entries [list]
+    set literal_block 0
 
     if { [catch {set handle [open $filename "r"]} err] } {
         puts stderr "Unable to open file \"$filename\" for reading. Error \"$err\""
@@ -38,6 +39,22 @@ proc process_file { filename } {
 
         if { [gets $handle line] == -1 } {
             break
+        }
+
+        if { [regexp {BE:ignore} $line] } {
+            continue
+        }
+
+        if { [regexp {BE:LITERAL:START} $line] } {
+            set literal_block 1
+            continue
+        }
+        if { [regexp {BE:LITERAL:END} $line] } {
+            set literal_block 0
+            continue
+        }
+        if { $literal_block } {
+            lappend current_struct_entries $line
         }
 
         # Look for start of typedef struct
@@ -105,14 +122,23 @@ proc process_file { filename } {
 		# struct something* ptr_var
 		#
 		lappend current_struct_entries "n16 ptr $struct_ptr \"$struct_entry_name\""
+
+	    } elseif { [regexp {^\s*\w+\s+\(\*(.+)\)\(.*\);$} $line unused func_ptr_name] } {
+
+		# function ptr, just the name
+		#
+                lappend current_struct_entries "n16 sym ptr $func_ptr_name \"fn ptr\""
+
 	    } elseif { [regexp {^\s*(\w+)\s+([^;]+);} $line unused possible_enum struct_entry_name] } {
 
 		# typedef'ed enum
 		#
-                if { [lsearch -exact $::known_enums $possible_enum] } {
+                if { [lsearch -exact $::known_enums $possible_enum] != -1 } {
                     lappend current_struct_entries "n8 map $possible_enum open \"$struct_entry_name\""
                 }
-	    }
+	    } else {
+                # puts "Unable to grok this: $line"
+            }
 
 
         }
@@ -124,21 +150,21 @@ proc process_file { filename } {
     close $handle
 }
 
-set usage "extract_structs.tcl \[--enum-list <filename>\] <files>"
-if { [catch {array set opts [concat { --enum-list "" } $argv]}] } {
+set usage "extract_structs.tcl --enum-list <filename> <files>"
+array set opts [list "--enum-list" ""]
+if { [llength $argv] >= 2 && [lindex $argv 0] eq "--enum-list" } {
+    set opts(--enum-list) [lindex $argv 1]
+    set argv [lrange $argv 2 end]
+} else {
     puts stderr $usage
-    exit -1               
 }
 
 set known_enums [list]
-if { $::opts(--enum-list) ne "" } {
-    set handle [open $::opts(--enum-list) "r"]
-    while { [gets $handle line] >= 0 } {
-        lappend known_enums $line
-    }
-    close $handle
-    set argv [lrange $argv 2 end]
+set handle [open $::opts(--enum-list) "r"]
+while { [gets $handle line] >= 0 } {
+    lappend known_enums $line
 }
+close $handle
 
 foreach filename $argv {
     process_file $filename

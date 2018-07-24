@@ -53,17 +53,23 @@ typedef enum _key_action_tracetype
   TEST_FINISH,
 } KEY_ACTION_TRACETYPE;
 
-typedef struct skipbe_key_action_trace
+typedef struct _key_action_trace
 {
   uint16_t               ticker;
   KEY_ACTION_TRACETYPE   tracetype;
-  uint16_t               data;
-  /*
-  union {
-    uint16_t             key_pressed;
-    uint16_t             bounced;
-  };
-  */
+
+  /* BE:LITERAL:START
+  union
+  {
+    n16 dec valid "tracetype==TEST_DIR_CHG_BOUNCE"         "bounced"
+    n16 dec valid "tracetype==TEST_DIR_CHG_KEY"            "key pressed"
+    n16 dec valid "tracetype==TEST_JUMP_PARTIAL_ON_BLOCK"  "mod(8) xpos"
+    n16 dec valid "tracetype==TEST_FALL_RIGHT_NO_TOE_SUPPORT"  "mod(8) xpos"
+    n16 dec valid "tracetype==TEST_FALL_LEFT_HEEL_SUPPORT"  "mod(8) xpos"
+  }    
+  BE:LITERAL:END */
+
+  uint16_t /* BE:ignore */data;  
 } KEY_ACTION_TRACE;
 
 #define KEY_ACTION_TRACE_ENTRIES   100

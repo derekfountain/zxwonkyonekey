@@ -6,43 +6,6 @@ include "be/sp1.berc"
 include "be/be_enums.inc"
 include "be/be_structs.inc"
 
-def GAMELOOP_TRACE struct
-{
-  n16 dec                     "50Hz ticker"
-  n8  map GAMELOOP_TRACETYPE  "tracetype"
-  n8  hex                     "key pressed"      
-  n8  hex                     "key processed"      
-  n8  dec                     "xpos"      
-  n8  dec                     "ypos"      
-  n8  map GAME_ACTION         "action"
-  n8  map PROCESSING_FLAG     "processing flag"
-}
- 
-def KEY_ACTION_TRACE
-{
-  n16 dec                        "50Hz ticker"
-  n8  map KEY_ACTION_TRACETYPE   "tracetype"
-  union
-  {
-    n16 dec valid "tracetype==TEST_DIR_CHG_BOUNCE"         "bounced"
-    n16 dec valid "tracetype==TEST_DIR_CHG_KEY"            "key pressed"
-    n16 dec valid "tracetype==TEST_JUMP_PARTIAL_ON_BLOCK"  "mod(8) xpos"
-    n16 dec valid "tracetype==TEST_FALL_RIGHT_NO_TOE_SUPPORT"  "mod(8) xpos"
-    n16 dec valid "tracetype==TEST_FALL_LEFT_HEEL_SUPPORT"  "mod(8) xpos"
-  }
-}
-
-def COLLISION_TRACE
-{
-  n16 dec                     "50Hz ticker"
-  n8  map COLLISION_TRACETYPE    "tracetype"
-  n8 dec                      "xpos"
-  n8 dec                      "ypos before delta"
-  n8 map DIRECTION               "facing"
-  n8 map JUMP_STATUS             "jump status"
-  n8 map REACTION              "reaction result"
-}
-
 def GAMELOOP_TRACE_TABLE
 {
   500 GAMELOOP_TRACE open "gameloop trace table"
@@ -65,6 +28,9 @@ def COLLISION_TRACE_TABLE struct
 
 def main struct
 {
+  at _game_actions
+  8 LOOP_ACTION open "loop action functions"
+
   at _gameloop_tracetable
   n16 ptr GAMELOOP_TRACE_TABLE "gameloop"
 
