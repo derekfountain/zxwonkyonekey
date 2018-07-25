@@ -44,9 +44,9 @@ def main struct
   n16 ptr COLLISION_TRACE_TABLE   "collision"
 
   at _game_state
-  GAME_STATE open "game_state"
+  1 GAME_STATE open "game_state"
 
   at _runner
-  RUNNER open "runner"
+  1 RUNNER open "runner"
 
 }
