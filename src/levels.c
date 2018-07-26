@@ -37,11 +37,8 @@ void level1(void)
     sp1_PrintAt(23,i,PAPER_GREEN|INK_BLACK,' ');
 
 
-  /* Central area, 2 jumps and a block */
-  sp1_PrintAt(23,15,PAPER_RED|INK_BLACK,' ');
+  /* Central area, 1 jump */
   sp1_PrintAt(23,17,PAPER_RED|INK_BLACK,' ');
-  // sp1_PrintAt(22,16,PAPER_GREEN|INK_BLACK,' ');
-
 
   /* Step 1 */
   for(i=9;i<14;i++)
@@ -80,6 +77,7 @@ void level1(void)
   for(i=5;i<8;i++)
     sp1_PrintAt(11,i,PAPER_GREEN|INK_BLACK,' ');
   sp1_PrintAt(11,8,PAPER_RED|INK_BLACK,' ');
+  sp1_PrintAt(11,9,PAPER_GREEN|INK_BLACK,' ');
 
   for(i=4;i<6;i++)
     sp1_PrintAt(9,i,PAPER_GREEN|INK_BLACK,' ');
