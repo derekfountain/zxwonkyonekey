@@ -76,7 +76,7 @@ int main()
 
     /* Runner at start point */
     set_runner_xpos(0);
-    set_runner_ypos(136);
+    set_runner_ypos(135);
 
     /* Enter game loop, exit when player dies */
     gameloop( &game_state );

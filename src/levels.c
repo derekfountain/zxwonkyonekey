@@ -88,8 +88,6 @@ void level1(void)
   for(i=10;i<24;i++)
     sp1_PrintAt(7,i,PAPER_GREEN|INK_BLACK,' ');
   sp1_PrintAt(7,21,PAPER_WHITE|INK_BLACK,' ');
-  sp1_PrintAt(7,20,PAPER_RED|INK_BLACK,' ');
-  sp1_PrintAt(7,22,PAPER_RED|INK_BLACK,' ');
 
 
   /* Step 7 */
@@ -112,14 +110,13 @@ void level1(void)
   sp1_PrintAt(7,29,PAPER_GREEN|INK_BLACK,' ');
   sp1_PrintAt(7,28,PAPER_GREEN|INK_BLACK,' ');
 
-  /* Step 8, long with killer */
+  /* Step 8 */
   sp1_PrintAt(5,26,PAPER_RED|INK_BLACK,' ');
   for(i=3;i<25;i++)
     sp1_PrintAt(4,i,PAPER_GREEN|INK_BLACK,' ');
-  sp1_PrintAt(4,6,PAPER_BLUE|INK_BLACK,' ');
-  sp1_PrintAt(4,7,PAPER_BLUE|INK_BLACK,' ');
-  sp1_PrintAt(4,8,PAPER_BLUE|INK_BLACK,' ');
-  sp1_PrintAt(4,9,PAPER_RED|INK_BLACK,' ');
+  sp1_PrintAt(3,5,PAPER_GREEN|INK_BLACK,' ');
+  sp1_PrintAt(4,9,PAPER_WHITE|INK_BLACK,' ');
+  sp1_PrintAt(4,10,PAPER_RED|INK_BLACK,' ');
 
 
   /* Finish */
