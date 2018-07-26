@@ -373,7 +373,7 @@ void toggle_runner_direction(void)
    * the resultant animation and positioning feel right.
    */
   if( RUNNER_JUMPING(runner.jump_offset) )
-    if( runner.jump_offset < sizeof(jump_y_offsets)/2 )
+    if( runner.jump_offset && (runner.jump_offset < sizeof(jump_y_offsets)/2) )
       runner.jump_offset = sizeof(jump_y_offsets) - runner.jump_offset;
 }
 
