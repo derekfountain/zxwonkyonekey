@@ -275,6 +275,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address = NULL;
+  uint8_t     background_attribute;
 
   uint8_t     xpos = get_runner_xpos();
   uint8_t     ypos = get_runner_ypos();
@@ -285,6 +286,9 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
     return KEEP_PROCESSING;
   }
 
+  /* Find the attribute colour of a background block in this level */
+  background_attribute = game_state->current_level->background_att;
+
   /*
    * TODO I can probably optimise this for space but pulling out
    * the repeated zx_pxy2aaddr() calls.
@@ -292,7 +296,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
 
   /* Is the cell below him solid? If so, he's supported */
   attr_address = zx_pxy2aaddr( xpos, ypos+8 );
-  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+  if( (*attr_address & ATTR_MASK_PAPER) != background_attribute ) {
     *output_action = NO_ACTION;
     return KEEP_PROCESSING;
   }
@@ -314,7 +318,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
      * then his toes are supported
      */
     attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+    if( (*attr_address & ATTR_MASK_PAPER) != background_attribute ) {
       *output_action = NO_ACTION;
       return KEEP_PROCESSING;
     }
@@ -336,7 +340,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
 
       KEY_ACTION_TRACE_CREATE( TEST_FALL_LEFT_HEEL_SUPPORT, MODULO8( xpos ) );
 
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( (*attr_address & ATTR_MASK_PAPER) != background_attribute ) {
         *output_action = NO_ACTION;
         return KEEP_PROCESSING;
       }
