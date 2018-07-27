@@ -377,7 +377,7 @@ PROCESSING_FLAG test_for_killer( void* data, GAME_ACTION* output_action )
   /* Are we on a killer block? If not, no action */
   attr_address = zx_pxy2aaddr( xpos, ypos+8  );
   
-  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_BLUE )
+  if( (*attr_address & ATTR_MASK_PAPER) != game_state->current_level->killer_att )
   {
     /* If the cell below isn't a killer, and he's aligned right on top of it, he's fine */
     if( MODULO8( xpos ) == 0 ) {
@@ -389,7 +389,7 @@ PROCESSING_FLAG test_for_killer( void* data, GAME_ACTION* output_action )
     if( get_runner_facing() == RIGHT )
       attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
   
-    if( (*attr_address & ATTR_MASK_PAPER) == PAPER_BLUE ) {
+    if( (*attr_address & ATTR_MASK_PAPER) == game_state->current_level->killer_att ) {
       *output_action = DIE;
       return STOP_PROCESSING;
     }
