@@ -176,7 +176,7 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
  * Runner jumps if:
  *
  *  he's not already jumping; and
- *  part of him is on a trampoline block; and
+ *  part of him is on a jumper block; and
  *  player hits the control key
  */
 PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
@@ -184,6 +184,7 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address;
   uint8_t     on_jump_block = 0;
+  uint8_t     jumper_attribute;
 
   uint8_t     xpos = get_runner_xpos();
   uint8_t     ypos = get_runner_ypos();
@@ -206,9 +207,12 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
     return KEEP_PROCESSING;
   }
 
+  /* Find the attribute colour of a jumper block in this level */
+  jumper_attribute = game_state->current_level->jumper_att;
+
   /* Is the cell directly below him a trampoline block? */
   attr_address = zx_pxy2aaddr( xpos, ypos+8  );
-  if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
+  if( (*attr_address & ATTR_MASK_PAPER) != jumper_attribute ) {
 
     /* No, so check the block below and to the right, which the sprite might have rotated into */
     if( MODULO8( xpos ) < 3 ) {
@@ -218,7 +222,7 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
     }
 
     attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_RED ) {
+    if( (*attr_address & ATTR_MASK_PAPER) != jumper_attribute ) {
       /* Block the sprite is rotated onto isn't a jump block either. */
       *output_action = NO_ACTION;
       return KEEP_PROCESSING;
