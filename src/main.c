@@ -40,6 +40,8 @@ GAME_STATE game_state;
 
 int main()
 {
+  uint8_t current_level_num;
+
   if( is_rom_writable() ) {
     /* Flicker the border if ROM is being used for trace */
     zx_border(INK_RED);
@@ -62,10 +64,13 @@ int main()
   init_collision_trace();
   create_runner( RIGHT );
 
+  current_level_num = 0;
   while( 1 ) {
+    
+    /* Get the level data and draw it */
+    game_state.current_level = get_level_data( current_level_num );
+    (game_state.current_level->draw_func)();
 
-    /* Draw the level */
-    level1();
     sp1_Invalidate(&full_screen);
     sp1_UpdateNow();
 

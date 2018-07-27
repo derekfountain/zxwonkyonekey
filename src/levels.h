@@ -20,6 +20,21 @@
 #ifndef __LEVELS_H
 #define __LEVELS_H
 
-void level1(void);
+#include <stdint.h>
+
+typedef struct _level_data
+{
+  void    (*draw_func)(void);
+
+  uint8_t background_att;
+  uint8_t solid_att;
+  uint8_t jumper_att;
+  uint8_t killer_att;
+  uint8_t finish_att;
+} LEVEL_DATA;
+
+#define LEVEL_ATT_DATA(tag0,val0,tag1,val1,tag2,val2,tag3,val3,tag4,val4) val0,val1,val2,val3,val4
+
+LEVEL_DATA* get_level_data( uint8_t level );
 
 #endif

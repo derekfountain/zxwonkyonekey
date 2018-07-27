@@ -22,7 +22,22 @@
 
 #include "levels.h"
 
-void level1(void)
+LEVEL_DATA level_data[] = {
+
+  { level0,
+    LEVEL_ATT_DATA("Background", PAPER_WHITE,
+                   "Solid",      PAPER_GREEN,
+                   "Jumper",     PAPER_RED,
+                   "Killer",     PAPER_BLUE,
+                   "Finish",     PAPER_YELLOW) },
+};
+
+LEVEL_DATA* get_level_data( uint8_t level )
+{
+  return &level_data[level];
+}
+
+void level0(void)
 {
   uint8_t i;
 

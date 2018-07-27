@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 
-#include "runner.h"
+#include "levels.h"
 
 /*
  * This structure defines the state of the game.
@@ -32,8 +32,10 @@
  */
 typedef struct _game_state
 {
-  uint8_t key_pressed;
-  uint8_t key_processed;
+  uint8_t     key_pressed;
+  uint8_t     key_processed;
+
+  LEVEL_DATA* current_level;
 } GAME_STATE;
 
 #endif
