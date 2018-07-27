@@ -431,7 +431,8 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   /* If he's not on a character cell boundary he can't be up against a wall */
   /*
    * TODO This won't work if he approaches the finish from the left side
-   * i.e. facing right
+   * i.e. facing right. Or falling, etc. This might have to go into the
+   * collision code.
    */
   if( MODULO8( xpos ) == 0 ) {
 
@@ -441,7 +442,7 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
     else
       attr_address = zx_pxy2aaddr( xpos-8, ypos );
   
-    if( (*attr_address & ATTR_MASK_PAPER) == PAPER_YELLOW ) {
+    if( (*attr_address & ATTR_MASK_PAPER) == game_state->current_level->finish_att ) {
       *output_action = FINISH;
       return STOP_PROCESSING;
     }
