@@ -113,15 +113,6 @@ void init_key_action_trace(void)
 }
 
 
-/*
-TODO
-
-Replace PAPER_WHITE with a value from the level data (empty sky).
-Also green (walls) and red (killer)
-Level data needs to be in the game state.
-
- */
-
 /***
  *      _____  _               _   _                _____ _                            
  *     |  __ \(_)             | | (_)              / ____| |                           
