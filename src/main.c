@@ -80,8 +80,8 @@ int main()
     game_state.key_processed = 0;
 
     /* Runner at start point */
-    set_runner_xpos(0);
-    set_runner_ypos(135);
+    set_runner_xpos( game_state.current_level->start_x );
+    set_runner_ypos( game_state.current_level->start_y );
 
     /* Enter game loop, exit when player dies */
     gameloop( &game_state );

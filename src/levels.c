@@ -25,6 +25,7 @@
 LEVEL_DATA level_data[] = {
 
   { level0,
+    START_POINT(0,135),
     LEVEL_ATT_DATA("Background", PAPER_WHITE,
                    "Solid",      PAPER_GREEN,
                    "Jumper",     PAPER_RED,
