@@ -58,6 +58,7 @@ typedef enum _gameloop_tracetype
 } GAMELOOP_TRACETYPE;
 
 extern GAMELOOP_TRACETYPE trc_table[10];
+extern void* next_trace_table;
 
 typedef struct _gameloop_trace
 {
