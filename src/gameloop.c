@@ -57,6 +57,8 @@ typedef enum _gameloop_tracetype
   EXIT,
 } GAMELOOP_TRACETYPE;
 
+extern GAMELOOP_TRACETYPE trc_table[10];
+
 typedef struct _gameloop_trace
 {
   uint16_t           ticker;
@@ -156,9 +158,14 @@ void finish_level(void)
  */
 void gameloop( GAME_STATE* game_state )
 {
+GAMELOOP_TRACE      glt_test;   \
+
   if( gameloop_tracetable == TRACING_UNINITIALISED ) {
     gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
   }
+
+glt_test.ticker          = 0x1234;		
+memcpy( &trc_table[0], &glt_test, sizeof(GAMELOOP_TRACE) );
 
   while(1) {
     uint8_t     i;
