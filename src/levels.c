@@ -22,14 +22,17 @@
 
 #include "levels.h"
 
-extern uint8_t grass1[];
-#define GRASS ('\x80')
+extern uint8_t grassh[];
+#define GRASSH ('\x80')
 
 extern uint8_t jumper[];
 #define JUMPER ('\x81')
 
 extern uint8_t finish[];
 #define FINISH ('\x82')
+
+extern uint8_t grassv[];
+#define GRASSV ('\x83')
 
 LEVEL_DATA level_data[] = {
 
@@ -55,19 +58,18 @@ void level0(void)
   uint8_t jumper_att      = level_data[0].jumper_att;
   uint8_t finish_att      = level_data[0].finish_att;
 
-  /*
-   * I currently have no idea how I'm going to do this.
-   */
-
-  sp1_TileEntry(128, grass1);
+  sp1_TileEntry(128, grassh);
   sp1_TileEntry(129, jumper);
   sp1_TileEntry(130, finish);
+  sp1_TileEntry(131, grassv);
 
   /* Bottom row */
-  sp1_PrintAt(22,0,solid_att,GRASS);
-  sp1_PrintAt(22,31,solid_att,GRASS);
-  for(i=0;i<32;i++)
-    sp1_PrintAt(23,i,solid_att,GRASS);
+  sp1_PrintAt(22,0,solid_att,GRASSH);
+  sp1_PrintAt(22,31,solid_att,GRASSH);
+  for(i=1;i<31;i++)
+    sp1_PrintAt(23,i,solid_att,GRASSH);
+  sp1_PrintAt(23,0,solid_att,GRASSV);
+  sp1_PrintAt(23,31,solid_att,GRASSV);
 
 
   /* Central area, 1 jump */
@@ -75,85 +77,89 @@ void level0(void)
 
   /* Step 1 */
   for(i=9;i<14;i++)
-    sp1_PrintAt(21,i,solid_att,GRASS);
+    sp1_PrintAt(21,i,solid_att,GRASSH);
   sp1_PrintAt(21,8,jumper_att,JUMPER);
 
   /* Hop */
-  sp1_PrintAt(19,4,solid_att,GRASS);
-  sp1_PrintAt(19,5,solid_att,GRASS);
+  sp1_PrintAt(19,4,solid_att,GRASSH);
+  sp1_PrintAt(19,5,solid_att,GRASSH);
   sp1_PrintAt(19,6,jumper_att,JUMPER);
 
   /* Step 2 */  
   for(i=10;i<15;i++)
-    sp1_PrintAt(18,i,solid_att,GRASS);
+    sp1_PrintAt(18,i,solid_att,GRASSH);
   sp1_PrintAt(18,15,jumper_att,JUMPER);
 
   /* Single jump */
-  sp1_PrintAt(16,19,solid_att,GRASS);
+  sp1_PrintAt(16,19,solid_att,GRASSH);
   sp1_PrintAt(16,20,jumper_att,JUMPER);
 
   /* Step 3 */
   for(i=23;i<26;i++)
-    sp1_PrintAt(14,i,solid_att,GRASS);
+    sp1_PrintAt(14,i,solid_att,GRASSH);
   sp1_PrintAt(14,22,jumper_att,JUMPER);
 
 
   /* Rest 1 */
-  for(i=10;i<20;i++)
-    sp1_PrintAt(13,i,solid_att,GRASS);
-  sp1_PrintAt(12,10,solid_att,GRASS);
-  sp1_PrintAt(12,19,solid_att,GRASS);
+  for(i=11;i<19;i++)
+    sp1_PrintAt(13,i,solid_att,GRASSH);
+  sp1_PrintAt(13,10,solid_att,GRASSV);
+  sp1_PrintAt(13,19,solid_att,GRASSV);
+  sp1_PrintAt(12,10,solid_att,GRASSH);
+  sp1_PrintAt(12,19,solid_att,GRASSH);
   sp1_PrintAt(13,11,jumper_att,JUMPER);
 
 
   /* Step 4 and 5 */
   for(i=5;i<8;i++)
-    sp1_PrintAt(11,i,solid_att,GRASS);
+    sp1_PrintAt(11,i,solid_att,GRASSH);
   sp1_PrintAt(11,8,jumper_att,JUMPER);
-  sp1_PrintAt(11,9,solid_att,GRASS);
+  sp1_PrintAt(11,9,solid_att,GRASSH);
 
   for(i=4;i<6;i++)
-    sp1_PrintAt(9,i,solid_att,GRASS);
+    sp1_PrintAt(9,i,solid_att,GRASSH);
   sp1_PrintAt(9,6,jumper_att,JUMPER);
 
 
-  /* Step 6 (long with gap) */
-  for(i=10;i<24;i++)
-    sp1_PrintAt(7,i,solid_att,GRASS);
-  sp1_PrintAt(7,21,background_att,' ');
-
+  /* Step 6 (long with fall at end) */
+  for(i=10;i<22;i++)
+    sp1_PrintAt(7,i,solid_att,GRASSH);
 
   /* Step 7 */
   for(i=21;i<23;i++)
-    sp1_PrintAt(10,i,solid_att,GRASS);
+    sp1_PrintAt(10,i,solid_att,GRASSH);
   sp1_PrintAt(10,23,jumper_att,JUMPER);
 
   /* Step 8 */
   for(i=26;i<27;i++)
-    sp1_PrintAt(8,i,solid_att,GRASS);
+    sp1_PrintAt(8,i,solid_att,GRASSH);
   sp1_PrintAt(8,27,jumper_att,JUMPER);
 
   /* Side wall */
-  sp1_PrintAt(3,31,solid_att,GRASS);
-  sp1_PrintAt(4,31,solid_att,GRASS);
-  sp1_PrintAt(5,31,solid_att,GRASS);
-  sp1_PrintAt(6,31,solid_att,GRASS);
-  sp1_PrintAt(7,31,solid_att,GRASS);
+  sp1_PrintAt(3,31,solid_att,GRASSH);
+  sp1_PrintAt(4,31,solid_att,GRASSV);
+  sp1_PrintAt(5,31,solid_att,GRASSV);
+  sp1_PrintAt(6,31,solid_att,GRASSV);
+  sp1_PrintAt(7,31,solid_att,GRASSV);
   sp1_PrintAt(7,30,jumper_att,JUMPER);
-  sp1_PrintAt(7,29,solid_att,GRASS);
-  sp1_PrintAt(7,28,solid_att,GRASS);
+  sp1_PrintAt(7,29,solid_att,GRASSH);
+  sp1_PrintAt(7,28,solid_att,GRASSH);
+
+  /* Isolated hop */
+  sp1_PrintAt(5,26,jumper_att,JUMPER);
 
   /* Step 8 */
-  sp1_PrintAt(5,26,jumper_att,JUMPER);
-  for(i=3;i<25;i++)
-    sp1_PrintAt(4,i,solid_att,GRASS);
-  sp1_PrintAt(3,5,solid_att,GRASS);
-  sp1_PrintAt(4,9,background_att,' ');
+  for(i=3;i<9;i++)
+    sp1_PrintAt(4,i,solid_att,GRASSH);
+  for(i=11;i<25;i++)
+    sp1_PrintAt(4,i,solid_att,GRASSH);
+  sp1_PrintAt(3,5,solid_att,GRASSH);
+  sp1_PrintAt(4,5,solid_att,GRASSV);
   sp1_PrintAt(4,10,jumper_att,JUMPER);
 
 
   /* Finish */
   for(i=0;i<3;i++)
-    sp1_PrintAt(16,i,solid_att,GRASS);
+    sp1_PrintAt(16,i,solid_att,GRASSH);
   sp1_PrintAt(15,0,finish_att,FINISH);
 }
