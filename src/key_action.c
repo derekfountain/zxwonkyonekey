@@ -203,7 +203,7 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
 
   /* Is the cell directly below him a trampoline block? */
   attr_address = zx_pxy2aaddr( xpos, ypos+8  );
-  if( (*attr_address & ATTR_MASK_PAPER) != jumper_attribute ) {
+  if( *attr_address != jumper_attribute ) {
 
     /* No, so check the block below and to the right, which the sprite might have rotated into */
     if( MODULO8( xpos ) < 3 ) {
@@ -213,7 +213,7 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
     }
 
     attr_address = zx_pxy2aaddr( xpos+8, ypos+8  );
-    if( (*attr_address & ATTR_MASK_PAPER) != jumper_attribute ) {
+    if( *attr_address != jumper_attribute ) {
       /* Block the sprite is rotated onto isn't a jump block either. */
       *output_action = NO_ACTION;
       return KEEP_PROCESSING;
@@ -287,7 +287,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
 
   /* Is the cell below him solid? If so, he's supported */
   attr_address = zx_pxy2aaddr( xpos, ypos+8 );
-  if( (*attr_address & ATTR_MASK_PAPER) != background_attribute ) {
+  if( *attr_address != background_attribute ) {
     *output_action = NO_ACTION;
     return KEEP_PROCESSING;
   }
@@ -309,7 +309,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
      * then his toes are supported
      */
     attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
-    if( (*attr_address & ATTR_MASK_PAPER) != background_attribute ) {
+    if( *attr_address != background_attribute ) {
       *output_action = NO_ACTION;
       return KEEP_PROCESSING;
     }
@@ -331,7 +331,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
 
       KEY_ACTION_TRACE_CREATE( TEST_FALL_LEFT_HEEL_SUPPORT, MODULO8( xpos ) );
 
-      if( (*attr_address & ATTR_MASK_PAPER) != background_attribute ) {
+      if( *attr_address != background_attribute ) {
         *output_action = NO_ACTION;
         return KEEP_PROCESSING;
       }
@@ -372,7 +372,7 @@ PROCESSING_FLAG test_for_killer( void* data, GAME_ACTION* output_action )
   /* Are we on a killer block? If not, no action */
   attr_address = zx_pxy2aaddr( xpos, ypos+8  );
   
-  if( (*attr_address & ATTR_MASK_PAPER) != game_state->current_level->killer_att )
+  if( *attr_address != game_state->current_level->killer_att )
   {
     /* If the cell below isn't a killer, and he's aligned right on top of it, he's fine */
     if( MODULO8( xpos ) == 0 ) {
@@ -437,7 +437,7 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
     else
       attr_address = zx_pxy2aaddr( xpos-8, ypos );
   
-    if( (*attr_address & ATTR_MASK_PAPER) == game_state->current_level->finish_att ) {
+    if( *attr_address == game_state->current_level->finish_att ) {
       *output_action = FINISH;
       return STOP_PROCESSING;
     }

@@ -29,6 +29,7 @@
 #include "tracetable.h"
 #include "runner.h"
 #include "action.h"
+#include "game_state.h"
 
 /***
  *      _______             _             
@@ -99,7 +100,8 @@ void init_collision_trace(void)
 #define SPRITE_WIDTH  6
 #define SPRITE_HEIGHT 8
 
-REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_STATUS jump_status )
+REACTION test_direction_blocked( uint8_t x, uint8_t y,
+                                 DIRECTION facing, JUMP_STATUS jump_status, uint8_t background_att )
 {
   uint8_t  check_x;
   uint8_t  check_y;
@@ -119,7 +121,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_y = y;
     }
     attr_address = zx_pxy2aaddr( check_x, check_y  );
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+    if( *attr_address != background_att ) {
       result = BOUNCE;
     }
     else {
@@ -142,7 +144,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_y = y;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( *attr_address != background_att ) {
         result = BOUNCE;
       }
       else {
@@ -150,7 +152,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        if( *attr_address != background_att ) {
           result = BOUNCE;
         }
         else {
@@ -165,7 +167,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       check_y = y;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( *attr_address != background_att ) {
         result = BOUNCE;
       }
       else {
@@ -173,7 +175,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        if( *attr_address != background_att ) {
           result = BOUNCE;
         }
         else {
@@ -190,7 +192,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( *attr_address != background_att ) {
         result = BOUNCE;
       }
       else {
@@ -200,7 +202,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        if( *attr_address != background_att ) {
           result = BOUNCE;
         }
         else {
@@ -210,7 +212,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
           check_y = y-1;
 
           attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          if( *attr_address != background_att ) {
             result = DROP_VERTICALLY;
           }
         }
@@ -225,7 +227,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( *attr_address != background_att ) {
         result = BOUNCE;
       }
       else {
@@ -235,7 +237,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        if( *attr_address != background_att ) {
           result = BOUNCE;
         }
         else {
@@ -245,7 +247,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
           check_y = y-1;
 
           attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          if( *attr_address != background_att ) {
             result = DROP_VERTICALLY;
           }
         }
@@ -260,7 +262,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( *attr_address != background_att ) {
         result = BOUNCE;
       }
       else {
@@ -270,7 +272,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        if( *attr_address != background_att ) {
           result = BOUNCE;
         }
         else {
@@ -280,7 +282,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
           check_y = y+SPRITE_HEIGHT;
 
           attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          if( *attr_address != background_att ) {
             result = LANDED;
           }
         }
@@ -295,7 +297,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
       result = NO_REACTION;
 
       attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+      if( *attr_address != background_att ) {
         result = BOUNCE;
       }
       else {
@@ -305,7 +307,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
         check_y = y+SPRITE_HEIGHT-1;
 
         attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+        if( *attr_address != background_att ) {
           result = BOUNCE;
         }
         else {
@@ -315,7 +317,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y, DIRECTION facing, JUMP_ST
           check_y = y+SPRITE_HEIGHT;
 
           attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
+          if( *attr_address != background_att ) {
             result = LANDED;
           }
         }
@@ -342,9 +344,10 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
   DIRECTION   facing = get_runner_facing();
   DIRECTION   jump_status = get_runner_jump_status();
 
-  (void)data;
+  GAME_STATE* game_state = (GAME_STATE*)data;
+  uint8_t     background = game_state->current_level->background_att;
 
-  reaction = test_direction_blocked( xpos, ypos, facing, jump_status );
+  reaction = test_direction_blocked( xpos, ypos, facing, jump_status, background );
   switch( reaction )
   {
   case BOUNCE:
@@ -373,99 +376,3 @@ void plot(unsigned char x, unsigned char y)
 }
 #endif
 
-
-#if 0
-Not sure there is any use for this...
-
-void find_corner_pixel( uint8_t* x, uint8_t* y, CORNER corner );
-void find_corner_pixel( uint8_t* x, uint8_t* y, CORNER corner )
-{
-  *x = runner.xpos;
-  *y = runner.ypos;
-
-  switch( corner )
-  {
-  case TOP_RIGHT:
-    *x += 6;
-    *y -= 1;
-    return;
-    
-  case BOTTOM_RIGHT:
-    *x += 6;
-    *y += 8;
-    return;
-
-  case TOP_LEFT:
-    *x -= 1;
-    *y -= 1;
-    return;
-
-  case BOTTOM_LEFT:
-    *x -= 1;
-    *y += 8;
-    return;
-  }
-}
-#endif
-
-#if 0
-Broken idea. Keep for now, some of the code might be reusable.
-
-#include <stdio.h>
-PROCESSING_FLAG update_xy_delta( void* data, GAME_ACTION* output_action )
-{
-  uint8_t        xpos;
-  uint8_t        ypos;
-  DIRECTION      facing      = get_runner_facing();
-  JUMP_STATUS    jump_status = get_runner_jump_status();
-
-  uint8_t*       attr_address;
-
-  (void)data;
-
-  /*
-   * Check if he's about to bang his head on a block. This applies if he's
-   * on the flat, or in any part of his jump.
-   */
-  find_corner_pixel( &xpos, &ypos, (facing==RIGHT) ? TOP_RIGHT : TOP_LEFT );
-
-//  printf("js=%u, x=%u y=%u\n",jump_status,xpos, ypos);
-  plot(xpos, ypos);
-  zx_border(INK_YELLOW);
-
-  attr_address = zx_pxy2aaddr( xpos, ypos );
-  if( (*attr_address & ATTR_MASK_PAPER) == PAPER_WHITE ) {
-
-    /* Empty cell in front - he can move into it */
-
-//  printf("js=%u, x=%u y=%u\n",jump_status,xpos, ypos);
-    switch( jump_status )
-    {
-    case NOT_JUMPING:
-      *output_action = (facing==RIGHT) ? MOVE_RIGHT : MOVE_LEFT;
-      return STOP_PROCESSING;      
-    }
-  }
-  else {
-    *output_action = TOGGLE_DIRECTION;
-    return STOP_PROCESSING;      
-  }
-//  printf("here\n");
-
-  /*
-   * If he's in the falling part of his jump also check if he's about to bang
-   * his foot into a block
-   */
-  if( jump_status == RIGHT_FALLING || jump_status ==  LEFT_FALLING ) {
-    find_corner_pixel( &xpos, &ypos, (facing==RIGHT) ? BOTTOM_RIGHT : BOTTOM_LEFT );
-    attr_address = zx_pxy2aaddr( xpos, ypos );
-    if( (*attr_address & ATTR_MASK_PAPER) != PAPER_WHITE ) {
-    }
-  }
-
-//  sprite_corner = find_corner_pixel( &xpos, &ypos,  ); 
-
-  return KEEP_PROCESSING;
-}
-*/
-#endif
