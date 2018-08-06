@@ -49,7 +49,8 @@ void* allocate_tracememory( size_t size )
 
 void* clear_trace_area(void)
 {
-  memset((void*)TRACE_MEMORY_START, 0, MAX_TRACE_MEMORY);
+  /* TODO FIXME Can't clear all the ROM at the start because SP1 print requires it */
+  memset((void*)TRACE_MEMORY_START, 0, MAX_TRACE_MEMORY/2);
 }
 
 /*
