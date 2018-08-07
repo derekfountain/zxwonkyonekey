@@ -19,6 +19,7 @@
 
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
+#include <string.h>
 
 #include "levels.h"
 
@@ -50,6 +51,11 @@ LEVEL_DATA* get_level_data( uint8_t level )
   return &level_data[level];
 }
 
+extern struct sp1_Rect full_screen;
+
+extern uint8_t  level1_map[];
+extern uint8_t  level1_map_end[];
+
 void level0(void)
 {
   uint8_t i;
@@ -58,18 +64,34 @@ void level0(void)
   uint8_t jumper_att      = level_data[0].jumper_att;
   uint8_t finish_att      = level_data[0].finish_att;
 
+#define PRINT_BUFFER_SIZE 64
+  uint8_t print_buffer[PRINT_BUFFER_SIZE];
+
+  struct sp1_pss print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
+                                   0, 0,
+                                   0x00, INK_WHITE|PAPER_WHITE,
+                                   0,
+                                   0 };
+
   sp1_TileEntry(128, grassh);
   sp1_TileEntry(129, jumper);
   sp1_TileEntry(130, finish);
   sp1_TileEntry(131, grassv);
 
   /* Bottom row */
-  sp1_PrintAt(22,0,solid_att,GRASSH);
-  sp1_PrintAt(22,31,solid_att,GRASSH);
-  for(i=1;i<31;i++)
-    sp1_PrintAt(23,i,solid_att,GRASSH);
-  sp1_PrintAt(23,0,solid_att,GRASSV);
-  sp1_PrintAt(23,31,solid_att,GRASSV);
+  //  sp1_PrintAt(22,0,solid_att,GRASSH);
+  //sp1_PrintAt(22,31,solid_att,GRASSH);
+
+  //  sp1_SetPrintPos(&print_control, 22, 0);
+
+  memcpy( print_buffer, &level1_map[0], (size_t)(level1_map_end-level1_map) );
+  sp1_PrintString(&print_control, print_buffer);
+ 
+  //sp1_PrintAt(23,0,solid_att,);
+  //  for(i=1;i<31;i++)
+  //    sp1_PrintAt(23,i,solid_att,GRASSH);
+  //  sp1_PrintAt(23,0,solid_att,GRASSV);
+  // sp1_PrintAt(23,31,solid_att,GRASSV);
 
 
   /* Central area, 1 jump */

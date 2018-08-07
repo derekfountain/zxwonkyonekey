@@ -55,7 +55,8 @@ OBJECTS = gameloop.o \
           tracetable.o \
 	  local_assert.o \
 	  collision.o \
-	  levels_graphics.o
+	  levels_graphics.o \
+	  levels_maps.o
 
 %.o: %.c $(PRAGMA_FILE)
 	$(CC) $(CFLAGS) -o $@ $<
