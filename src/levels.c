@@ -78,57 +78,38 @@ void level0(void)
   sp1_TileEntry(130, finish);
   sp1_TileEntry(131, grassv);
 
-  /* Bottom row */
-  //  sp1_PrintAt(22,0,solid_att,GRASSH);
-  //sp1_PrintAt(22,31,solid_att,GRASSH);
-
-  //  sp1_SetPrintPos(&print_control, 22, 0);
-
   memcpy( print_buffer, &level1_map[0], (size_t)(level1_map_end-level1_map) );
   sp1_PrintString(&print_control, print_buffer);
  
-  //sp1_PrintAt(23,0,solid_att,);
-  //  for(i=1;i<31;i++)
-  //    sp1_PrintAt(23,i,solid_att,GRASSH);
-  //  sp1_PrintAt(23,0,solid_att,GRASSV);
-  // sp1_PrintAt(23,31,solid_att,GRASSV);
-
 
   /* Central area, 1 jump */
   sp1_PrintAt(23,17,jumper_att,JUMPER);
 
   /* Step 1 */
-  for(i=9;i<14;i++)
-    sp1_PrintAt(21,i,solid_att,GRASSH);
   sp1_PrintAt(21,8,jumper_att,JUMPER);
 
   /* Hop */
-  sp1_PrintAt(19,4,solid_att,GRASSH);
-  sp1_PrintAt(19,5,solid_att,GRASSH);
   sp1_PrintAt(19,6,jumper_att,JUMPER);
 
   /* Step 2 */  
-  for(i=10;i<15;i++)
-    sp1_PrintAt(18,i,solid_att,GRASSH);
   sp1_PrintAt(18,15,jumper_att,JUMPER);
 
   /* Single jump */
-  sp1_PrintAt(16,19,solid_att,GRASSH);
   sp1_PrintAt(16,20,jumper_att,JUMPER);
 
   /* Step 3 */
-  for(i=23;i<26;i++)
-    sp1_PrintAt(14,i,solid_att,GRASSH);
+//  for(i=23;i<26;i++)
+//    sp1_PrintAt(14,i,solid_att,GRASSH);
   sp1_PrintAt(14,22,jumper_att,JUMPER);
 
 
   /* Rest 1 */
-  for(i=11;i<19;i++)
-    sp1_PrintAt(13,i,solid_att,GRASSH);
-  sp1_PrintAt(13,10,solid_att,GRASSV);
-  sp1_PrintAt(13,19,solid_att,GRASSV);
-  sp1_PrintAt(12,10,solid_att,GRASSH);
-  sp1_PrintAt(12,19,solid_att,GRASSH);
+//  for(i=11;i<19;i++)
+//    sp1_PrintAt(13,i,solid_att,GRASSH);
+//  sp1_PrintAt(13,10,solid_att,GRASSV);
+//  sp1_PrintAt(13,19,solid_att,GRASSV);
+//  sp1_PrintAt(12,10,solid_att,GRASSH);
+//  sp1_PrintAt(12,19,solid_att,GRASSH);
   sp1_PrintAt(13,11,jumper_att,JUMPER);
 
 
