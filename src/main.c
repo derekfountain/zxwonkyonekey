@@ -67,9 +67,9 @@ int main()
   current_level_num = 0;
   while( 1 ) {
     
-    /* Get the level data and draw it */
+    /* Get the level data and call it's draw function to draw it */
     game_state.current_level = get_level_data( current_level_num );
-    (game_state.current_level->draw_func)();
+    (game_state.current_level->draw_func)(game_state.current_level);
 
     sp1_Invalidate(&full_screen);
     sp1_UpdateNow();

@@ -19,7 +19,7 @@ CC=zcc
 AS=zcc
 TARGET=+zx
 VERBOSITY=-vn
-CRT=4
+CRT=31
 
 PRAGMA_FILE=zpragma.inc
 
