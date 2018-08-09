@@ -207,7 +207,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         }
         else {
 
-          /* Check if he's about to bang his head */
+          /* Check if he's about to bang the front of his head */
           check_x = x+SPRITE_WIDTH;
           check_y = y-1;
 
@@ -215,6 +215,17 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           if( *attr_address != background_att ) {
             result = DROP_VERTICALLY;
           }
+	  else {
+
+	    /* Check if he's about to bang the back of his head */
+	    check_x = x;
+	    check_y = y-1;
+
+	    attr_address = zx_pxy2aaddr( check_x, check_y  );
+	    if( *attr_address != background_att ) {
+	      result = DROP_VERTICALLY;
+	    }
+	  }
         }
       }
       break;
@@ -242,7 +253,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         }
         else {
 
-          /* Check if he's about to bang his head */
+          /* Check if he's about to bang the front of his head */
           check_x = x-1;
           check_y = y-1;
 
@@ -250,6 +261,17 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           if( *attr_address != background_att ) {
             result = DROP_VERTICALLY;
           }
+	  else {
+
+	    /* Check if he's about to bang the back of his head */
+	    check_x = x+SPRITE_WIDTH;
+	    check_y = y-1;
+
+	    attr_address = zx_pxy2aaddr( check_x, check_y  );
+	    if( *attr_address != background_att ) {
+	      result = DROP_VERTICALLY;
+	    }
+	  }
         }
       }
       break;
