@@ -160,7 +160,7 @@ PUBLIC _level0_map
         defb 0x80               ; grassh
         defb 0x80               ; grassh
         defb 0x16, 0x03, 0x05   ; AT 3,5
-        defb 0x83               ; grassv
+        defb 0x80               ; grassv
 
         
         ;; Finish
