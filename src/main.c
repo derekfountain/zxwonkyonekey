@@ -38,6 +38,13 @@ struct sp1_Rect full_screen = {0, 0, 32, 24};
 
 GAME_STATE game_state;
 
+void game_over( void )
+{
+  /* TODO... */
+  zx_border( INK_GREEN );
+  while(1);
+}
+
 int main()
 {
   uint8_t current_level_num;
@@ -53,7 +60,6 @@ int main()
     clear_trace_area();    
   }
 
-  zx_border(INK_BLACK);
   setup_int();
 
   sp1_Initialize( SP1_IFLAG_MAKE_ROTTBL | SP1_IFLAG_OVERWRITE_TILES | SP1_IFLAG_OVERWRITE_DFILE,
@@ -64,7 +70,7 @@ int main()
   init_collision_trace();
   create_runner( RIGHT );
 
-  current_level_num = 0;
+  current_level_num = 1; /* TODO Should start at 0 */
   while( 1 ) {
     
     /* Get the level data and call it's draw function to draw it */
@@ -80,10 +86,17 @@ int main()
     game_state.key_processed = 0;
 
     /* Runner at start point */
+    zx_border( game_state.current_level->border_colour );
+    set_runner_facing( game_state.current_level->start_facing );
     set_runner_xpos( game_state.current_level->start_x );
     set_runner_ypos( game_state.current_level->start_y );
 
     /* Enter game loop, exit when player dies */
     gameloop( &game_state );
+
+    if( ++current_level_num == NUM_LEVELS ) {
+      game_over();
+      current_level_num = 0;
+    }
   }
 }

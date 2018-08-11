@@ -32,4 +32,13 @@
 #define ATTR_MASK_INK   ((uint8_t)0x03)
 #define ATTR_MASK_PAPER ((uint8_t)0x38)
 
+/*
+ * Macros to allow named contants. Just throw away every other value.
+ */
+#define NAMED_VALUES_1(name1,val1)                                               val1
+#define NAMED_VALUES_2(name1,val1,name2,val2)                                    val1,val2
+#define NAMED_VALUES_3(name1,val1,name2,val2,name3,val3)                         val1,val2,val3
+#define NAMED_VALUES_4(name1,val1,name2,val2,name3,val3,name4,val4)              val1,val2,val3,val4
+#define NAMED_VALUES_5(name1,val1,name2,val2,name3,val3,name4,val4,name5,val5)   val1,val2,val3,val4,val5
+
 #endif

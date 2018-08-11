@@ -139,9 +139,7 @@ LOOP_ACTION game_actions[] =
 
 void finish_level(void)
 {
-  /* TODO... */
-  zx_border( INK_GREEN );
-  while(1);
+  /* Do I need anything here? Trace point, maybe? */
 }
 
 /***
@@ -221,7 +219,7 @@ void gameloop( GAME_STATE* game_state )
 
         case FINISH:
           finish_level();
-          break;
+          return;
         }
 
       if( flag == STOP_PROCESSING )

@@ -22,24 +22,33 @@
 
 #include <stdint.h>
 
+#include "runner.h"
+#include "utils.h"
+
 typedef struct _level_data
 {
-  void    (*draw_func)(struct _level_data*);
-  void*   draw_data;
+  void      (*draw_func)(struct _level_data*);
+  void*     draw_data;
 
-  uint8_t start_x;
-  uint8_t start_y;
+  uint8_t   start_x;
+  uint8_t   start_y;
 
-  uint8_t background_att;
-  uint8_t solid_att;
-  uint8_t jumper_att;
-  uint8_t killer_att;
-  uint8_t finish_att;
+  uint8_t   border_colour;
+
+  DIRECTION start_facing;
+
+  uint8_t   background_att;
+  uint8_t   solid_att;
+  uint8_t   jumper_att;
+  uint8_t   killer_att;
+  uint8_t   finish_att;
 } LEVEL_DATA;
 
-#define START_POINT(x,y) x,y
+#define NUM_LEVELS 2
 
-#define LEVEL_ATT_DATA(tag0,val0,tag1,val1,tag2,val2,tag3,val3,tag4,val4) val0,val1,val2,val3,val4
+#define START_POINT(x,y) x,y
+#define LEVEL_BORDER(b) b
+#define START_FACING(f) f
 
 LEVEL_DATA* get_level_data( uint8_t level );
 

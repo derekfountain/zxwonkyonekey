@@ -58,7 +58,20 @@ OBJECTS = gameloop.o \
 	  levels_graphics.o \
 	  levels_maps.o
 
-%.o: %.c $(PRAGMA_FILE)
+# For now, if any header changes, recompile the lot
+HEADERS = action.h \
+	  collision.h \
+	  gameloop.h \
+	  game_state.h \
+	  int.h \
+	  key_action.h \
+	  levels.h \
+	  local_assert.h \
+	  runner.h \
+	  tracetable.h \
+	  utils.h
+
+%.o: %.c $(PRAGMA_FILE) $(HEADERS)
 	$(CC) $(CFLAGS) -o $@ $<
 
 %.o: %.asm

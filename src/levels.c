@@ -22,6 +22,7 @@
 #include <string.h>
 #include <malloc.h>
 
+#include "utils.h"
 #include "levels.h"
 
 extern uint8_t grassh[];
@@ -30,13 +31,26 @@ extern uint8_t finish[];
 extern uint8_t grassv[];
 
 extern uint8_t level0_map[];
+extern uint8_t level1_map[];
 
 LEVEL_DATA level_data[] = {
 
   { print_level_from_sp1_string,
     level0_map,
     START_POINT(0,135),
-    LEVEL_ATT_DATA("Background", INK_BLACK|PAPER_WHITE,
+    LEVEL_BORDER(INK_BLACK),
+    START_FACING(RIGHT),
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
+                   "Solid",      INK_GREEN|PAPER_WHITE,
+                   "Jumper",     INK_RED|PAPER_GREEN,
+                   "Killer",     INK_BLUE|PAPER_WHITE,
+                   "Finish",     INK_YELLOW|PAPER_BLUE) },
+  { print_level_from_sp1_string,
+    level1_map,
+    START_POINT(0,135),
+    LEVEL_BORDER(INK_BLUE),
+    START_FACING(RIGHT),
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
                    "Solid",      INK_GREEN|PAPER_WHITE,
                    "Jumper",     INK_RED|PAPER_GREEN,
                    "Killer",     INK_BLUE|PAPER_WHITE,

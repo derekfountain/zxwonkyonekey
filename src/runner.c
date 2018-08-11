@@ -201,7 +201,6 @@ RUNNER* create_runner( DIRECTION initial_direction )
   runner.sprite->xthresh = 3;
 
   /* These will be initialised from level data. Just make them sane here. */
-  /* TODO Direction needs to come from the level data too, so I need a runner init() function */
   runner.xpos        = 0;
   runner.ypos        = 0;
   runner.facing      = initial_direction;
@@ -239,6 +238,11 @@ void move_runner_xpos( int8_t delta )
 void move_runner_ypos( int8_t delta )
 {
   runner.ypos += delta;
+}
+
+void set_runner_facing( DIRECTION dir )
+{
+  runner.facing = dir;
 }
 
 DIRECTION get_runner_facing( void )
