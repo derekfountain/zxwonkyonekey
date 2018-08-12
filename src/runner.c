@@ -250,6 +250,21 @@ DIRECTION get_runner_facing( void )
   return runner.facing;
 }
 
+static uint8_t required_colour;
+static void initialiseColour(unsigned int count, struct sp1_cs *c)
+{
+  (void)count;    /* Suppress compiler warning about unused parameter */
+
+  c->attr_mask = SP1_AMASK_INK|SP1_AMASK_PAPER;
+  c->attr      = required_colour;
+}
+
+void set_runner_colour( uint8_t new_att )
+{
+  required_colour = new_att;
+  sp1_IterateSprChar(runner.sprite, initialiseColour);
+}
+
 uint8_t get_runner_jump_offset( void )
 {
   return runner.jump_offset;

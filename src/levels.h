@@ -30,6 +30,8 @@ typedef struct _level_data
   void      (*draw_func)(struct _level_data*);
   void*     draw_data;
 
+  uint8_t   runner_att;
+
   uint8_t   start_x;
   uint8_t   start_y;
 
@@ -46,6 +48,7 @@ typedef struct _level_data
 
 #define NUM_LEVELS 2
 
+#define RUNNER_ATT(r) r
 #define START_POINT(x,y) x,y
 #define LEVEL_BORDER(b) b
 #define START_FACING(f) f

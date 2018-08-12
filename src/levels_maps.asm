@@ -237,8 +237,8 @@ PUBLIC _level0_map_end
 
 PUBLIC _level1_map
 ._level1_map
-        defb 0x10, 0x04         ; ink green
-        defb 0x11, 0x07         ; paper white
+        defb 0x10, 0x07         ; ink white
+        defb 0x11, 0x00         ; paper black
 
         ;; Bottom row, with a blocker at each end
         
@@ -405,7 +405,7 @@ PUBLIC _level1_map
         ;; Now go back and fill in the jumpers
 
         defb 0x10, 0x02         ; ink red
-        defb 0x11, 0x04         ; paper green
+        defb 0x11, 0x07         ; paper white
         
         defb 0x16, 0x17, 0x11   ; AT 23,17, centre of bottom row
         defb 0x81               ; jumper

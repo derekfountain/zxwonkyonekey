@@ -97,6 +97,7 @@ void        move_runner_xpos( int8_t delta );
 void        move_runner_ypos( int8_t delta );
 void        set_runner_facing( DIRECTION d );
 DIRECTION   get_runner_facing( void );
+void        set_runner_colour( uint8_t );
 uint8_t     get_runner_jump_offset( void );
 JUMP_STATUS get_runner_jump_status(void);
 

@@ -90,6 +90,7 @@ int main()
     set_runner_facing( game_state.current_level->start_facing );
     set_runner_xpos( game_state.current_level->start_x );
     set_runner_ypos( game_state.current_level->start_y );
+    set_runner_colour( game_state.current_level->runner_att );
 
     /* Enter game loop, exit when player dies */
     gameloop( &game_state );
