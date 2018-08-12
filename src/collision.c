@@ -299,7 +299,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         }
         else {
 
-          /* Check if he's landed on something */
+          /* Check if he's landed on something (toe check) */
           check_x = x+SPRITE_WIDTH-1;
           check_y = y+SPRITE_HEIGHT;
 
@@ -307,6 +307,16 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           if( *attr_address != background_att ) {
             result = LANDED;
           }
+	  else {
+
+	    /* Check if he's landed on something (heel check) */
+	    check_x = x;
+
+	    attr_address = zx_pxy2aaddr( check_x, check_y  );
+	    if( *attr_address != background_att ) {
+	      result = LANDED;
+	    }
+	  }
         }
       }
       break;
@@ -334,7 +344,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         }
         else {
 
-          /* Check if he's landed on something */
+          /* Check if he's landed on something (toe check) */
           check_x = x;
           check_y = y+SPRITE_HEIGHT;
 
@@ -342,6 +352,16 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           if( *attr_address != background_att ) {
             result = LANDED;
           }
+	  else {
+
+	    /* Check if he's landed on something (heel check) */
+	    check_x = x+SPRITE_WIDTH-1;
+
+	    attr_address = zx_pxy2aaddr( check_x, check_y  );
+	    if( *attr_address != background_att ) {
+	      result = LANDED;
+	    }
+	  }
         }
       }
       break;
