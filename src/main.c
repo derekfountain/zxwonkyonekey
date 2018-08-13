@@ -92,7 +92,7 @@ int main()
     set_runner_ypos( game_state.current_level->start_y );
     set_runner_colour( game_state.current_level->background_att );
 
-    /* Enter game loop, exit when player dies */
+    /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );
 
     if( ++current_level_num == NUM_LEVELS ) {

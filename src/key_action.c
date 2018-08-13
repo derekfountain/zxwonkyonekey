@@ -49,7 +49,6 @@ typedef enum _key_action_tracetype
   TEST_FALL_RIGHT_UNROTATED,
   TEST_FALL_RIGHT_NO_TOE_SUPPORT,
   TEST_FALL_LEFT_HEEL_SUPPORT,
-  TEST_KILLER,
   TEST_FINISH,
 } KEY_ACTION_TRACETYPE;
 
@@ -342,62 +341,6 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
   }
 }
 
-
-
-
-/***
- *     __          __   _ _            _               _          _    _ _ _         ___  
- *     \ \        / /  | | |          | |             | |        | |  (_| | |       |__ \ 
- *      \ \  /\  / __ _| | | _____  __| |   ___  _ __ | |_ ___   | | ___| | | ___ _ __ ) |
- *       \ \/  \/ / _` | | |/ / _ \/ _` |  / _ \| '_ \| __/ _ \  | |/ | | | |/ _ | '__/ / 
- *        \  /\  | (_| | |   |  __| (_| | | (_) | | | | || (_) | |   <| | | |  __| | |_|  
- *         \/  \/ \__,_|_|_|\_\___|\__,_|  \___/|_| |_|\__\___/  |_|\_|_|_|_|\___|_| (_)  
- *                                                                                        
- *                                                                                        
- */
-PROCESSING_FLAG test_for_killer( void* data, GAME_ACTION* output_action )
-{
-  GAME_STATE* game_state = (GAME_STATE*)data;
-  uint8_t*    attr_address;
-
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
-
-  /* Are we in the middle of a jump? If so, no action */
-  if( RUNNER_JUMPING( get_runner_jump_offset() ) ) {
-    *output_action = NO_ACTION;
-    return KEEP_PROCESSING;
-  }
-
-  /* Are we on a killer block? If not, no action */
-  attr_address = zx_pxy2aaddr( xpos, ypos+8  );
-  
-  if( *attr_address != game_state->current_level->killer_att )
-  {
-    /* If the cell below isn't a killer, and he's aligned right on top of it, he's fine */
-    if( MODULO8( xpos ) == 0 ) {
-      *output_action = NO_ACTION;
-      return KEEP_PROCESSING;
-    }
-
-    /* He's moved onto the next character cell. Is that a killer? */
-    if( get_runner_facing() == RIGHT )
-      attr_address = zx_pxy2aaddr( xpos+8, ypos+8 );
-  
-    if( (*attr_address & ATTR_MASK_PAPER) == game_state->current_level->killer_att ) {
-      *output_action = DIE;
-      return STOP_PROCESSING;
-    }
-    else {
-      *output_action = NO_ACTION;
-      return KEEP_PROCESSING;
-    }
-  }
-  else {
-    *output_action = DIE;
-    return STOP_PROCESSING;
-  }
-}
 
 /***
  *      ______ _       _     _    ___  

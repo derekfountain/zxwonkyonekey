@@ -49,7 +49,6 @@ typedef struct _level_data
   uint8_t   background_att;
   uint8_t   solid_att;
   uint8_t   jumper_att;
-  uint8_t   killer_att;
   uint8_t   finish_att;
 } LEVEL_DATA;
 
