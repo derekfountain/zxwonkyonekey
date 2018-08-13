@@ -30,8 +30,6 @@ typedef struct _level_data
   void      (*draw_func)(struct _level_data*);
   void*     draw_data;
 
-  uint8_t   runner_att;
-
   uint8_t   start_x;
   uint8_t   start_y;
 
@@ -39,6 +37,15 @@ typedef struct _level_data
 
   DIRECTION start_facing;
 
+  /*
+   * Background attribute paper provides the background colour.
+   * Its ink colour provides the runner's colour. It has to be
+   * this way because the runner sprite sets the colours of the
+   * two cells it gets placed in, and since collision detection
+   * is based on paper colour the sprite will "collide with
+   * itself" if the runner were to have a different background
+   * colour.
+   */
   uint8_t   background_att;
   uint8_t   solid_att;
   uint8_t   jumper_att;
@@ -48,7 +55,6 @@ typedef struct _level_data
 
 #define NUM_LEVELS 2
 
-#define RUNNER_ATT(r) r
 #define START_POINT(x,y) x,y
 #define LEVEL_BORDER(b) b
 #define START_FACING(f) f
