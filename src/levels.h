@@ -25,6 +25,12 @@
 #include "runner.h"
 #include "utils.h"
 
+typedef struct _tile_definition
+{
+  uint8_t  tile_num;
+  uint8_t* udg_data;
+} TILE_DEFINITION;
+
 typedef struct _level_data
 {
   void      (*draw_func)(struct _level_data*);
@@ -50,6 +56,8 @@ typedef struct _level_data
   uint8_t   solid_att;
   uint8_t   jumper_att;
   uint8_t   finish_att;
+
+  TILE_DEFINITION* level_tiles;
 } LEVEL_DATA;
 
 #define NUM_LEVELS 2

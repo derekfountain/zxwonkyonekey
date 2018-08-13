@@ -25,25 +25,56 @@
 #include "utils.h"
 #include "levels.h"
 
-extern uint8_t grassh[];
-extern uint8_t jumper[];
-extern uint8_t finish[];
-extern uint8_t grassv[];
+/*
+ * These are the UDGs, defined in assembler because
+ * they're easier to see with binary representation.
+ */
+extern uint8_t grassh[8];
+extern uint8_t jumper[8];
+extern uint8_t finish[8];
+extern uint8_t grassv[8];
 
+/*
+ * Maps, also in assembler because the strings require
+ * '\0' bytes.
+ */
 extern uint8_t level0_map[];
 extern uint8_t level1_map[];
+
+/*
+ * Tables of tiles required for each level. "UDGs".
+ * Tile number 0 is end of list; assumes I'll never
+ * redefine tile zero.
+ */
+TILE_DEFINITION level0_tiles[] = {
+  {128, grassh},
+  {129, jumper},
+  {130, finish},
+  {131, grassv},
+  {0,   {0}   }
+};
+
+TILE_DEFINITION level1_tiles[] = {
+  {128, grassh},
+  {129, jumper},
+  {130, finish},
+  {131, grassv},
+  {0,   {0}   }
+};
 
 LEVEL_DATA level_data[] = {
 
   { print_level_from_sp1_string,
     level0_map,
-    START_POINT(0,135),
+    START_POINT(128,0),    /* TODO Use this for real game START_POINT(0,135), */
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_4("Background", INK_BLACK|PAPER_WHITE,
                    "Solid",      INK_GREEN|PAPER_WHITE,
                    "Jumper",     INK_RED|PAPER_GREEN,
-                   "Finish",     INK_YELLOW|PAPER_BLUE) },
+                   "Finish",     INK_YELLOW|PAPER_BLUE),
+    &level0_tiles[0]
+  },
   { print_level_from_sp1_string,
     level1_map,
     START_POINT(0,135),
@@ -52,7 +83,9 @@ LEVEL_DATA level_data[] = {
     NAMED_VALUES_4("Background", INK_MAGENTA|PAPER_BLACK,
                    "Solid",      INK_WHITE|PAPER_BLACK,
                    "Jumper",     INK_RED|PAPER_WHITE,
-                   "Finish",     INK_YELLOW|PAPER_BLUE) },
+                   "Finish",     INK_YELLOW|PAPER_BLUE),
+    &level1_tiles[0],
+  },
 };
 
 
@@ -79,6 +112,7 @@ extern struct sp1_Rect full_screen;
  */
 void print_level_from_sp1_string(LEVEL_DATA* level_data)
 {
+  TILE_DEFINITION* tile_ptr;
   struct sp1_pss print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
                                    0, 0,
                                    0x00, level_data->background_att,
@@ -86,13 +120,17 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
                                    0 };
 
   /* Reset screen, remove tiles and sprites, and reset to new colours */
-  sp1_ClearRectInv( &full_screen, level_data->background_att, ' ', SP1_RFLAG_TILE|SP1_RFLAG_COLOUR|SP1_RFLAG_SPRITE );
+  sp1_ClearRectInv( &full_screen, level_data->background_att, ' ', SP1_RFLAG_TILE|
+                                                                   SP1_RFLAG_COLOUR|
+                                                                   SP1_RFLAG_SPRITE );
 
-  /* TODO These should be in the level data so they can vary from level to level */
-  sp1_TileEntry(128, grassh);
-  sp1_TileEntry(129, jumper);
-  sp1_TileEntry(130, finish);
-  sp1_TileEntry(131, grassv);
+  /* Loop over tile defintitions, redefining them for the level */
+  tile_ptr = level_data->level_tiles;
+  while( tile_ptr->tile_num != 0 )
+  {
+    sp1_TileEntry(tile_ptr->tile_num, tile_ptr->udg_data);
+    tile_ptr += 1;
+  }
 
   sp1_PrintString(&print_control, (uint8_t*)(level_data->draw_data));
 }
