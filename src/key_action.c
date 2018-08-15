@@ -390,3 +390,49 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   return KEEP_PROCESSING;
 }
 
+
+
+
+/***
+ *      _______   _                       _          ___  
+ *     |__   __| | |                     | |        |__ \ 
+ *        | | ___| | ___ _ __   ___  _ __| |_ ___ _ __ ) |
+ *        | |/ _ | |/ _ | '_ \ / _ \| '__| __/ _ | '__/ / 
+ *        | |  __| |  __| |_) | (_) | |  | ||  __| | |_|  
+ *        |_|\___|_|\___| .__/ \___/|_|   \__\___|_| (_)  
+ *                      | |                               
+ *                      |_|                               
+ */
+
+PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+  LEVEL_DATA* level_data = game_state->current_level;
+
+  uint8_t     xpos = get_runner_xpos();
+  uint8_t     ypos = get_runner_ypos();
+
+  TELEPORTER_DEFINITION* teleporter = level_data->teleporters;
+
+  while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
+
+    if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
+
+      set_runner_xpos( teleporter->end_2_x );
+      set_runner_ypos( teleporter->end_2_y );
+      break;
+
+    } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
+
+      set_runner_xpos( teleporter->end_1_x );
+      set_runner_ypos( teleporter->end_1_y );
+      break;
+
+    }
+
+    teleporter++;
+  }
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}

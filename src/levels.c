@@ -33,6 +33,7 @@ extern uint8_t grassh[8];
 extern uint8_t jumper[8];
 extern uint8_t finish[8];
 extern uint8_t grassv[8];
+extern uint8_t teleporter[8];
 
 /*
  * Maps, also in assembler because the strings require
@@ -59,32 +60,42 @@ TILE_DEFINITION level1_tiles[] = {
   {129, jumper},
   {130, finish},
   {131, grassv},
+  {132, teleporter},
   {0,   {0}   }
+};
+
+TELEPORTER_DEFINITION level1_teleporters[] = {
+  {1*8,0*8, 30*8,22*8},
+  {0,0,0,0}
 };
 
 LEVEL_DATA level_data[] = {
 
   { print_level_from_sp1_string,
     level0_map,
-    START_POINT(128,0),    /* TODO Use this for real game START_POINT(0,135), */
+    START_POINT(0,135),    /* TODO Use this for real game START_POINT(0,135), */
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
-    NAMED_VALUES_4("Background", INK_BLACK|PAPER_WHITE,
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
                    "Solid",      INK_GREEN|PAPER_WHITE,
                    "Jumper",     INK_RED|PAPER_GREEN,
+                   "Teleporter", INK_BLACK|PAPER_WHITE,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
-    &level0_tiles[0]
+    &level0_tiles[0],
+    NULL
   },
   { print_level_from_sp1_string,
     level1_map,
     START_POINT(0,135),
     LEVEL_BORDER(INK_BLUE),
     START_FACING(RIGHT),
-    NAMED_VALUES_4("Background", INK_MAGENTA|PAPER_BLACK,
+    NAMED_VALUES_5("Background", INK_MAGENTA|PAPER_BLACK,
                    "Solid",      INK_WHITE|PAPER_BLACK,
                    "Jumper",     INK_RED|PAPER_WHITE,
+                   "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
+    &level1_teleporters[0]
   },
 };
 

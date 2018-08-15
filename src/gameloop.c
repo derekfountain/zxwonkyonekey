@@ -126,6 +126,7 @@ void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
 LOOP_ACTION game_actions[] =
   {
     {test_for_finish                },
+    {test_for_teleporter            },
     {test_for_falling               },
     {test_for_start_jump            },
     {test_for_direction_change      },
@@ -224,6 +225,13 @@ void gameloop( GAME_STATE* game_state )
     draw_runner();
 
     intrinsic_halt();
+    {
+//  {0*8,1*8, 22*8,30*8},
+    struct sp1_Rect val1 = {0,1, 1,1};
+    struct sp1_Rect val2 = {22,30, 1,1};
+    sp1_Validate(&val1);
+    sp1_Validate(&val2);
+    }
     sp1_UpdateNow();
   }
 }

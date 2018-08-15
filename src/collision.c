@@ -57,6 +57,8 @@ typedef struct _collision_trace
   uint8_t             ypos;
   DIRECTION           direction;
   JUMP_STATUS         jump_status;
+  uint8_t             background_att;
+  uint8_t             teleporter_att;
   REACTION            reaction;
 } COLLISION_TRACE;
 
@@ -66,7 +68,7 @@ typedef struct _collision_trace
 COLLISION_TRACE* collision_tracetable = TRACING_UNINITIALISED;
 COLLISION_TRACE* collision_next_trace = 0xFFFF;
 
-#define COLLISION_TRACE_CREATE(ttype,x,y,d,js,r) {    \
+#define COLLISION_TRACE_CREATE(ttype,x,y,d,js,b,t,r) {	\
     if( collision_tracetable != TRACING_INACTIVE ) { \
       COLLISION_TRACE      ct;   \
       ct.ticker          = GET_TICKER; \
@@ -75,6 +77,8 @@ COLLISION_TRACE* collision_next_trace = 0xFFFF;
       ct.ypos            = y; \
       ct.direction       = d; \
       ct.jump_status     = js; \
+      ct.background_att  = b; \
+      ct.teleporter_att  = t; \
       ct.reaction        = r; \
       collision_add_trace(&ct); \
     } \
@@ -100,8 +104,15 @@ void init_collision_trace(void)
 #define SPRITE_WIDTH  6
 #define SPRITE_HEIGHT 8
 
+static uint8_t is_attr_not( uint8_t x, uint8_t y, uint8_t att1, uint8_t att2 )
+{
+  register uint8_t* attr_address = zx_pxy2aaddr( x, y );
+  return ( *attr_address != att1 && *attr_address != att2 );
+}
+
 REACTION test_direction_blocked( uint8_t x, uint8_t y,
-                                 DIRECTION facing, JUMP_STATUS jump_status, uint8_t background_att )
+                                 DIRECTION facing, JUMP_STATUS jump_status, uint8_t background_att,
+                                                                            uint8_t teleporter_att )
 {
   uint8_t  check_x;
   uint8_t  check_y;
@@ -120,8 +131,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
       check_x = x-1;
       check_y = y;
     }
-    attr_address = zx_pxy2aaddr( check_x, check_y  );
-    if( *attr_address != background_att ) {
+    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
       result = BOUNCE;
     }
     else {
@@ -131,11 +141,6 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
   }
   else {  /* In the middle of a jump */
 
-    /*
-     * TODO So much duplication here... Obvious contender for optimisation
-     * when I need some cycles or space.
-     */
-
     switch( jump_status )
     {
     case RIGHT_FLAT:
@@ -143,16 +148,14 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
       check_x = x+SPRITE_WIDTH;
       check_y = y;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( *attr_address != background_att ) {
+      if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
         result = BOUNCE;
       }
       else {
         /* OK, check if he's about to bang his foot */
         check_y = y+SPRITE_HEIGHT-1;
 
-        attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( *attr_address != background_att ) {
+	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -166,16 +169,14 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
       check_x = x+1;
       check_y = y;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( *attr_address != background_att ) {
+      if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
         result = BOUNCE;
       }
       else {
         /* OK, check if he's about to bang his foot */
         check_y = y+SPRITE_HEIGHT-1;
 
-        attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( *attr_address != background_att ) {
+	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -191,8 +192,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
       result = NO_REACTION;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( *attr_address != background_att ) {
+      if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
         result = BOUNCE;
       }
       else {
@@ -201,8 +201,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x+SPRITE_WIDTH;
         check_y = y+SPRITE_HEIGHT-1;
 
-        attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( *attr_address != background_att ) {
+	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -211,8 +210,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x+SPRITE_WIDTH;
           check_y = y-1;
 
-          attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( *attr_address != background_att ) {
+	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = DROP_VERTICALLY;
           }
 	  else {
@@ -221,8 +219,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 	    check_x = x;
 	    check_y = y-1;
 
-	    attr_address = zx_pxy2aaddr( check_x, check_y  );
-	    if( *attr_address != background_att ) {
+	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
 	      result = DROP_VERTICALLY;
 	    }
 	  }
@@ -237,8 +234,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
       result = NO_REACTION;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( *attr_address != background_att ) {
+      if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
         result = BOUNCE;
       }
       else {
@@ -247,8 +243,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x-1;
         check_y = y+SPRITE_HEIGHT-1;
 
-        attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( *attr_address != background_att ) {
+	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -257,8 +252,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x-1;
           check_y = y-1;
 
-          attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( *attr_address != background_att ) {
+	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = DROP_VERTICALLY;
           }
 	  else {
@@ -267,8 +261,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 	    check_x = x+SPRITE_WIDTH;
 	    check_y = y-1;
 
-	    attr_address = zx_pxy2aaddr( check_x, check_y  );
-	    if( *attr_address != background_att ) {
+	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
 	      result = DROP_VERTICALLY;
 	    }
 	  }
@@ -283,8 +276,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
       result = NO_REACTION;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( *attr_address != background_att ) {
+      if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
         result = BOUNCE;
       }
       else {
@@ -293,8 +285,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x+SPRITE_WIDTH;
         check_y = y+SPRITE_HEIGHT-1;
 
-        attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( *attr_address != background_att ) {
+	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -303,8 +294,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x+SPRITE_WIDTH-1;
           check_y = y+SPRITE_HEIGHT;
 
-          attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( *attr_address != background_att ) {
+	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = LANDED;
           }
 	  else {
@@ -312,8 +302,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 	    /* Check if he's landed on something (heel check) */
 	    check_x = x;
 
-	    attr_address = zx_pxy2aaddr( check_x, check_y  );
-	    if( *attr_address != background_att ) {
+	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
 	      result = LANDED;
 	    }
 	  }
@@ -328,8 +317,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
       result = NO_REACTION;
 
-      attr_address = zx_pxy2aaddr( check_x, check_y  );
-      if( *attr_address != background_att ) {
+      if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
         result = BOUNCE;
       }
       else {
@@ -338,8 +326,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x-1;
         check_y = y+SPRITE_HEIGHT-1;
 
-        attr_address = zx_pxy2aaddr( check_x, check_y  );
-        if( *attr_address != background_att ) {
+	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -348,8 +335,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x;
           check_y = y+SPRITE_HEIGHT;
 
-          attr_address = zx_pxy2aaddr( check_x, check_y  );
-          if( *attr_address != background_att ) {
+	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = LANDED;
           }
 	  else {
@@ -357,8 +343,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 	    /* Check if he's landed on something (heel check) */
 	    check_x = x+SPRITE_WIDTH-1;
 
-	    attr_address = zx_pxy2aaddr( check_x, check_y  );
-	    if( *attr_address != background_att ) {
+	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
 	      result = LANDED;
 	    }
 	  }
@@ -372,7 +357,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
     }
   }
 
-  COLLISION_TRACE_CREATE( CHECK_BLOCKED, x, y, facing, jump_status, result);
+  COLLISION_TRACE_CREATE( CHECK_BLOCKED, x, y, facing, jump_status, background_att, teleporter_att, result);
 
   return result;
 }
@@ -388,8 +373,9 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
 
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t     background = game_state->current_level->background_att;
+  uint8_t     teleporter = game_state->current_level->teleporter_att;
 
-  reaction = test_direction_blocked( xpos, ypos, facing, jump_status, background );
+  reaction = test_direction_blocked( xpos, ypos, facing, jump_status, background, teleporter );
   switch( reaction )
   {
   case BOUNCE:

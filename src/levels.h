@@ -25,11 +25,23 @@
 #include "runner.h"
 #include "utils.h"
 
+typedef struct _teleporter_defintion
+{
+  uint8_t end_1_x;
+  uint8_t end_1_y;
+
+  uint8_t end_2_x;
+  uint8_t end_2_y;
+
+} TELEPORTER_DEFINITION;
+
+
 typedef struct _tile_definition
 {
   uint8_t  tile_num;
   uint8_t* udg_data;
 } TILE_DEFINITION;
+
 
 typedef struct _level_data
 {
@@ -55,9 +67,12 @@ typedef struct _level_data
   uint8_t   background_att;
   uint8_t   solid_att;
   uint8_t   jumper_att;
+  uint8_t   teleporter_att;
   uint8_t   finish_att;
 
-  TILE_DEFINITION* level_tiles;
+  TILE_DEFINITION*       level_tiles;
+  TELEPORTER_DEFINITION* teleporters;
+
 } LEVEL_DATA;
 
 #define NUM_LEVELS 2

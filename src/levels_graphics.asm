@@ -43,3 +43,15 @@ PUBLIC _finish
 	defb @10111101
 	defb @10000001
 	defb @11111111
+
+PUBLIC _teleporter
+._teleporter
+        defb @01000010
+        defb @10100101
+        defb @01001000
+        defb @00110000
+        defb @00001100
+        defb @00010010
+        defb @10100101
+        defb @01000010
+	
