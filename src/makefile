@@ -33,11 +33,11 @@ ASFLAGS=$(TARGET) $(VERBOSITY) -c
 SYMBOLS_GENERATOR=./generate_symbols.pl
 MAP=wonky.map
 
-BE_MAP_EXTRACTOR=./be/extract_enums.tcl
-BE_ENUMS=./be/be_enums.inc
-BE_ENUMS_LIST=./be/enums_list.lis
-BE_STRUCT_EXTRACTOR=./be/extract_structs.tcl
-BE_STRUCTS=./be/be_structs.inc
+BE_MAP_EXTRACTOR=./zxspectrum_be/extract_enums.tcl
+BE_ENUMS=./zxwonkyonekey_enums.inc
+BE_ENUMS_LIST=./enums_list.lis
+BE_STRUCT_EXTRACTOR=./zxspectrum_be/extract_structs.tcl
+BE_STRUCTS=./zxwonkyonekey_structs.inc
 
 TAGS_GENERATOR=etags
 
@@ -92,5 +92,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.lis *.ss zcc_opt.def *~ $(BE_ENUMS) ./be/*.lis /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) /tmp/tmpXX*
 	rm -rf __pycache__
