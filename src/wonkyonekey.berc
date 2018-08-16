@@ -1,10 +1,10 @@
-include "be/stdint.berc"
-include "be/sp1.berc"
+include "zxspectrum_be/stdint.berc"
+include "zxspectrum_be/sp1.berc"
 
 // These are generated.
 //
-include "be/be_enums.inc"
-include "be/be_structs.inc"
+include "zxwonkyonekey_enums.inc"
+include "zxwonkyonekey_structs.inc"
 
 def GAMELOOP_TRACE_TABLE
 {
