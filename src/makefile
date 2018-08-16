@@ -92,5 +92,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) TAGS /tmp/tmpXX*
 	rm -rf __pycache__
