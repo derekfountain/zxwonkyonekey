@@ -69,7 +69,7 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
     30*8, 22*8, 30, 22,
     NAMED_VALUES_1("Change direction", 0)
   },
-  {  10*8,  0*8,  10,  0,
+  { 10*8,  0*8, 10,  0,
     10*8, 22*8, 10, 22,
     NAMED_VALUES_1("Change direction", 1)
   },
@@ -150,5 +150,39 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
     tile_ptr += 1;
   }
 
+  /* Print the string from the levels map data */
   sp1_PrintString(&print_control, (uint8_t*)(level_data->draw_data));
+
+  /*
+   * If the level has teleporters they are filled in here. These could be
+   * done in the level map string in the ASM code, but they are required
+   * in the C code as well so their cells can be vaildated. The duplication
+   * was confusing, so I moved the code to deal with them here. It's less
+   * efficient space-wise but makes things easier when putting the level
+   * together.
+   */
+  if( level_data->teleporters )
+  {
+    TELEPORTER_DEFINITION* teleporter = level_data->teleporters;
+
+    while( teleporter->end_1_x || teleporter->end_1_y )
+    {
+      uint8_t print_string[5];
+      
+      print_string[0] = '\x16';
+      print_string[1] = teleporter->end_1_y_cell;
+      print_string[2] = teleporter->end_1_x_cell;
+      print_string[3] = '\x84';
+      print_string[4] = '\0';
+
+      sp1_PrintString(&print_control, print_string);
+
+      print_string[1] = teleporter->end_2_y_cell;
+      print_string[2] = teleporter->end_2_x_cell;
+
+      sp1_PrintString(&print_control, print_string);
+    
+      teleporter++;
+    }
+  }
 }

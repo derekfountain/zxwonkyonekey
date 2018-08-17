@@ -296,27 +296,26 @@ PUBLIC _level1_map
         defb 0x0e, 0x14         ; repeat 20 times
         defb 0x80               ; grassh
         defb 0x0f               ; end repeat
-
-
 	
-	;; teleporter 1
-
-        defb 0x10, 0x04         ; ink green
-        defb 0x11, 0x03         ; paper blue
-        
-        defb 0x16, 0x016, 0x1E  ; AT 22,30
-        defb 0x84               ; teleporter
 	
-        defb 0x16, 0x000, 0x01  ; AT 0,1
-        defb 0x84               ; teleporter
+	;;  Step 1, after first initial fall
 
-        defb 0x16, 0x016, 0x0A  ; AT 22,30
-        defb 0x84               ; teleporter
+        defb 0x16, 0x11, 0x0F   ; AT 17,0
+
+	defb 0x0e, 0x0E         ; repeat 20 times
+        defb 0x80               ; grassh
+        defb 0x0f               ; end repeat
+	        
+
+        ;; Now go back and fill in the jumpers
+
+        defb 0x10, 0x02         ; ink red
+        defb 0x11, 0x07         ; paper white
+        
+        defb 0x16, 0x17, 0x07   ; AT 23,7, bottom row
+        defb 0x81               ; jumper
 	
-        defb 0x16, 0x000, 0x0A  ; AT 0,1
-        defb 0x84               ; teleporter
-        
-        
+	        
         ;; Place the finish point
 
         defb 0x10, 0x06         ; ink yellow
@@ -324,7 +323,14 @@ PUBLIC _level1_map
         
         defb 0x16, 0x0F, 0x0    ; AT 15,0
         defb 0x82               ; finish
-                
+
+	
+	;; prime colour for teleporters which get filled in by the C code in
+	;; print_level_from_sp1_string()
+	
+        defb 0x10, 0x04         ; ink green
+        defb 0x11, 0x03         ; paper blue
+	                
         defb 0x00
 PUBLIC _level1_map_end
 ._level1_map_end

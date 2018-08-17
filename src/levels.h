@@ -32,6 +32,8 @@
  * tile invalidation. Both coord types are required each game loop
  * so it makes sense to store both types rather than calculate them
  * each time round.
+ * Some teleporters change the runner's direction, so he might go in
+ * facing left and come out facing right. That's the flag at the end.
  */
 typedef struct _teleporter_defintion
 {
@@ -51,6 +53,10 @@ typedef struct _teleporter_defintion
 } TELEPORTER_DEFINITION;
 
 
+/*
+ * Tile defintion is essentially a user defined graphic for the sp1 library.
+ * Tile numbers for UDGs start at 128.
+ */
 typedef struct _tile_definition
 {
   uint8_t  tile_num;

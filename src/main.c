@@ -70,7 +70,7 @@ int main()
   init_collision_trace();
   create_runner( RIGHT );
 
-  current_level_num = 0; /* TODO Should start at 0 */
+  current_level_num = 1; /* TODO Should start at 0 */
   while( 1 ) {
     
     /* Get the level data and call it's draw function to draw it */
