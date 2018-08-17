@@ -25,13 +25,27 @@
 #include "runner.h"
 #include "utils.h"
 
+/*
+ * Teleporter moves the runner from one screen location to another.
+ * The x,y coords are pixels, required for testing against where
+ * the sprite is. The x_cell,y_cell coords are cells, required for
+ * tile invalidation. Both coord types are required each game loop
+ * so it makes sense to store both types rather than calculate them
+ * each time round.
+ */
 typedef struct _teleporter_defintion
 {
   uint8_t end_1_x;
   uint8_t end_1_y;
 
+  uint8_t end_1_x_cell;
+  uint8_t end_1_y_cell;
+
   uint8_t end_2_x;
   uint8_t end_2_y;
+
+  uint8_t end_2_x_cell;
+  uint8_t end_2_y_cell;
 
 } TELEPORTER_DEFINITION;
 

@@ -65,8 +65,8 @@ TILE_DEFINITION level1_tiles[] = {
 };
 
 TELEPORTER_DEFINITION level1_teleporters[] = {
-  {1*8,0*8, 30*8,22*8},
-  {0,0,0,0}
+  {1*8, 0*8, 1, 0,   30*8, 22*8, 30, 22},
+  {0}
 };
 
 LEVEL_DATA level_data[] = {

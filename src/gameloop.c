@@ -224,14 +224,32 @@ void gameloop( GAME_STATE* game_state )
 
     draw_runner();
 
-    intrinsic_halt();
+    /*
+     * If the level has teleporters the cells they occupy are validated so
+     * the runner doesn't get redrawn when he moves "onto" one. The effect
+     * is for him to move "into" it which is what I want.
+     */
+    if( game_state->current_level->teleporters )
     {
-//  {0*8,1*8, 22*8,30*8},
-    struct sp1_Rect val1 = {0,1, 1,1};
-    struct sp1_Rect val2 = {22,30, 1,1};
-    sp1_Validate(&val1);
-    sp1_Validate(&val2);
+      TELEPORTER_DEFINITION* teleporter = game_state->current_level->teleporters;
+
+      while( teleporter->end_1_x || teleporter->end_1_y ) {
+        /*
+         * There doesn't appear to be an SP1 interface to validate a
+         * single tile. Use a 1x1 rectangle instead.
+         */
+        struct sp1_Rect validate_cell = {teleporter->end_1_y_cell, teleporter->end_1_x_cell, 1, 1};
+        sp1_Validate(&validate_cell);
+
+        validate_cell.row = teleporter->end_2_y_cell;
+        validate_cell.col = teleporter->end_2_x_cell;
+        sp1_Validate(&validate_cell);
+
+        teleporter++;
+      }
     }
+
+    intrinsic_halt();
     sp1_UpdateNow();
   }
 }
