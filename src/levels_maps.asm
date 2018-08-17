@@ -300,13 +300,41 @@ PUBLIC _level1_map
 	
 	;;  Step 1, after first initial fall
 
-        defb 0x16, 0x11, 0x0F   ; AT 17,0
+        defb 0x16, 0x11, 0x0F   ; AT 17,15
 
-	defb 0x0e, 0x0E         ; repeat 20 times
+	defb 0x0e, 0x09         ; repeat
         defb 0x80               ; grassh
         defb 0x0f               ; end repeat
-	        
 
+	;; Step 2, needs reverse jump to reach, teleporter at end
+		        
+        defb 0x16, 0x0F, 0x11   ; AT 15,17
+
+	defb 0x0e, 0x04         ; repeat
+        defb 0x80               ; grassh
+        defb 0x0f               ; end repeat
+
+	
+
+	;; Top left step with teleporter at end
+	
+        defb 0x16, 0x04, 0x00   ; AT 4,0
+
+	defb 0x0e, 0x06         ; repeat 6 times
+        defb 0x80               ; grassh
+        defb 0x0f               ; end repeat
+
+	;; Teleports back down to left side platform:
+
+	;;  Step x, first on left side
+
+        defb 0x16, 0x11, 0x00   ; AT 17,0
+
+	defb 0x0e, 0x08         ; repeat
+        defb 0x80               ; grassh
+        defb 0x0f               ; end repeat
+	
+	
         ;; Now go back and fill in the jumpers
 
         defb 0x10, 0x02         ; ink red
@@ -315,13 +343,16 @@ PUBLIC _level1_map
         defb 0x16, 0x17, 0x07   ; AT 23,7, bottom row
         defb 0x81               ; jumper
 	
-	        
+        defb 0x16, 0x11, 0x0E   ; AT 17,14
+        defb 0x81               ; useless bogus jumper
+
+		        
         ;; Place the finish point
 
         defb 0x10, 0x06         ; ink yellow
         defb 0x11, 0x01         ; paper blue
         
-        defb 0x16, 0x0F, 0x0    ; AT 15,0
+        defb 0x16, 0x10, 0x0    ; AT 16,0
         defb 0x82               ; finish
 
 	

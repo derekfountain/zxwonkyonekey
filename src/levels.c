@@ -65,13 +65,17 @@ TILE_DEFINITION level1_tiles[] = {
 };
 
 TELEPORTER_DEFINITION level1_teleporters[] = {
-  {  1*8,  0*8,  1,  0,
-    30*8, 22*8, 30, 22,
+  {  0*8,  1*8,  0,  1,
+    22*8, 30*8, 22, 30,
     NAMED_VALUES_1("Change direction", 0)
   },
-  { 10*8,  0*8, 10,  0,
-    10*8, 22*8, 10, 22,
+  {  0*8, 10*8,  0, 10,
+    22*8, 10*8, 22, 10,
     NAMED_VALUES_1("Change direction", 1)
+  },
+  { 14*8, 20*8, 14, 20,
+     3*8,  0*8,  3,  0,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {0}
 };
@@ -93,7 +97,7 @@ LEVEL_DATA level_data[] = {
   },
   { print_level_from_sp1_string,
     level1_map,
-    START_POINT(0,135),
+    START_POINT(0,155),
     LEVEL_BORDER(INK_BLUE),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_MAGENTA|PAPER_BLACK,
