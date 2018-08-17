@@ -116,7 +116,6 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 {
   uint8_t  check_x;
   uint8_t  check_y;
-  uint8_t* attr_address;
   REACTION result;
 
   if( jump_status == NOT_JUMPING ) {
