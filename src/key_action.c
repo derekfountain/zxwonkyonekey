@@ -414,18 +414,28 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
   TELEPORTER_DEFINITION* teleporter = level_data->teleporters;
 
+  *output_action = NO_ACTION;
+
   while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
 
     if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
 
       set_runner_xpos( teleporter->end_2_x );
       set_runner_ypos( teleporter->end_2_y );
+      
+      if( teleporter->change_direction ) {
+        *output_action = TOGGLE_DIRECTION;
+      }
       break;
 
     } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
 
       set_runner_xpos( teleporter->end_1_x );
       set_runner_ypos( teleporter->end_1_y );
+
+      if( teleporter->change_direction ) {
+        *output_action = TOGGLE_DIRECTION;
+      }
       break;
 
     }
@@ -433,6 +443,5 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
     teleporter++;
   }
 
-  *output_action = NO_ACTION;
   return KEEP_PROCESSING;
 }

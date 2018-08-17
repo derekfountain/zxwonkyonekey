@@ -47,6 +47,7 @@ typedef struct _teleporter_defintion
   uint8_t end_2_x_cell;
   uint8_t end_2_y_cell;
 
+  uint8_t change_direction;
 } TELEPORTER_DEFINITION;
 
 

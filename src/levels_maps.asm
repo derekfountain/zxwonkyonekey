@@ -310,6 +310,12 @@ PUBLIC _level1_map
         defb 0x16, 0x000, 0x01  ; AT 0,1
         defb 0x84               ; teleporter
 
+        defb 0x16, 0x016, 0x0A  ; AT 22,30
+        defb 0x84               ; teleporter
+	
+        defb 0x16, 0x000, 0x0A  ; AT 0,1
+        defb 0x84               ; teleporter
+        
         
         ;; Place the finish point
 

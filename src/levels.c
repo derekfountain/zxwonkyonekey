@@ -65,7 +65,14 @@ TILE_DEFINITION level1_tiles[] = {
 };
 
 TELEPORTER_DEFINITION level1_teleporters[] = {
-  {1*8, 0*8, 1, 0,   30*8, 22*8, 30, 22},
+  {  1*8,  0*8,  1,  0,
+    30*8, 22*8, 30, 22,
+    NAMED_VALUES_1("Change direction", 0)
+  },
+  {  10*8,  0*8,  10,  0,
+    10*8, 22*8, 10, 22,
+    NAMED_VALUES_1("Change direction", 1)
+  },
   {0}
 };
 
