@@ -20,7 +20,7 @@ use strict;
 
 while( my $line = <> ) {
 
-  if( $line =~ /^(\w+)\s+=\s+\$(\w+)\s;\saddr, public/ ) {
+  if( $line =~ /^(\w+)\s+=\s+\$(\w+)\s;\saddr,/ ) {
     print "$1 $2\n";
   }
 }

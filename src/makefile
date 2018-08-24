@@ -33,6 +33,9 @@ ASFLAGS=$(TARGET) $(VERBOSITY) -c
 SYMBOLS_GENERATOR=./generate_symbols.pl
 MAP=wonky.map
 
+TAGGABLE_SRC_GENERATOR=./generate_taggable_src.pl
+TAGGABLE_SRC=wonky.taggable_src
+
 BE_MAP_EXTRACTOR=./zxspectrum_be/extract_enums.tcl
 BE_ENUMS=./zxwonkyonekey_enums.inc
 BE_ENUMS_LIST=./enums_list.lis
@@ -82,6 +85,7 @@ all : clean_tmp $(EXEC)
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
+	$(TAGGABLE_SRC_GENERATOR) $(SYM_OUTPUT) *.c.lis > $(TAGGABLE_SRC)
 	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
 	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
 	$(TAGS_GENERATOR) *.h *.c
@@ -92,5 +96,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) TAGS /tmp/tmpXX*
+	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
 	rm -rf __pycache__
