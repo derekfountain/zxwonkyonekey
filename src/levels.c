@@ -86,6 +86,14 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
      3*8,  0*8,  3,  0,
     NAMED_VALUES_1("Change direction", 0)
   },
+  { 11*8, 28*8, 11, 28,
+     6*8,  0*8,  6,  0,
+    NAMED_VALUES_1("Change direction", 1)
+  },
+  {  7*8, 13*8,  7, 13,
+     2*8, 30*8,  2, 30,
+    NAMED_VALUES_1("Change direction", 1)
+  },
   {0}
 };
 

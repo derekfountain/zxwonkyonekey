@@ -256,7 +256,7 @@ PUBLIC _level0_map_end
 ;;   | |___|  __/\ V |  __| |  | |
 ;;   |______\___| \_/ \___|_|  |_|
 ;;                                
-;; Hand crafted                             
+;; Level designer
 
 	
 PUBLIC _level1_map
@@ -265,19 +265,7 @@ PUBLIC _level1_map
         defb 0x11, 0x00         ; paper black
 
 INCLUDE "level1_map.inc.asm"	
-	
-        ;; Now go back and fill in the jumpers
-
-        defb 0x10, 0x02         ; ink red
-        defb 0x11, 0x07         ; paper white
-        
-        defb 0x16, 0x17, 0x07   ; AT 23,7, bottom row
-        defb 0x81               ; jumper
-	
-        defb 0x16, 0x11, 0x0E   ; AT 17,14
-        defb 0x81               ; useless bogus jumper
-
-		        
+			        
         ;; Place the finish point
 
         defb 0x10, 0x06         ; ink yellow
@@ -285,7 +273,6 @@ INCLUDE "level1_map.inc.asm"
         
         defb 0x16, 0x10, 0x0    ; AT 16,0
         defb 0x82               ; finish
-
 	
 	;; prime colour for teleporters which get filled in by the C code in
 	;; print_level_from_sp1_string()

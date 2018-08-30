@@ -27,7 +27,10 @@ set ::JUMPER            "red"
 
 set ::SOLIDH_CHAR       {0x80}
 set ::SOLIDV_CHAR       {0x83}
+set ::SOLID_COLOUR      "0x10, 0x07, 0x11, 0x00 ; ink white, paper black"
+
 set ::JUMPER_CHAR       {0x81}
+set ::JUMPER_COLOUR     "0x10, 0x02, 0x11, 0x07 ; ink red, paper white"
 
 set ::HIGHLIT_OUTLINE   "yellow"
 set ::UNHIGHLIT_OUTLINE "gray"
@@ -54,30 +57,46 @@ proc generateOutput {} {
 
     set h [open $::filename "w"]
 
+    # Write passthrough block at the top
+    #
     foreach line $::passThrough {
 	puts $h $line
     }
 
-
+    # Fill in the solids
+    #
+    puts $h [format "        defb $::SOLID_COLOUR"]
     for { set y 0 } { $y < $::HEIGHT_TILES } { incr y } {
 	for { set x 0 } { $x < $::WIDTH_TILES } { incr x } {
 
 	    set fill [.c itemcget "_${y}x${x}" -fill]
 	    if { $fill ne $::BACKGROUND } {
 
-		puts $h [format "        defb 0x16, 0x%02X, 0x%02X   ; AT %d,%d" $y $x $y $x]
-
 		switch $fill \
 		    $::SOLIDH {
+			puts $h [format "        defb 0x16, 0x%02X, 0x%02X   ; AT %d,%d" $y $x $y $x]
 			puts $h [format "        defb 0x%02X ; solidh" $::SOLIDH_CHAR]
 		    }\
 		    $::SOLIDV {
+			puts $h [format "        defb 0x16, 0x%02X, 0x%02X   ; AT %d,%d" $y $x $y $x]
 			puts $h [format "        defb 0x%02X ; solidv" $::SOLIDV_CHAR]
 		    }\
-		    $::JUMPER {
-			puts $h [format "        defb 0x%02X ; jumper" $::JUMPER_CHAR]
-		    }
-		
+	    }
+
+	}
+    }
+
+    # Fill in the jumpers
+    #
+    puts $h [format "        defb $::JUMPER_COLOUR"]
+    for { set y 0 } { $y < $::HEIGHT_TILES } { incr y } {
+	for { set x 0 } { $x < $::WIDTH_TILES } { incr x } {
+
+	    set fill [.c itemcget "_${y}x${x}" -fill]
+	    if { $fill eq $::JUMPER } {
+
+		puts $h [format "        defb 0x16, 0x%02X, 0x%02X   ; AT %d,%d" $y $x $y $x]
+		puts $h [format "        defb 0x%02X ; jumper" $::JUMPER_CHAR]		
 	    }
 
 	}
