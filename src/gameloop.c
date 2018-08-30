@@ -168,6 +168,11 @@ void gameloop( GAME_STATE* game_state )
       game_state->key_processed = 0;
     }
 
+    if( in_key_pressed( IN_KEY_SCANCODE_q ) ) {
+      finish_level();
+      break;
+    }
+
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
       PROCESSING_FLAG flag;
       GAME_ACTION     required_action;
