@@ -82,6 +82,10 @@ HEADERS = action.h \
 
 all : clean_tmp $(EXEC)
 
+# Level maps are in files built with the level designer
+levels_maps.o : level1_map.inc.asm \
+                level2_map.inc.asm
+
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)

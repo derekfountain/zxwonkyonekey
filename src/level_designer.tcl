@@ -54,6 +54,11 @@ proc generateOutput {} {
 
     set h [open $::filename "w"]
 
+    foreach line $::passThrough {
+	puts $h $line
+    }
+
+
     for { set y 0 } { $y < $::HEIGHT_TILES } { incr y } {
 	for { set x 0 } { $x < $::WIDTH_TILES } { incr x } {
 
@@ -63,9 +68,16 @@ proc generateOutput {} {
 		puts $h [format "        defb 0x16, 0x%02X, 0x%02X   ; AT %d,%d" $y $x $y $x]
 
 		switch $fill \
-		    $::SOLIDH [list puts $h [format "        defb 0x%02X ; solidh" $::SOLIDH_CHAR]] \
-		    $::SOLIDV [list puts $h [format "        defb 0x%02X ; solidv" $::SOLIDV_CHAR]] \
-		    $::JUMPER [list puts $h [format "        defb 0x%02X ; jumper" $::JUMPER_CHAR]] \
+		    $::SOLIDH {
+			puts $h [format "        defb 0x%02X ; solidh" $::SOLIDH_CHAR]
+		    }\
+		    $::SOLIDV {
+			puts $h [format "        defb 0x%02X ; solidv" $::SOLIDV_CHAR]
+		    }\
+		    $::JUMPER {
+			puts $h [format "        defb 0x%02X ; jumper" $::JUMPER_CHAR]
+		    }
+		
 	    }
 
 	}
@@ -74,16 +86,6 @@ proc generateOutput {} {
     close $h
 
 }
-
-proc changeChar { keySym } {
-    if { [string is integer $keySym] } {
-	# Not required, as it turned out
-    } elseif { $keySym eq "question" } {
-	generateOutput
-    }
-}
-
-bind all <KeyPress> [list changeChar %K]
 
 proc tileEnter { widget tagName } {
     $widget itemconfigure $tagName -outline $::HIGHLIT_OUTLINE
@@ -109,13 +111,17 @@ proc tileSelect { widget tagName action } {
     generateOutput
 }
 
+set passThrough {}
 set existingLayout [dict create]
+array set colours {}
 if { [file exists $::filename] } {
 
     set tagName ""
 
+    set passing 0
+
     set h [open $filename "r"]
-    while { [gets $h line] > 0 } {
+    while { [gets $h line] >= 0 } {
 
 	if { [regexp {\s+defb 0x16, (0x\w\w), (0x\w\w)} $line unused yHex xHex] } {
 	    scan $yHex %x y
@@ -123,6 +129,14 @@ if { [file exists $::filename] } {
 	    set tagName "_${y}x${x}"
 	} elseif { [regexp {\s+defb 0x\w\w ; (\w+)} $line unused charType] } {
 	    dict append existingLayout $tagName $charType
+	} elseif { [regexp {;LEVEL DESIGNER PASSTHROUGH START} $line unused] } {
+	    set passing 1
+	    lappend ::passThrough $line
+	} elseif { [regexp {;LEVEL DESIGNER PASSTHROUGH END} $line unused]} {
+	    set passing 0
+	    lappend ::passThrough $line
+	} elseif { $passing } {
+	    lappend ::passThrough $line
 	}
 
     }

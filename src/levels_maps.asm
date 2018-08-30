@@ -264,76 +264,7 @@ PUBLIC _level1_map
         defb 0x10, 0x07         ; ink white
         defb 0x11, 0x00         ; paper black
 
-        ;; Bottom row, with a blocker at each end
-        
-        defb 0x16, 0x16, 0x00   ; AT 22,0
-        
-        defb 0x80               ; grassh
-        defb 0x0b               ; down
-        defb 0x08               ; left
-
-        defb 0x83               ; grassv in very bottom left corner
-                
-        defb 0x0e, 0x1e         ; repeat 30 times
-        defb 0x80               ; grassh along the bottom
-        defb 0x0f               ; end repeat
-
-        defb 0x83               ; grassv in very bottom right corner
-        defb 0x16, 0x16, 0x1f   ; up doesn't work, so AT 22,31
-        defb 0x80               ; grassh
-
-	
-	;; Top run
-	
-        defb 0x16, 0x00, 0x00   ; AT 0,0
-        
-        defb 0x80               ; grassh
-        defb 0x0b               ; down
-        defb 0x08               ; left
-
-        defb 0x83               ; grassv below
-                
-        defb 0x0e, 0x14         ; repeat 20 times
-        defb 0x80               ; grassh
-        defb 0x0f               ; end repeat
-	
-	
-	;;  Step 1, after first initial fall
-
-        defb 0x16, 0x11, 0x0F   ; AT 17,15
-
-	defb 0x0e, 0x09         ; repeat
-        defb 0x80               ; grassh
-        defb 0x0f               ; end repeat
-
-	;; Step 2, needs reverse jump to reach, teleporter at end
-		        
-        defb 0x16, 0x0F, 0x11   ; AT 15,17
-
-	defb 0x0e, 0x04         ; repeat
-        defb 0x80               ; grassh
-        defb 0x0f               ; end repeat
-
-	
-
-	;; Top left step with teleporter at end
-	
-        defb 0x16, 0x04, 0x00   ; AT 4,0
-
-	defb 0x0e, 0x06         ; repeat 6 times
-        defb 0x80               ; grassh
-        defb 0x0f               ; end repeat
-
-	;; Teleports back down to left side platform:
-
-	;;  Step x, first on left side
-
-        defb 0x16, 0x11, 0x00   ; AT 17,0
-
-	defb 0x0e, 0x08         ; repeat
-        defb 0x80               ; grassh
-        defb 0x0f               ; end repeat
-	
+INCLUDE "level1_map.inc.asm"	
 	
         ;; Now go back and fill in the jumpers
 
