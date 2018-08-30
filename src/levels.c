@@ -41,6 +41,7 @@ extern uint8_t teleporter[8];
  */
 extern uint8_t level0_map[];
 extern uint8_t level1_map[];
+extern uint8_t level2_map[];
 
 /*
  * Tables of tiles required for each level. "UDGs".
@@ -61,6 +62,14 @@ TILE_DEFINITION level1_tiles[] = {
   {130, finish},
   {131, grassv},
   {132, teleporter},
+  {0,   {0}   }
+};
+
+TILE_DEFINITION level2_tiles[] = {
+  {128, grassh},
+  {129, jumper},
+  {130, finish},
+  {131, grassv},
   {0,   {0}   }
 };
 
@@ -107,6 +116,19 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
     &level1_teleporters[0]
+  },
+  { print_level_from_sp1_string,
+    level2_map,
+    START_POINT(0,135),    /* TODO Use this for real game START_POINT(0,135), */
+    LEVEL_BORDER(INK_BLACK),
+    START_FACING(RIGHT),
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
+                   "Solid",      INK_GREEN|PAPER_WHITE,
+                   "Jumper",     INK_RED|PAPER_GREEN,
+                   "Teleporter", INK_BLACK|PAPER_WHITE,
+                   "Finish",     INK_YELLOW|PAPER_BLUE),
+    &level0_tiles[0],
+    NULL
   },
 };
 

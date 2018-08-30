@@ -14,7 +14,7 @@ SECTION rodata_user
 ;;   | |___|  __/\ V |  __| | | |_| |
 ;;   |______\___| \_/ \___|_|  \___/ 
 ;;                                   
-;;                                   
+;; Hand crafted                              
 
 	        
 PUBLIC _level0_map
@@ -256,7 +256,7 @@ PUBLIC _level0_map_end
 ;;   | |___|  __/\ V |  __| |  | |
 ;;   |______\___| \_/ \___|_|  |_|
 ;;                                
-;;                                
+;; Hand crafted                             
 
 	
 PUBLIC _level1_map
@@ -365,4 +365,27 @@ PUBLIC _level1_map
         defb 0x00
 PUBLIC _level1_map_end
 ._level1_map_end
+
+
+
+
 	
+;;    _                    _   ___  
+;;   | |                  | | |__ \ 
+;;   | |     _____   _____| |    ) |
+;;   | |    / _ \ \ / / _ | |   / / 
+;;   | |___|  __/\ V |  __| |  / /_ 
+;;   |______\___| \_/ \___|_| |____|
+;;                                  
+;; Level designer                                 
+
+
+PUBLIC _level2_map
+._level2_map
+
+INCLUDE "level2_map.inc.asm"
+
+	defb 0x00
+	
+PUBLIC _level2_map_end
+._level2_map_end

@@ -96,7 +96,7 @@ typedef struct _level_data
 
 } LEVEL_DATA;
 
-#define NUM_LEVELS 2
+#define NUM_LEVELS 3
 
 #define START_POINT(x,y) x,y
 #define LEVEL_BORDER(b) b
