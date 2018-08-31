@@ -90,9 +90,13 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
      6*8,  0*8,  6,  0,
     NAMED_VALUES_1("Change direction", 1)
   },
-  {  7*8, 13*8,  7, 13,
+  {  4*8,  8*8,  4,  8,
      2*8, 30*8,  2, 30,
-    NAMED_VALUES_1("Change direction", 1)
+    NAMED_VALUES_1("Change direction", 0)
+  },
+  {  2*8, 23*8,  2, 23,
+    16*8,  6*8,  16, 6,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {0}
 };
@@ -101,7 +105,7 @@ LEVEL_DATA level_data[] = {
 
   { print_level_from_sp1_string,
     level0_map,
-    START_POINT(0,135),    /* TODO Use this for real game START_POINT(0,135), */
+    START_POINT(0,135),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
@@ -127,7 +131,7 @@ LEVEL_DATA level_data[] = {
   },
   { print_level_from_sp1_string,
     level2_map,
-    START_POINT(0,135),    /* TODO Use this for real game START_POINT(0,135), */
+    START_POINT(240,00),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
