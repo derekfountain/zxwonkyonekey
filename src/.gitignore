@@ -6,6 +6,7 @@
 *.ss
 *.sym
 *.tap
+*.taggable_src
 zcc_opt.def
 TAGS
 *~

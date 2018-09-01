@@ -22,6 +22,28 @@ PUBLIC _grassv
 	defb @11110111
 	defb @11111111
 	
+PUBLIC _platform1
+._platform1
+        defb @11111111
+        defb @01010101
+	defb @01100100
+	defb @11010010
+	defb @10101001
+	defb @10100010
+	defb @01010010
+	defb @10000100
+
+PUBLIC _platform1v
+._platform1v
+        defb @10010101
+        defb @01011101
+	defb @01100100
+	defb @11010010
+	defb @10101001
+	defb @10111010
+	defb @01110111
+	defb @10101101
+		
 PUBLIC _jumper
 ._jumper
         defb @11111111

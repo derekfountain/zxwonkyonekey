@@ -31,6 +31,8 @@
  */
 extern uint8_t grassh[8];
 extern uint8_t jumper[8];
+extern uint8_t platform1[8];
+extern uint8_t platform1v[8];
 extern uint8_t finish[8];
 extern uint8_t grassv[8];
 extern uint8_t teleporter[8];
@@ -57,10 +59,10 @@ TILE_DEFINITION level0_tiles[] = {
 };
 
 TILE_DEFINITION level1_tiles[] = {
-  {128, grassh},
+  {128, platform1},
   {129, jumper},
   {130, finish},
-  {131, grassv},
+  {131, platform1v},
   {132, teleporter},
   {0,   {0}   }
 };
@@ -123,7 +125,7 @@ LEVEL_DATA level_data[] = {
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_MAGENTA|PAPER_BLACK,
                    "Solid",      INK_WHITE|PAPER_BLACK,
-                   "Jumper",     INK_RED|PAPER_WHITE,
+                   "Jumper",     INK_RED|PAPER_BLACK,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
