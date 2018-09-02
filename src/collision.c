@@ -65,9 +65,6 @@ typedef struct _collision_trace
 #define COLLISION_TRACE_ENTRIES 250
 #define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
 
-COLLISION_TRACE* collision_tracetable = TRACING_UNINITIALISED;
-COLLISION_TRACE* collision_next_trace = 0xFFFF;
-
 #define COLLISION_TRACE_CREATE(ttype,x,y,d,js,b,t,r) {	\
     if( collision_tracetable != TRACING_INACTIVE ) { \
       COLLISION_TRACE      ct;   \
@@ -84,15 +81,8 @@ COLLISION_TRACE* collision_next_trace = 0xFFFF;
     } \
 }
 
-void collision_add_trace( COLLISION_TRACE* ct_ptr )
-{
-  memcpy(collision_next_trace, ct_ptr, sizeof(COLLISION_TRACE));
+TRACE_FN( collision, COLLISION_TRACE, COLLISION_TRACETABLE_SIZE )
 
-  collision_next_trace = (void*)((uint8_t*)collision_next_trace + sizeof(COLLISION_TRACE));
-
-  if( collision_next_trace == (void*)((uint8_t*)collision_tracetable+COLLISION_TRACETABLE_SIZE) )
-      collision_next_trace = collision_tracetable;
-}
 
 void init_collision_trace(void)
 {

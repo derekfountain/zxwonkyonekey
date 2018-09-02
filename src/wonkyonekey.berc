@@ -23,7 +23,7 @@ def KEY_ACTION_TRACE_TABLE struct
 
 def COLLISION_TRACE_TABLE struct
 {
-  500 COLLISION_TRACE open "collision trace table"
+  250 COLLISION_TRACE open "collision trace table"
 }
 
 def main struct

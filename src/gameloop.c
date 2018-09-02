@@ -72,9 +72,6 @@ typedef struct _gameloop_trace
 #define GAMELOOP_TRACE_ENTRIES 500
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
-GAMELOOP_TRACE* gameloop_tracetable = TRACING_UNINITIALISED;
-GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
-
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
 #define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act,pflag) { \
     if( gameloop_tracetable != TRACING_INACTIVE ) { \
@@ -91,17 +88,7 @@ GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
     } \
 }
 
-void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
-{
-  memcpy(gameloop_next_trace, glt_ptr, sizeof(GAMELOOP_TRACE));
-
-  gameloop_next_trace = (void*)((uint8_t*)gameloop_next_trace + sizeof(GAMELOOP_TRACE));
-
-  if( gameloop_next_trace == (void*)((uint8_t*)gameloop_tracetable+GAMELOOP_TRACETABLE_SIZE) )
-      gameloop_next_trace = gameloop_tracetable;
-}
-
-
+TRACE_FN( gameloop, GAMELOOP_TRACE, GAMELOOP_TRACETABLE_SIZE )
 
 
 /***

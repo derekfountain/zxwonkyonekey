@@ -81,38 +81,13 @@ typedef struct _runner_trace
 #define RUNNER_TRACE_ENTRIES 50
 #define RUNNER_TRACETABLE_SIZE ((size_t)sizeof(RUNNER_TRACE)*RUNNER_TRACE_ENTRIES)
 
-RUNNER_TRACE* runner_tracetable = TRACING_UNINITIALISED;
-RUNNER_TRACE* runner_next_trace = 0xFFFF;
+TRACE_FN( runner, RUNNER_TRACE, RUNNER_TRACETABLE_SIZE )
 
-#if 0
 /*
- * This macro works best if there are only 1 or 2 tracing points, otherwise
- * it produces quite a lot of inline code. In that case a subroutine call
- * is more efficient (slower, but uses much less memory).
+ * Filling in a blank trace entry is normally done with a macro,
+ * but since this one is called several times a function is more
+ * economical.
  */
-#define RUNNER_TRACE_CREATE(ttype,x,y,yd) {	  \
-    if( runner_tracetable != TRACING_INACTIVE ) { \
-      RUNNER_TRACE  rt; \
-      rt.ticker     = GET_TICKER; \
-      rt.tracetype  = ttype; \
-      rt.xpos       = x; \
-      rt.ypos       = y; \
-      rt.ydelta     = yd; \
-      runner_add_trace(&rt); \
-    } \
-}
-#endif
-
-void runner_add_trace( RUNNER_TRACE* rt_ptr )
-{
-  memcpy(runner_next_trace, rt_ptr, sizeof(RUNNER_TRACE));
-
-  runner_next_trace = (void*)((uint8_t*)runner_next_trace + sizeof(RUNNER_TRACE));
-
-  if( runner_next_trace == (void*)((uint8_t*)runner_tracetable+RUNNER_TRACETABLE_SIZE) )
-    runner_next_trace = runner_tracetable;
-}
-
 void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t yd )
 {
   if( runner_tracetable != TRACING_INACTIVE ) {
