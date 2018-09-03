@@ -59,11 +59,12 @@
  * with a macro to enforce conformity.
  *
  * The macro takes the name of the thing to be traced, the type
- * which defines the trace entry structure, and the number of
- * those entries in the table. It defines and initialises the
- * table pointer and the next entry in the table pointer.
+ * which defines the trace entry structure, and the size of the
+ * table in bytes so it knows when to wrap.
+ * It also defines and initialises the table pointer and the
+ * next entry in the table pointer.
  */
-#define TRACE_FN( NAME, TYPE, NUM_ENTRIES )	\
+#define TRACE_FN( NAME, TYPE, TABLE_SIZE )	\
 \
 TYPE * NAME ## _tracetable = TRACING_UNINITIALISED; \
 TYPE * NAME ## _next_trace = 0xFFFF; \
@@ -74,7 +75,7 @@ void NAME ## _add_trace( TYPE * ptr ) \
 \
   NAME ## _next_trace = (void*)((uint8_t*)NAME ## _next_trace + sizeof(TYPE));\
 \
-  if( NAME ## _next_trace == (void*)((uint8_t*)NAME ## _tracetable + NUM_ENTRIES) )\
+  if( NAME ## _next_trace == (void*)((uint8_t*)NAME ## _tracetable + TABLE_SIZE) )\
       NAME ## _next_trace = NAME ## _tracetable;\
 }
 
