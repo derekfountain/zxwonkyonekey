@@ -71,6 +71,7 @@ typedef struct _key_action_trace
   uint16_t /* BE:ignore */data;  
 } KEY_ACTION_TRACE;
 
+/* BE:PICKUPDEF */
 #define KEY_ACTION_TRACE_ENTRIES   100
 #define KEY_ACTION_TRACETABLE_SIZE ((size_t)sizeof(KEY_ACTION_TRACE)*KEY_ACTION_TRACE_ENTRIES)
 

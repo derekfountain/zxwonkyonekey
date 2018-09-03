@@ -8,29 +8,28 @@ include "zxwonkyonekey_structs.inc"
 
 def GAMELOOP_TRACE_TABLE
 {
-  500 GAMELOOP_TRACE open "gameloop trace table"
+  GAMELOOP_TRACE_ENTRIES GAMELOOP_TRACE open "gameloop trace table"
 }
 
 def RUNNER_TRACE_TABLE struct
 {
-  50 RUNNER_TRACE open "runner trace table"
+  RUNNER_TRACE_ENTRIES RUNNER_TRACE open "runner trace table"
 }
 
 def KEY_ACTION_TRACE_TABLE struct
 {
-  100 KEY_ACTION_TRACE open "key action trace table"
+  KEY_ACTION_TRACE_ENTRIES KEY_ACTION_TRACE open "key action trace table"
 }
 
 def COLLISION_TRACE_TABLE struct
 {
-  250 COLLISION_TRACE open "collision trace table"
+  COLLISION_TRACE_ENTRIES COLLISION_TRACE open "collision trace table"
 }
 
 def main struct
 {
-  at _game_actions
-  8 LOOP_ACTION open "loop action functions"
-
+  // Trace tables first
+  //
   at _gameloop_tracetable
   n16 ptr GAMELOOP_TRACE_TABLE "gameloop"
 
@@ -42,6 +41,11 @@ def main struct
 
   at _collision_tracetable
   n16 ptr COLLISION_TRACE_TABLE   "collision"
+
+  // Misc structures
+  //
+  at _game_actions
+  8 LOOP_ACTION open "loop action functions"
 
   at _game_state
   1 GAME_STATE open "game_state"

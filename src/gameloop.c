@@ -69,6 +69,7 @@ typedef struct _gameloop_trace
   PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
 
+/* BE:PICKUPDEF */
 #define GAMELOOP_TRACE_ENTRIES 500
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 

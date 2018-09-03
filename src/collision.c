@@ -56,6 +56,7 @@ typedef struct _collision_trace
   REACTION            reaction;
 } COLLISION_TRACE;
 
+/* BE:PICKUPDEF */
 #define COLLISION_TRACE_ENTRIES 250
 #define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
 

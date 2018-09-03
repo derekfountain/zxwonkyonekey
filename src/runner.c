@@ -78,6 +78,7 @@ typedef struct _runner_trace
   int8_t            ydelta;
 } RUNNER_TRACE;
 
+/* BE:PICKUPDEF */
 #define RUNNER_TRACE_ENTRIES 50
 #define RUNNER_TRACETABLE_SIZE ((size_t)sizeof(RUNNER_TRACE)*RUNNER_TRACE_ENTRIES)
 
