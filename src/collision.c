@@ -44,15 +44,9 @@
  * This defines the collision checker trace table.
  */
 
-typedef enum _collision_tracetype
-{
-  CHECK_BLOCKED,
-} COLLISION_TRACETYPE;
-
 typedef struct _collision_trace
 {
   uint16_t            ticker;
-  COLLISION_TRACETYPE tracetype;
   uint8_t             xpos;
   uint8_t             ypos;
   DIRECTION           direction;
@@ -65,11 +59,10 @@ typedef struct _collision_trace
 #define COLLISION_TRACE_ENTRIES 250
 #define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
 
-#define COLLISION_TRACE_CREATE(ttype,x,y,d,js,b,t,r) {	\
+#define COLLISION_TRACE_CREATE(x,y,d,js,b,t,r) {	\
     if( collision_tracetable != TRACING_INACTIVE ) { \
       COLLISION_TRACE      ct;   \
       ct.ticker          = GET_TICKER; \
-      ct.tracetype       = ttype; \
       ct.xpos            = x; \
       ct.ypos            = y; \
       ct.direction       = d; \
@@ -346,7 +339,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
     }
   }
 
-  COLLISION_TRACE_CREATE( CHECK_BLOCKED, x, y, facing, jump_status, background_att, teleporter_att, result);
+  COLLISION_TRACE_CREATE( x, y, facing, jump_status, background_att, teleporter_att, result);
 
   return result;
 }
