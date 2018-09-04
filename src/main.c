@@ -36,6 +36,13 @@
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
+/*
+ * TODO
+ *
+ * Get all static structures into the trace file. Not sure how.
+ * Create trace init functions. Maybe have them called automatically.
+ *  Not sure that's worth it, I don't want to change the source.
+ */
 GAME_STATE game_state;
 
 void game_over( void )
