@@ -40,8 +40,6 @@ struct sp1_Rect full_screen = {0, 0, 32, 24};
  * TODO
  *
  * Get all static structures into the trace file. Not sure how.
- * Create trace init functions. Maybe have them called automatically.
- *  Not sure that's worth it, I don't want to change the source.
  */
 GAME_STATE game_state;
 
@@ -65,6 +63,11 @@ int main()
     zx_border(INK_WHITE);
 
     clear_trace_area();    
+
+    init_gameloop_trace();
+    init_key_action_trace();
+    init_collision_trace();
+    init_runner_trace();
   }
 
   setup_int();
@@ -73,10 +76,6 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
 
-  init_gameloop_trace();
-  init_key_action_trace();
-  init_collision_trace();
-  init_runner_trace();
 
   create_runner( RIGHT );
 
