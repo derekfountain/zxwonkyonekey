@@ -23,6 +23,11 @@
 #include "game_state.h"
 
 /*
+ * Initialise trace table for gameloop
+ */
+void init_gameloop_trace(void);
+
+/*
  * This function is the main game loop. It exits when the player completes the level.
  */
 void gameloop( GAME_STATE* game_state );

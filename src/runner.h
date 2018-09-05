@@ -102,6 +102,11 @@ uint8_t     get_runner_jump_offset( void );
 JUMP_STATUS get_runner_jump_status(void);
 
 /*
+ * Initialise trace table for runner
+ */
+void init_runner_trace(void);
+
+/*
  * Adjust the runner's screen position depending on where he
  * is in the cycle of the jump animation, if at all.
  */

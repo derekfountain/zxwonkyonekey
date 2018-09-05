@@ -91,6 +91,12 @@ typedef struct _gameloop_trace
 
 TRACE_FN( gameloop, GAMELOOP_TRACE, GAMELOOP_TRACETABLE_SIZE )
 
+void init_gameloop_trace(void)
+{
+  if( gameloop_tracetable == TRACING_UNINITIALISED )
+    gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
+}
+
 
 /***
  *       _____                                     _   _                 
@@ -142,9 +148,6 @@ void finish_level(void)
  */
 void gameloop( GAME_STATE* game_state )
 {
-  if( gameloop_tracetable == TRACING_UNINITIALISED ) {
-    gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
-  }
 
   while(1) {
     uint8_t     i;

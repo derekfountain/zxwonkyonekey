@@ -84,6 +84,12 @@ typedef struct _runner_trace
 
 TRACE_FN( runner, RUNNER_TRACE, RUNNER_TRACETABLE_SIZE )
 
+void init_runner_trace(void)
+{
+  if( runner_tracetable == TRACING_UNINITIALISED )
+    runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
+}
+
 /*
  * Filling in a blank trace entry is normally done with a macro,
  * but since this one is called several times a function is more
@@ -161,9 +167,6 @@ RUNNER runner;
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {
-  if( runner_tracetable == TRACING_UNINITIALISED )
-    runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
-
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 

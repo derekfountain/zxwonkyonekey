@@ -73,8 +73,11 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
 
+  init_gameloop_trace();
   init_key_action_trace();
   init_collision_trace();
+  init_runner_trace();
+
   create_runner( RIGHT );
 
   current_level_num = 0; /* TODO Should start at 0 */
