@@ -62,4 +62,6 @@ def main struct
   at _runner
   1 RUNNER open "runner"
 
+include "zxwonkyonekey_statics.inc"
+
 }

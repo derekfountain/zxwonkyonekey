@@ -30,6 +30,8 @@ CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -preserve -compiler sdcc -clib=s
 LDFLAGS=$(TARGET) $(VERBOSITY) -m -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
 ASFLAGS=$(TARGET) $(VERBOSITY) -c
 
+CPP_FLAGS=$(TARGET) $(VERBOSITY) -c -v -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) -E
+
 SYMBOLS_GENERATOR=./generate_symbols.pl
 MAP=wonky.map
 
@@ -41,6 +43,8 @@ BE_ENUMS=./zxwonkyonekey_enums.inc
 BE_ENUMS_LIST=./enums_list.lis
 BE_STRUCT_EXTRACTOR=./zxspectrum_be/extract_structs.tcl
 BE_STRUCTS=./zxwonkyonekey_structs.inc
+BE_STATICS_EXTRACTOR=./zxspectrum_be/extract_statics.tcl
+BE_STATICS=./zxwonkyonekey_statics.inc
 
 TAGS_GENERATOR=etags
 
@@ -61,6 +65,18 @@ OBJECTS = gameloop.o \
 	  levels_graphics.o \
 	  levels_maps.o
 
+C_FILES = gameloop.o \
+          levels.o \
+          key_action.o \
+          main.o \
+          int.o \
+	  runner.o \
+          tracetable.o \
+	  local_assert.o \
+	  collision.o
+
+PREPROCESSED = $(C_FILES:.o=.cpre)
+
 # For now, if any header changes, recompile the lot
 HEADERS = action.h \
 	  collision.h \
@@ -74,13 +90,17 @@ HEADERS = action.h \
 	  tracetable.h \
 	  utils.h
 
+# Run the preprocessor on *.c files to get *.cpre files
+%.cpre: %.c $(PRAGMA_FILE) $(HEADERS)
+	$(CC) $(CPP_FLAGS) -o $@ $<
+
 %.o: %.c $(PRAGMA_FILE) $(HEADERS)
 	$(CC) $(CFLAGS) -o $@ $<
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
-all : clean_tmp $(EXEC)
+all : clean_tmp $(EXEC) statics
 
 # Level maps are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
@@ -94,11 +114,14 @@ $(EXEC) : $(OBJECTS)
 	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
 	$(TAGS_GENERATOR) *.h *.c
 
+statics: $(PREPROCESSED)
+	$(BE_STATICS_EXTRACTOR) *.cpre > $(BE_STATICS)
+
 .PHONY: clean_tmp
 clean_tmp:
 	rm -f /tmp/tmpXX* 
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
+	rm -f *.o *.cpre *.err *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
 	rm -rf __pycache__
