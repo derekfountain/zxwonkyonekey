@@ -5,6 +5,7 @@ include "zxspectrum_be/sp1.berc"
 //
 include "zxwonkyonekey_enums.inc"
 include "zxwonkyonekey_structs.inc"
+include "zxwonkyonekey_statics.inc"
 
 def GAMELOOP_TRACE_TABLE
 {
@@ -25,6 +26,7 @@ def COLLISION_TRACE_TABLE struct
 {
   COLLISION_TRACE_ENTRIES COLLISION_TRACE open "collision trace table"
 }
+
 
 def main struct
 {
@@ -62,6 +64,13 @@ def main struct
   at _runner
   1 RUNNER open "runner"
 
-include "zxwonkyonekey_statics.inc"
 
+  at 0 NullDef suppress ""
+  at 0 NullDef suppress "************************"
+  at 0 NullDef suppress "** Generated statics: **"
+  at 0 NullDef suppress "************************"
+  at 0 NullDef suppress ""
+
+  at 0
+  1 GENERATED open "generated statics"
 }

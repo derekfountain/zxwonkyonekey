@@ -30,7 +30,7 @@ CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -preserve -compiler sdcc -clib=s
 LDFLAGS=$(TARGET) $(VERBOSITY) -m -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
 ASFLAGS=$(TARGET) $(VERBOSITY) -c
 
-CPP_FLAGS=$(TARGET) $(VERBOSITY) -c -v -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) -E
+CPP_FLAGS=$(TARGET) $(VERBOSITY) -c -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) -E
 
 SYMBOLS_GENERATOR=./generate_symbols.pl
 MAP=wonky.map
@@ -100,22 +100,31 @@ HEADERS = action.h \
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
-all : clean_tmp $(EXEC) statics
+all : clean_tmp $(EXEC) symbols taggable_src statics
 
 # Level maps are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
                 level2_map.inc.asm
 
+# Rule to build the executable (and some other stuff)
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
-	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
-	$(TAGGABLE_SRC_GENERATOR) $(SYM_OUTPUT) *.c.lis > $(TAGGABLE_SRC)
 	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
 	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
 	$(TAGS_GENERATOR) *.h *.c
 
-statics: $(PREPROCESSED)
-	$(BE_STATICS_EXTRACTOR) *.cpre > $(BE_STATICS)
+# Build the symbols table after the executable
+symbols: $(EXEC)
+	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
+
+# Tagged source needs symbol table
+taggable_src: symbols
+	$(TAGGABLE_SRC_GENERATOR) $(SYM_OUTPUT) *.c.lis > $(TAGGABLE_SRC)
+
+# Statics processing needs preprocessor output plus the symbols table
+statics: $(PREPROCESSED) symbols
+	$(BE_STATICS_EXTRACTOR) --symbols-file $(SYM_OUTPUT) *.cpre > $(BE_STATICS)
+
 
 .PHONY: clean_tmp
 clean_tmp:
