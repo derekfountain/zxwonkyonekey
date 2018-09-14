@@ -68,6 +68,8 @@ def main struct
   at 0 NullDef suppress ""
   at 0 NullDef suppress "************************"
   at 0 NullDef suppress "** Generated statics: **"
+  at 0 NullDef suppress "** This doesn't work  **"
+  at 0 NullDef suppress "** very well. :(      **"
   at 0 NullDef suppress "************************"
   at 0 NullDef suppress ""
 
