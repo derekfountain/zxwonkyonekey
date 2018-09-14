@@ -47,6 +47,7 @@ BE_STATICS_EXTRACTOR=./zxspectrum_be/extract_statics.tcl
 BE_STATICS=./zxwonkyonekey_statics.inc
 
 TAGS_GENERATOR=etags
+TAGS=TAGS
 
 EXEC=wonky.tap
 EXEC_OUTPUT=wonky
@@ -65,17 +66,19 @@ OBJECTS = gameloop.o \
 	  levels_graphics.o \
 	  levels_maps.o
 
-C_FILES = gameloop.o \
-          levels.o \
-          key_action.o \
-          main.o \
-          int.o \
-	  runner.o \
-          tracetable.o \
-	  local_assert.o \
-	  collision.o
+# Objects built from C files (as opposed to ASMs)
+C_OBJECTS = gameloop.o \
+            levels.o \
+            key_action.o \
+            main.o \
+            int.o \
+	    runner.o \
+            tracetable.o \
+	    local_assert.o \
+	    collision.o
 
-PREPROCESSED = $(C_FILES:.o=.cpre)
+# A .cpre is the output of the C preprocessor
+PREPROCESSED = $(C_OBJECTS:.o=.cpre)
 
 # For now, if any header changes, recompile the lot
 HEADERS = action.h \
@@ -100,30 +103,39 @@ HEADERS = action.h \
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
-all : clean_tmp $(EXEC) symbols taggable_src statics
+all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS)
 
 # Level maps are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
                 level2_map.inc.asm
 
-# Rule to build the executable (and some other stuff)
+# Rule to build the executable
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
-	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
-	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
-	$(TAGS_GENERATOR) *.h *.c
 
 # Build the symbols table after the executable
-symbols: $(EXEC)
+$(SYM_OUTPUT): $(EXEC)
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
 
 # Tagged source needs symbol table
-taggable_src: symbols
+$(TAGGABLE_SRC): $(SYM_OUTPUT)
 	$(TAGGABLE_SRC_GENERATOR) $(SYM_OUTPUT) *.c.lis > $(TAGGABLE_SRC)
 
+# BE enums extractor runs after a successful build
+$(BE_ENUMS): $(EXEC)
+	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
+
+# BE structs extractor runs after a successful build, plus it requires the enum list
+$(BE_STRUCTS): $(EXEC) $(BE_ENUMS)
+	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
+
 # Statics processing needs preprocessor output plus the symbols table
-statics: $(PREPROCESSED) symbols
+$(BE_STATICS): $(PREPROCESSED) $(SYM_OUTPUT)
 	$(BE_STATICS_EXTRACTOR) --symbols-file $(SYM_OUTPUT) *.cpre > $(BE_STATICS)
+
+# TAGS file generated each time the binary is rebuilt for any reason
+$(TAGS): $(EXEC)
+	$(TAGS_GENERATOR) *.h *.c
 
 
 .PHONY: clean_tmp
