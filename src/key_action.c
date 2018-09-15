@@ -71,22 +71,17 @@ typedef struct _key_action_trace
   uint16_t /* BE:ignore */data;  
 } KEY_ACTION_TRACE;
 
+/* BE:PICKUPDEF */
 #define KEY_ACTION_TRACE_ENTRIES   100
 #define KEY_ACTION_TRACETABLE_SIZE ((size_t)sizeof(KEY_ACTION_TRACE)*KEY_ACTION_TRACE_ENTRIES)
 
-KEY_ACTION_TRACE* key_action_tracetable = TRACING_UNINITIALISED;
-KEY_ACTION_TRACE* key_action_next_trace = 0xFFFF;
+TRACE_FN( key_action, KEY_ACTION_TRACE, KEY_ACTION_TRACETABLE_SIZE )
 
-void key_action_add_trace( KEY_ACTION_TRACE* ka_ptr )
-{
-  memcpy(key_action_next_trace, ka_ptr, sizeof(KEY_ACTION_TRACE));
-
-  key_action_next_trace = (void*)((uint8_t*)key_action_next_trace + sizeof(KEY_ACTION_TRACE));
-
-  if( key_action_next_trace == (void*)((uint8_t*)key_action_tracetable+KEY_ACTION_TRACETABLE_SIZE) )
-    key_action_next_trace = key_action_tracetable;
-}
-
+/*
+ * Filling in a blank trace entry is normally done with a macro,
+ * but since this one is called several times a function is more
+ * economical.
+ */
 void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype, uint16_t d )
 {
   if( key_action_tracetable != TRACING_INACTIVE ) {

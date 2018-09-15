@@ -30,6 +30,8 @@ CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -preserve -compiler sdcc -clib=s
 LDFLAGS=$(TARGET) $(VERBOSITY) -m -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE)
 ASFLAGS=$(TARGET) $(VERBOSITY) -c
 
+CPP_FLAGS=$(TARGET) $(VERBOSITY) -c -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) -E
+
 SYMBOLS_GENERATOR=./generate_symbols.pl
 MAP=wonky.map
 
@@ -41,8 +43,11 @@ BE_ENUMS=./zxwonkyonekey_enums.inc
 BE_ENUMS_LIST=./enums_list.lis
 BE_STRUCT_EXTRACTOR=./zxspectrum_be/extract_structs.tcl
 BE_STRUCTS=./zxwonkyonekey_structs.inc
+BE_STATICS_EXTRACTOR=./zxspectrum_be/extract_statics.tcl
+BE_STATICS=./zxwonkyonekey_statics.inc
 
 TAGS_GENERATOR=etags
+TAGS=TAGS
 
 EXEC=wonky.tap
 EXEC_OUTPUT=wonky
@@ -61,6 +66,20 @@ OBJECTS = gameloop.o \
 	  levels_graphics.o \
 	  levels_maps.o
 
+# Objects built from C files (as opposed to ASMs)
+C_OBJECTS = gameloop.o \
+            levels.o \
+            key_action.o \
+            main.o \
+            int.o \
+	    runner.o \
+            tracetable.o \
+	    local_assert.o \
+	    collision.o
+
+# A .cpre is the output of the C preprocessor
+PREPROCESSED = $(C_OBJECTS:.o=.cpre)
+
 # For now, if any header changes, recompile the lot
 HEADERS = action.h \
 	  collision.h \
@@ -74,25 +93,50 @@ HEADERS = action.h \
 	  tracetable.h \
 	  utils.h
 
+# Run the preprocessor on *.c files to get *.cpre files
+%.cpre: %.c $(PRAGMA_FILE) $(HEADERS)
+	$(CC) $(CPP_FLAGS) -o $@ $<
+
 %.o: %.c $(PRAGMA_FILE) $(HEADERS)
 	$(CC) $(CFLAGS) -o $@ $<
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
-all : clean_tmp $(EXEC)
+all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS)
 
 # Level maps are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
                 level2_map.inc.asm
 
+# Rule to build the executable
 $(EXEC) : $(OBJECTS)
 	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
+
+# Build the symbols table after the executable
+$(SYM_OUTPUT): $(EXEC)
 	$(SYMBOLS_GENERATOR) < $(MAP) > $(SYM_OUTPUT)
+
+# Tagged source needs symbol table
+$(TAGGABLE_SRC): $(SYM_OUTPUT)
 	$(TAGGABLE_SRC_GENERATOR) $(SYM_OUTPUT) *.c.lis > $(TAGGABLE_SRC)
+
+# BE enums extractor runs after a successful build
+$(BE_ENUMS): $(EXEC)
 	$(BE_MAP_EXTRACTOR) --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_ENUMS)
+
+# BE structs extractor runs after a successful build, plus it requires the enum list
+$(BE_STRUCTS): $(EXEC) $(BE_ENUMS)
 	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
+
+# Statics processing needs preprocessor output plus the symbols table
+$(BE_STATICS): $(PREPROCESSED) $(SYM_OUTPUT)
+	$(BE_STATICS_EXTRACTOR) --symbols-file $(SYM_OUTPUT) *.cpre > $(BE_STATICS)
+
+# TAGS file generated each time the binary is rebuilt for any reason
+$(TAGS): $(EXEC)
 	$(TAGS_GENERATOR) *.h *.c
+
 
 .PHONY: clean_tmp
 clean_tmp:
@@ -100,5 +144,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
+	rm -f *.o *.cpre *.err *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
 	rm -rf __pycache__

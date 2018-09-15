@@ -69,11 +69,9 @@ typedef struct _gameloop_trace
   PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
 
+/* BE:PICKUPDEF */
 #define GAMELOOP_TRACE_ENTRIES 500
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
-
-GAMELOOP_TRACE* gameloop_tracetable = TRACING_UNINITIALISED;
-GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
 
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
 #define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act,pflag) { \
@@ -91,17 +89,13 @@ GAMELOOP_TRACE* gameloop_next_trace = 0xFFFF;
     } \
 }
 
-void gameloop_add_trace( GAMELOOP_TRACE* glt_ptr )
+TRACE_FN( gameloop, GAMELOOP_TRACE, GAMELOOP_TRACETABLE_SIZE )
+
+void init_gameloop_trace(void)
 {
-  memcpy(gameloop_next_trace, glt_ptr, sizeof(GAMELOOP_TRACE));
-
-  gameloop_next_trace = (void*)((uint8_t*)gameloop_next_trace + sizeof(GAMELOOP_TRACE));
-
-  if( gameloop_next_trace == (void*)((uint8_t*)gameloop_tracetable+GAMELOOP_TRACETABLE_SIZE) )
-      gameloop_next_trace = gameloop_tracetable;
+  if( gameloop_tracetable == TRACING_UNINITIALISED )
+    gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
 }
-
-
 
 
 /***
@@ -154,9 +148,6 @@ void finish_level(void)
  */
 void gameloop( GAME_STATE* game_state )
 {
-  if( gameloop_tracetable == TRACING_UNINITIALISED ) {
-    gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
-  }
 
   while(1) {
     uint8_t     i;

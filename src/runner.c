@@ -78,41 +78,23 @@ typedef struct _runner_trace
   int8_t            ydelta;
 } RUNNER_TRACE;
 
+/* BE:PICKUPDEF */
 #define RUNNER_TRACE_ENTRIES 50
 #define RUNNER_TRACETABLE_SIZE ((size_t)sizeof(RUNNER_TRACE)*RUNNER_TRACE_ENTRIES)
 
-RUNNER_TRACE* runner_tracetable = TRACING_UNINITIALISED;
-RUNNER_TRACE* runner_next_trace = 0xFFFF;
+TRACE_FN( runner, RUNNER_TRACE, RUNNER_TRACETABLE_SIZE )
 
-#if 0
-/*
- * This macro works best if there are only 1 or 2 tracing points, otherwise
- * it produces quite a lot of inline code. In that case a subroutine call
- * is more efficient (slower, but uses much less memory).
- */
-#define RUNNER_TRACE_CREATE(ttype,x,y,yd) {	  \
-    if( runner_tracetable != TRACING_INACTIVE ) { \
-      RUNNER_TRACE  rt; \
-      rt.ticker     = GET_TICKER; \
-      rt.tracetype  = ttype; \
-      rt.xpos       = x; \
-      rt.ypos       = y; \
-      rt.ydelta     = yd; \
-      runner_add_trace(&rt); \
-    } \
-}
-#endif
-
-void runner_add_trace( RUNNER_TRACE* rt_ptr )
+void init_runner_trace(void)
 {
-  memcpy(runner_next_trace, rt_ptr, sizeof(RUNNER_TRACE));
-
-  runner_next_trace = (void*)((uint8_t*)runner_next_trace + sizeof(RUNNER_TRACE));
-
-  if( runner_next_trace == (void*)((uint8_t*)runner_tracetable+RUNNER_TRACETABLE_SIZE) )
-    runner_next_trace = runner_tracetable;
+  if( runner_tracetable == TRACING_UNINITIALISED )
+    runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
 }
 
+/*
+ * Filling in a blank trace entry is normally done with a macro,
+ * but since this one is called several times a function is more
+ * economical.
+ */
 void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t yd )
 {
   if( runner_tracetable != TRACING_INACTIVE ) {
@@ -147,14 +129,12 @@ const struct sp1_Rect runner_screen = {0, 0, 32, 24};
  * This data set makes the jump 5 chars wide, with a sharp
  * incline at the start and decline at the end, so like an
  * arc. Arrived at emprically.
- * The negative values are probably a bit expensive on the
- * Z80 but this appears to be the easiest way to do it.
  */
-const int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
-			           1,  1,  1,  1,    1,  1,  1,  0,
-                                   0,  0,  0,  0,    0,  0,  0,  0,
-		                   0, -1, -1, -1,   -1, -1, -1, -1,
-			          -1, -1, -1, -2,   -2, -2, -2, -2 };
+const int8_t jump_y_offsets[40] =  { 2,  2,  2,  2,    2,  1,  1,  1,
+			             1,  1,  1,  1,    1,  1,  1,  0,
+                                     0,  0,  0,  0,    0,  0,  0,  0,
+		                     0, -1, -1, -1,   -1, -1, -1, -1,
+			            -1, -1, -1, -2,   -2, -2, -2, -2 };
 
 /*
  * Size in bytes of one frame of the runner sprite graphic. It's currently
@@ -185,9 +165,6 @@ RUNNER runner;
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {
-  if( runner_tracetable == TRACING_UNINITIALISED )
-    runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
-
   runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
 
