@@ -37,16 +37,16 @@ def main struct
   at 0 NullDef suppress ""
 
   at _gameloop_tracetable
-  n16 ptr GAMELOOP_TRACE_TABLE "gameloop"
+  n16 ptr GAMELOOP_TRACE_TABLE   null "gameloop"
 
   at _runner_tracetable
-  n16 ptr RUNNER_TRACE_TABLE   "runner"
+  n16 ptr RUNNER_TRACE_TABLE     null "runner"
 
   at _key_action_tracetable
-  n16 ptr KEY_ACTION_TRACE_TABLE   "key action"
+  n16 ptr KEY_ACTION_TRACE_TABLE null "key action"
 
   at _collision_tracetable
-  n16 ptr COLLISION_TRACE_TABLE   "collision"
+  n16 ptr COLLISION_TRACE_TABLE  null "collision"
 
 
   at 0 NullDef suppress ""
