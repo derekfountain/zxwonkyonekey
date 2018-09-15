@@ -129,14 +129,12 @@ const struct sp1_Rect runner_screen = {0, 0, 32, 24};
  * This data set makes the jump 5 chars wide, with a sharp
  * incline at the start and decline at the end, so like an
  * arc. Arrived at emprically.
- * The negative values are probably a bit expensive on the
- * Z80 but this appears to be the easiest way to do it.
  */
-const int8_t jump_y_offsets[] =  { 2,  2,  2,  2,    2,  1,  1,  1,
-			           1,  1,  1,  1,    1,  1,  1,  0,
-                                   0,  0,  0,  0,    0,  0,  0,  0,
-		                   0, -1, -1, -1,   -1, -1, -1, -1,
-			          -1, -1, -1, -2,   -2, -2, -2, -2 };
+const int8_t jump_y_offsets[40] =  { 2,  2,  2,  2,    2,  1,  1,  1,
+			             1,  1,  1,  1,    1,  1,  1,  0,
+                                     0,  0,  0,  0,    0,  0,  0,  0,
+		                     0, -1, -1, -1,   -1, -1, -1, -1,
+			            -1, -1, -1, -2,   -2, -2, -2, -2 };
 
 /*
  * Size in bytes of one frame of the runner sprite graphic. It's currently
