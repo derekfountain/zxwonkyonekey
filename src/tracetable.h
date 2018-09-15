@@ -37,17 +37,15 @@
 #define TRACING_INACTIVE      ((void*)0xFFFE)
 
 /*
- * Start of memory area used for trace table. Spectrum's ROM starts
- * at zero but I can't use byte zero because BE thinks that's the
- * result of a null dereference. So use 1.
+ * Start of memory area used for trace table.
  */
-#define TRACE_MEMORY_START ((uint16_t)1)
+#define TRACE_MEMORY_START ((uint16_t)0)
 
 /*
  * Maximum amount of memory to allocate to tracetables.
- * We use the ROM area, so 16K minus the 1 discussed above.
+ * We use the ROM area, so 16K.
  */
-#define MAX_TRACE_MEMORY ((uint16_t)16383)
+#define MAX_TRACE_MEMORY ((uint16_t)16384)
 
 /*
  * Macro to generate a function to add an entry to a trace table.
