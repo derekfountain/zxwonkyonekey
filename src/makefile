@@ -64,7 +64,8 @@ OBJECTS = gameloop.o \
 	  local_assert.o \
 	  collision.o \
 	  levels_graphics.o \
-	  levels_maps.o
+	  levels_maps.o \
+	  scoring.o
 
 # Objects built from C files (as opposed to ASMs)
 C_OBJECTS = gameloop.o \
@@ -75,7 +76,8 @@ C_OBJECTS = gameloop.o \
 	    runner.o \
             tracetable.o \
 	    local_assert.o \
-	    collision.o
+	    collision.o \
+	    scoring.o
 
 # A .cpre is the output of the C preprocessor
 PREPROCESSED = $(C_OBJECTS:.o=.cpre)
@@ -91,7 +93,8 @@ HEADERS = action.h \
 	  local_assert.h \
 	  runner.h \
 	  tracetable.h \
-	  utils.h
+	  utils.h \
+	  scoring.h
 
 # Run the preprocessor on *.c files to get *.cpre files
 %.cpre: %.c $(PRAGMA_FILE) $(HEADERS)
