@@ -31,11 +31,15 @@
  */
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <arch/zx/sp1.h>
 
-uint32_t total_score;
+#include "scoring.h"
 
-uint16_t level_score;
-uint16_t level_bonus;
+uint32_t total_score = 0;
+
+uint16_t level_score = 50000;
+uint16_t level_bonus = 35000;
 
 void set_level_score( uint16_t score )
 {
@@ -62,6 +66,51 @@ void decrement_level_score( uint16_t decrement )
  *                  | |             __/ |
  *                  |_|            |___/
  */
+
+/*
+ * This is defined in main.c. Just share it for now.
+ */
+extern struct sp1_Rect full_screen;
+
+/*
+ * TODO Need to remind myself why this should be static. Alvin told be in
+ * a pull request comment. :)
+ */
+struct sp1_pss print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
+                                 0, 0,
+                                 0x00, 0x03,
+                                 0,
+                                 0 };
+
+void show_scores( SCORE_SCREEN_DATA* score_screen_data )
+{
+  /*
+   * TODO This fails when the score gets down to less that 5 digits.
+   * sprintf() would be too expensive, so this needs to work a bit
+   * harder to get 0 padding and alignment.
+   * I also need to cache the last displayed score and only update
+   * the display when it changes. Doing this every loop is expensive.
+   * Get the colours for the text into the level data too. Change colour
+   * in the string below. I need to label the numbers, they look weird.
+   *
+   * Then add some sort of timer to reduce the score. Show the total score
+   * between screens?
+   */
+  char print_string[15] = {0};
+
+  print_string[0] = '\x16';
+  print_string[1] = score_screen_data->level_score_y;
+  print_string[2] = score_screen_data->level_score_x;
+  utoa( level_score, &(print_string[3]), 10 );
+
+  print_string[8] = '\x16';
+  print_string[9] = score_screen_data->bonus_score_y;
+  print_string[10] = score_screen_data->bonus_score_x;
+  utoa( level_score, &(print_string[11]), 10 );
+
+  sp1_PrintString(&print_control, (uint8_t*)print_string);
+  
+}
 
 void display_level_score( void )
 {

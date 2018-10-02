@@ -32,6 +32,22 @@ void     decrement_level_score( uint16_t decrement );
  * I'll keep this here for now.
  */
 
+/*
+ * Structure to hold the screen locations and colours etc. to place the scores.
+ * These vary from level to level.
+ */
+typedef struct _score_screen_data
+{
+  uint8_t  level_score_x;
+  uint8_t  level_score_y;
+
+  uint8_t  bonus_score_x;
+  uint8_t  bonus_score_y;
+
+} SCORE_SCREEN_DATA;
+
+void     show_scores( SCORE_SCREEN_DATA* score_screen_data );
+
 void     display_level_score( void );
 void     display_bonus( void );
 

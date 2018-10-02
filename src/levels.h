@@ -24,6 +24,7 @@
 
 #include "runner.h"
 #include "utils.h"
+#include "scoring.h"
 
 /*
  * Teleporter moves the runner from one screen location to another.
@@ -94,6 +95,7 @@ typedef struct _level_data
   TILE_DEFINITION*       level_tiles;
   TELEPORTER_DEFINITION* teleporters;
 
+  SCORE_SCREEN_DATA      score_screen_data;
 } LEVEL_DATA;
 
 #define NUM_LEVELS 3

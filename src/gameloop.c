@@ -34,6 +34,7 @@
 #include "local_assert.h"
 #include "int.h"
 #include "collision.h"
+#include "scoring.h"
 
 
 /***
@@ -219,7 +220,8 @@ void gameloop( GAME_STATE* game_state )
     }
 
     draw_runner();
-
+    show_scores( &(game_state->current_level->score_screen_data) );
+    
     /*
      * If the level has teleporters the cells they occupy are validated so
      * the runner doesn't get redrawn when he moves "onto" one. The effect

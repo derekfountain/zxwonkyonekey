@@ -116,7 +116,11 @@ LEVEL_DATA level_data[] = {
                    "Teleporter", INK_BLACK|PAPER_WHITE,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level0_tiles[0],
-    NULL
+    NULL,
+    { NAMED_VALUES_4("Level score X", 24,
+                     "Level score Y", 17,
+                     "Bonus score X", 24,
+                     "Bonus score Y", 18) }
   },
   { print_level_from_sp1_string,
     level1_map,
@@ -129,7 +133,8 @@ LEVEL_DATA level_data[] = {
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
-    &level1_teleporters[0]
+    &level1_teleporters[0],
+    {0,0,0,0}
   },
   { print_level_from_sp1_string,
     level2_map,
@@ -142,7 +147,8 @@ LEVEL_DATA level_data[] = {
                    "Teleporter", INK_BLACK|PAPER_WHITE,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level0_tiles[0],
-    NULL
+    NULL,
+    {0,0,0,0}
   },
 };
 
