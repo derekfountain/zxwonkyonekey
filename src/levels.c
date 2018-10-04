@@ -105,6 +105,13 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 
 LEVEL_DATA level_data[] = {
 
+  /***
+   *      _                _    __
+   *     | |   _____ _____| |  /  \
+   *     | |__/ -_\ V / -_| | | () |
+   *     |____\___|\_/\___|_|  \__/
+   *
+   */
   { print_level_from_sp1_string,
     level0_map,
     START_POINT(0,135),
@@ -125,6 +132,14 @@ LEVEL_DATA level_data[] = {
                      "Bonus score Y", 19,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
+
+  /***
+   *      _                _   _
+   *     | |   _____ _____| | / |
+   *     | |__/ -_\ V / -_| | | |
+   *     |____\___|\_/\___|_| |_|
+   *
+   */
   { print_level_from_sp1_string,
     level1_map,
     START_POINT(0,155),
@@ -139,12 +154,20 @@ LEVEL_DATA level_data[] = {
     &level1_teleporters[0],
     2500,
      500,
-    { NAMED_VALUES_5("Level score X", 18,
+    { NAMED_VALUES_5("Level score X", 14,
                      "Level score Y", 19,
-                     "Bonus score X", 18,
+                     "Bonus score X", 14,
                      "Bonus score Y", 20,
 		     "Scores att",    INK_YELLOW|PAPER_BLACK) }
   },
+
+  /***
+   *      _                _   ___
+   *     | |   _____ _____| | |_  )
+   *     | |__/ -_\ V / -_| |  / /
+   *     |____\___|\_/\___|_| /___|
+   *
+   */
   { print_level_from_sp1_string,
     level2_map,
     START_POINT(240,00),
@@ -165,6 +188,7 @@ LEVEL_DATA level_data[] = {
                      "Bonus score Y", 19,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
+
 };
 
 
