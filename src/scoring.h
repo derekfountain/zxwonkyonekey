@@ -23,6 +23,7 @@
 #include <stdint.h>
 
 void     set_level_score( uint16_t score );
+void     set_level_bonus( uint16_t bonus );
 uint16_t get_level_score( void );
 void     decrement_level_score( uint16_t decrement );
 

@@ -82,9 +82,12 @@ C_OBJECTS = gameloop.o \
 # A .cpre is the output of the C preprocessor
 PREPROCESSED = $(C_OBJECTS:.o=.cpre)
 
-# For now, if any header changes, recompile the lot
+# For now, if any header changes, recompile the lot. This list is used for
+# BE structures file creation so order is important. Forward references
+# in the structures need to be avoided.
 HEADERS = action.h \
 	  collision.h \
+	  scoring.h \
 	  gameloop.h \
 	  game_state.h \
 	  int.h \
@@ -93,8 +96,7 @@ HEADERS = action.h \
 	  local_assert.h \
 	  runner.h \
 	  tracetable.h \
-	  utils.h \
-	  scoring.h
+	  utils.h
 
 # Run the preprocessor on *.c files to get *.cpre files
 %.cpre: %.c $(PRAGMA_FILE) $(HEADERS)
@@ -130,7 +132,7 @@ $(BE_ENUMS): $(EXEC)
 
 # BE structs extractor runs after a successful build, plus it requires the enum list
 $(BE_STRUCTS): $(EXEC) $(BE_ENUMS)
-	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) *.h *.c > $(BE_STRUCTS)
+	$(BE_STRUCT_EXTRACTOR)  --enum-list $(BE_ENUMS_LIST) $(HEADERS) *.c > $(BE_STRUCTS)
 
 # Statics processing needs preprocessor output plus the symbols table
 $(BE_STATICS): $(PREPROCESSED) $(SYM_OUTPUT)
@@ -147,5 +149,5 @@ clean_tmp:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.cpre *.err *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc *.ss zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
+	rm -f *.o *.cpre *.err *.bin *.tap *.map *.sym *.lis zxwonkyonekey*.inc zcc_opt.def *~ $(BE_ENUMS) $(TAGGABLE_SRC) TAGS /tmp/tmpXX*
 	rm -rf __pycache__

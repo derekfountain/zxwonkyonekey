@@ -51,6 +51,11 @@ void set_level_score( uint16_t score )
   level_score = score;
 }
 
+void set_level_bonus( uint16_t bonus )
+{
+  level_bonus = bonus;
+}
+
 uint16_t get_level_score( void )
 {
   return level_score;
@@ -58,7 +63,8 @@ uint16_t get_level_score( void )
 
 void decrement_level_score( uint16_t decrement )
 {
-  level_score -= decrement;
+  if( level_score )
+      level_score -= decrement;
 }
 
 /***
@@ -85,15 +91,10 @@ struct sp1_pss scoring_print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
                                          0x00, 0x03,
                                          0,
                                          0 };
-uint8_t scoring_print_string[29];
+uint8_t scoring_print_string[27];
 
 void show_scores( SCORE_SCREEN_DATA* score_screen_data )
 {
-  /*
-   * Then add some sort of timer to reduce the score. Show the total score
-   * between screens?
-   */
-
   /* Only update the screen when one of the values changes. This update is expensive! */
   if( level_score != last_printed_level_score || level_bonus != last_printed_level_bonus )
     {
@@ -103,7 +104,7 @@ void show_scores( SCORE_SCREEN_DATA* score_screen_data )
        *
        * https://github.com/derekfountain/zxwonkyonekey/wiki/Adding-sprintf()
        */
-      sprintf(scoring_print_string, "\x14%c\x16%c%cScore:%05u\x16%c%cBonus:%05u",
+      sprintf(scoring_print_string, "\x14%c\x16%c%cScore:%04u\x16%c%cBonus:%04u",
 		score_screen_data->score_screen_attribute,
 		score_screen_data->level_score_y,
 		score_screen_data->level_score_x,

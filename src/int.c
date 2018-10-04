@@ -25,18 +25,36 @@
 #include <string.h>
 
 /*
- * The "getter" for this is currently a macro, so don't make this
- * static.
+ * Timer ticker for the 50Hz interrupt signal which fires
+ * via the hardware every 20ms.
+ *
+ * The "getter" for this is currently a macro, so don't make
+ * this static.
  */
 volatile uint16_t ticker = 0;
+
+/*
+ * 100ms ticker. This one increments every 5 interrupts, so it
+ * ticks up every 100ms.
+ */
+uint8_t           ticker_100ms_int_counter;  /* This goes 0-5 */
+volatile uint16_t ticker_100ms = 0;
+volatile uint8_t  interrupt_service_required_100ms = 0;
 
 IM2_DEFINE_ISR(isr)
 {
   /*
-   * This write happens with the interrupt still disabled so
-   * it doesn't need atomic protection.
+   * This all happens with the interrupt still disabled so
+   * nothing needs atomic protection.
    */
   ticker++;
+
+  if( ++ticker_100ms_int_counter == 5 )
+  {
+      ticker_100ms_int_counter = 0;
+      ticker_100ms++;
+      interrupt_service_required_100ms = 1;
+  }
 }
 
 /*

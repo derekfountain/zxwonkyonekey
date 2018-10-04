@@ -24,6 +24,7 @@
 #include <intrinsic.h>
 
 extern uint16_t ticker;
+extern uint8_t  interrupt_service_required_100ms;
 
 void setup_int(void);
 

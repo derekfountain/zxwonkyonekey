@@ -95,6 +95,8 @@ typedef struct _level_data
   TILE_DEFINITION*       level_tiles;
   TELEPORTER_DEFINITION* teleporters;
 
+  uint16_t               max_score;
+  uint16_t               max_bonus;
   SCORE_SCREEN_DATA      score_screen_data;
 } LEVEL_DATA;
 
