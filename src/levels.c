@@ -117,10 +117,11 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level0_tiles[0],
     NULL,
-    { NAMED_VALUES_4("Level score X", 19,
+    { NAMED_VALUES_5("Level score X", 19,
                      "Level score Y", 18,
                      "Bonus score X", 19,
-                     "Bonus score Y", 19) }
+                     "Bonus score Y", 19,
+		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
   { print_level_from_sp1_string,
     level1_map,
@@ -134,10 +135,11 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
     &level1_teleporters[0],
-    { NAMED_VALUES_4("Level score X", 18,
+    { NAMED_VALUES_5("Level score X", 18,
                      "Level score Y", 19,
                      "Bonus score X", 18,
-                     "Bonus score Y", 20) }
+                     "Bonus score Y", 20,
+		     "Scores att",    INK_YELLOW|PAPER_BLACK) }
   },
   { print_level_from_sp1_string,
     level2_map,
@@ -151,10 +153,11 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level0_tiles[0],
     NULL,
-    { NAMED_VALUES_4("Level score X", 19,
+    { NAMED_VALUES_5("Level score X", 19,
                      "Level score Y", 18,
                      "Bonus score X", 19,
-                     "Bonus score Y", 19) }
+                     "Bonus score Y", 19,
+		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 };
 

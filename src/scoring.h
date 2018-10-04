@@ -44,9 +44,24 @@ typedef struct _score_screen_data
   uint8_t  bonus_score_x;
   uint8_t  bonus_score_y;
 
+  uint8_t  score_screen_attribute;
+
 } SCORE_SCREEN_DATA;
 
+/*
+ * Show scores on screen according to the given screen data.
+ * Locations on screen, colours, etc., change from level to
+ * level so the parameter is required to pass that in.
+ */
 void     show_scores( SCORE_SCREEN_DATA* score_screen_data );
+
+/*
+ * Scores are only updated on screen when they change because
+ * it's an expensive operation which might feasibly have to be
+ * done every cycle. This routine resets the caching, guaranteeing
+ * the scores will be redrawn next cycle. This needs calling when
+ * the level changes, probably among other key points.
+ */
 void     reset_cached_screen_scores( void );
 
 void     display_total_score( void );

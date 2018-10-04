@@ -90,9 +90,6 @@ uint8_t scoring_print_string[29];
 void show_scores( SCORE_SCREEN_DATA* score_screen_data )
 {
   /*
-   * Get the colours for the text into the level data too. Change colour
-   * in the string below. I need to label the numbers, they look weird.
-   *
    * Then add some sort of timer to reduce the score. Show the total score
    * between screens?
    */
@@ -106,7 +103,8 @@ void show_scores( SCORE_SCREEN_DATA* score_screen_data )
        *
        * https://github.com/derekfountain/zxwonkyonekey/wiki/Adding-sprintf()
        */
-      sprintf(scoring_print_string, "\x16%c%cScore:%05u\x16%c%cBonus:%05u",
+      sprintf(scoring_print_string, "\x14%c\x16%c%cScore:%05u\x16%c%cBonus:%05u",
+		score_screen_data->score_screen_attribute,
 		score_screen_data->level_score_y,
 		score_screen_data->level_score_x,
 		level_score,
