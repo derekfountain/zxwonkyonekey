@@ -47,9 +47,7 @@ typedef struct _score_screen_data
 } SCORE_SCREEN_DATA;
 
 void     show_scores( SCORE_SCREEN_DATA* score_screen_data );
-
-void     display_level_score( void );
-void     display_bonus( void );
+void     reset_cached_screen_scores( void );
 
 void     display_total_score( void );
 

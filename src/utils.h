@@ -21,6 +21,13 @@
 #define __UTILS_H
 
 /*
+ * Switch point to turn off static allocations. In some places the symbols
+ * end up missing from the compiler's symbols output file, which means they
+ * don't appear in the BE definitions.
+ */
+#define STATIC static
+
+/*
  * The modulo operator (%) is expensive with SDCC. It compiles in a CALL
  * to a function to do the work, and without hardware support that takes
  * quite a bit of effort. For cases where I just want to know if a value

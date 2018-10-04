@@ -101,6 +101,8 @@ int main()
     set_runner_ypos( game_state.current_level->start_y );
     set_runner_colour( game_state.current_level->background_att );
 
+    reset_cached_screen_scores();
+
     /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );
 
