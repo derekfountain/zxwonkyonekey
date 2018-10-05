@@ -103,6 +103,11 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
   {0}
 };
 
+SLOWDOWN_DEFINITION level0_slowdowns[] = {
+  { 128, 178 },
+  {0}
+};
+
 LEVEL_DATA level_data[] = {
 
   /***
@@ -124,8 +129,9 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level0_tiles[0],
     NULL,
-    1500,
-     300,
+    &level0_slowdowns[0],
+    MAX_POINTS(1500),
+    MAX_BONUS(300),
     { NAMED_VALUES_5("Level score X", 20,
                      "Level score Y", 18,
                      "Bonus score X", 20,
@@ -152,8 +158,9 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
     &level1_teleporters[0],
-    2500,
-     500,
+    NULL,
+    MAX_POINTS(2500),
+    MAX_BONUS(500),
     { NAMED_VALUES_5("Level score X", 14,
                      "Level score Y", 19,
                      "Bonus score X", 14,
@@ -180,8 +187,9 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level0_tiles[0],
     NULL,
-    2000,
-     200,
+    NULL,
+    MAX_POINTS(2000),
+    MAX_BONUS(200),
     { NAMED_VALUES_5("Level score X", 19,
                      "Level score Y", 18,
                      "Bonus score X", 19,
@@ -268,6 +276,26 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
       sp1_PrintString(&print_control, print_string);
     
       teleporter++;
+    }
+  }
+
+  if( level_data->slowdowns )
+  {
+    SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
+
+    /*
+This approach isn't going to work. I would need to lay the "pill" on top of the
+SP1 display area, which means not validating a cell or something. The correct way
+to do this is to add a pill sprite the SP1 way. Animate it to make it pulse.
+I think storing the central point to check for collision will still work as long
+as the attribute is the same as the runner.
+    */
+    while( slowdown->x || slowdown->y )
+    {
+      *zx_pxy2saddr(slowdown->x,slowdown->y) |= zx_px2bitmask(slowdown->x);
+      //plot( slowdown->x, slowdown->y );
+      while(1); 
+      slowdown++;
     }
   }
 }

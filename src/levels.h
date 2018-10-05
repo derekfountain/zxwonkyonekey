@@ -53,6 +53,14 @@ typedef struct _teleporter_defintion
   uint8_t change_direction;
 } TELEPORTER_DEFINITION;
 
+/*
+ * Slowdown point, stored as an x,y pixel location
+ */
+typedef struct _slowdown_definition
+{
+  uint8_t x;
+  uint8_t y;
+} SLOWDOWN_DEFINITION;
 
 /*
  * Tile defintion is essentially a user defined graphic for the sp1 library.
@@ -94,6 +102,7 @@ typedef struct _level_data
 
   TILE_DEFINITION*       level_tiles;
   TELEPORTER_DEFINITION* teleporters;
+  SLOWDOWN_DEFINITION*   slowdowns;
 
   uint16_t               max_score;
   uint16_t               max_bonus;
@@ -105,6 +114,8 @@ typedef struct _level_data
 #define START_POINT(x,y) x,y
 #define LEVEL_BORDER(b) b
 #define START_FACING(f) f
+#define MAX_POINTS(m) m
+#define MAX_BONUS(b) b
 
 LEVEL_DATA* get_level_data( uint8_t level );
 
