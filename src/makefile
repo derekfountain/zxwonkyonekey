@@ -66,7 +66,8 @@ OBJECTS = gameloop.o \
 	  collision.o \
 	  levels_graphics.o \
 	  levels_maps.o \
-	  scoring.o
+	  scoring.o \
+	  small_utoa.o
 
 # Objects built from C files (as opposed to ASMs)
 C_OBJECTS = gameloop.o \

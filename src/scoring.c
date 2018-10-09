@@ -91,7 +91,9 @@ struct sp1_pss scoring_print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
                                          0x00, 0x03,
                                          0,
                                          0 };
-uint8_t scoring_print_string[27];
+uint8_t scoring_print_string[] = "\x14" "A\x16" "YXScore:00000\x16" "YXBonus:00000";
+
+uint8_t* small_utoa( uint16_t, uint8_t* );
 
 void show_scores( SCORE_SCREEN_DATA* score_screen_data )
 {
@@ -99,19 +101,21 @@ void show_scores( SCORE_SCREEN_DATA* score_screen_data )
   if( level_score != last_printed_level_score || level_bonus != last_printed_level_bonus )
     {
       /*
-       * I spent an age trying to work around this sprintf(), but ultimately
-       * it was the best approach:
+       * Boy did this unsigned to ascii thing take some time to get right. :)
        *
        * https://github.com/derekfountain/zxwonkyonekey/wiki/Adding-sprintf()
        */
-      sprintf(scoring_print_string, "\x14%c\x16%c%cScore:%04u\x16%c%cBonus:%04u",
-		score_screen_data->score_screen_attribute,
-		score_screen_data->level_score_y,
-		score_screen_data->level_score_x,
-		level_score,
-		score_screen_data->bonus_score_y,
-		score_screen_data->bonus_score_x,
-		level_bonus);
+      scoring_print_string[1]  = score_screen_data->score_screen_attribute;
+      scoring_print_string[3]  = score_screen_data->level_score_y;
+      scoring_print_string[4]  = score_screen_data->level_score_x;
+      scoring_print_string[17] = score_screen_data->bonus_score_y;
+      scoring_print_string[18] = score_screen_data->bonus_score_x;
+
+      if( level_score != last_printed_level_score )
+	small_utoa( level_score, &scoring_print_string[11] );
+
+      if( level_bonus != last_printed_level_bonus )
+	small_utoa( level_bonus, &scoring_print_string[25] );
 
       sp1_PrintString(&scoring_print_control, (uint8_t*)scoring_print_string);
 
