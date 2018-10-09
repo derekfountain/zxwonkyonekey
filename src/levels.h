@@ -25,6 +25,7 @@
 #include "runner.h"
 #include "utils.h"
 #include "scoring.h"
+#include "slowdown_pill.h"
 
 /*
  * Teleporter moves the runner from one screen location to another.
@@ -52,15 +53,6 @@ typedef struct _teleporter_defintion
 
   uint8_t change_direction;
 } TELEPORTER_DEFINITION;
-
-/*
- * Slowdown point, stored as an x,y pixel location
- */
-typedef struct _slowdown_definition
-{
-  uint8_t x;
-  uint8_t y;
-} SLOWDOWN_DEFINITION;
 
 /*
  * Tile defintion is essentially a user defined graphic for the sp1 library.

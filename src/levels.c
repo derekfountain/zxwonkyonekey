@@ -104,7 +104,7 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 };
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
-  { 128, 178 },
+  { 184, 176 },
   {0}
 };
 
@@ -284,17 +284,16 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
     /*
-This approach isn't going to work. I would need to lay the "pill" on top of the
-SP1 display area, which means not validating a cell or something. The correct way
-to do this is to add a pill sprite the SP1 way. Animate it to make it pulse.
-I think storing the central point to check for collision will still work as long
-as the attribute is the same as the runner.
-    */
+Change of plan. The slowdown pills are now sprites, animated to pulse.
+I need to update all the pills onscreen at maybe 2Hz, so I need a new timer.
+The pills need to be the same colour as the runner so there's no colour clash
+when he reaches one. Probably ORed in at a higher screen layer so he doesn't
+partially obliterate them.
+Collision is still going to be done by screen position.
+     */
     while( slowdown->x || slowdown->y )
     {
-      *zx_pxy2saddr(slowdown->x,slowdown->y) |= zx_px2bitmask(slowdown->x);
-      //plot( slowdown->x, slowdown->y );
-      while(1); 
+      create_slowdown_pill( slowdown );
       slowdown++;
     }
   }

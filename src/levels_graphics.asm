@@ -1,4 +1,30 @@
+;; Wonky One Key, a ZX Spectrum game featuring a single control key
+;; Copyright (C) 2018 Derek Fountain
+;; 
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 2
+;; of the License, or (at your option) any later version.
+;; 
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;; 
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+        
 SECTION rodata_user
+
+;;    _                    _   _    _ _____   _____     
+;;   | |                  | | | |  | |  __ \ / ____|    
+;;   | |     _____   _____| | | |  | | |  | | |  __ ___ 
+;;   | |    / _ \ \ / / _ | | | |  | | |  | | | |_ / __|
+;;   | |___|  __/\ V |  __| | | |__| | |__| | |__| \__ \
+;;   |______\___| \_/ \___|_|  \____/|_____/ \_____|___/
+;;                                                      
+;;                                                      
 
 PUBLIC _grassh
 ._grassh
@@ -76,4 +102,104 @@ PUBLIC _teleporter
         defb @00010010
         defb @10100101
         defb @01000010
-	
+
+
+
+
+;;     _____ _                  _                       _____ _ _ _ 
+;;    / ____| |                | |                     |  __ (_| | |
+;;   | (___ | | _____      ____| | _____      ___ __   | |__) _| | |
+;;    \___ \| |/ _ \ \ /\ / / _` |/ _ \ \ /\ / | '_ \  |  ___| | | |
+;;    ____) | | (_) \ V  V | (_| | (_) \ V  V /| | | | | |   | | | |
+;;   |_____/|_|\___/ \_/\_/ \__,_|\___/ \_/\_/ |_| |_| |_|   |_|_|_|
+;;                                                                  
+;;                                                                  
+     
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+PUBLIC _slowdown_pill_f1
+._slowdown_pill_f1
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00011000
+	defb @00011000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+PUBLIC _slowdown_pill_f2
+._slowdown_pill_f2
+	defb @00000000
+	defb @00000000
+	defb @00011000
+	defb @00111100
+	defb @00111100
+	defb @00011000
+	defb @00000000
+	defb @00000000
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+PUBLIC _slowdown_pill_f3
+._slowdown_pill_f3
+	defb @00000000
+	defb @00011000
+	defb @00111100
+	defb @01111110
+	defb @01111110
+	defb @00111100
+	defb @00011000
+	defb @00000000
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+PUBLIC _slowdown_pill_f4
+._slowdown_pill_f4
+	defb @00011000
+	defb @00011000
+	defb @00111100
+	defb @11111111
+	defb @11111111
+	defb @00111100
+	defb @00011000
+	defb @00011000
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+                

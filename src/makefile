@@ -59,6 +59,7 @@ OBJECTS = gameloop.o \
           main.o \
           int.o \
 	  runner.o \
+	  slowdown_pill.o \
 	  runner_sprite.o \
           tracetable.o \
 	  local_assert.o \
@@ -74,6 +75,7 @@ C_OBJECTS = gameloop.o \
             main.o \
             int.o \
 	    runner.o \
+            slowdown_pill.o \
             tracetable.o \
 	    local_assert.o \
 	    collision.o \
@@ -87,6 +89,7 @@ PREPROCESSED = $(C_OBJECTS:.o=.cpre)
 # in the structures need to be avoided.
 HEADERS = action.h \
 	  collision.h \
+	  slowdown_pill.h \
 	  scoring.h \
 	  gameloop.h \
 	  game_state.h \
