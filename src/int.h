@@ -25,6 +25,7 @@
 
 extern uint16_t ticker;
 extern uint8_t  interrupt_service_required_100ms;
+extern uint8_t  interrupt_service_required_500ms;
 
 void setup_int(void);
 

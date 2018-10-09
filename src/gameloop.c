@@ -121,6 +121,14 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
   return KEEP_PROCESSING;
 }
 
+PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action )
+{
+  (void)data;
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}
+
 /***
  *       _____                                     _   _                 
  *      / ____|                          /\       | | (_)                
@@ -143,6 +151,7 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
 LOOP_ACTION game_actions[] =
   {
     {service_interrupt_100ms        },
+    {service_interrupt_500ms        },
     {test_for_finish                },
     {test_for_teleporter            },
     {test_for_falling               },

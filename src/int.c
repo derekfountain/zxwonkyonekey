@@ -41,6 +41,14 @@ uint8_t           ticker_100ms_int_counter;  /* This goes 0-5 */
 volatile uint16_t ticker_100ms = 0;
 volatile uint8_t  interrupt_service_required_100ms = 0;
 
+/*
+ * 500ms ticker. This one increments every 25 interrupts, so it
+ * ticks up every 500ms.
+ */
+uint8_t           ticker_500ms_int_counter;  /* This goes 0-25 */
+volatile uint16_t ticker_500ms = 0;
+volatile uint8_t  interrupt_service_required_500ms = 0;
+
 IM2_DEFINE_ISR(isr)
 {
   /*
@@ -54,6 +62,12 @@ IM2_DEFINE_ISR(isr)
       ticker_100ms_int_counter = 0;
       ticker_100ms++;
       interrupt_service_required_100ms = 1;
+  }
+  if( ++ticker_500ms_int_counter == 25 )
+  {
+      ticker_500ms_int_counter = 0;
+      ticker_500ms++;
+      interrupt_service_required_500ms = 1;
   }
 }
 
