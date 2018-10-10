@@ -32,12 +32,14 @@ extern uint8_t slowdown_pill_f3[];
  */
 extern struct sp1_Rect full_screen;
 
+#define SLOWDOWN_PILL_PLANE    (uint8_t)(1)
+
 void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
 {
   slowdown->frame     = 0;
   slowdown->expanding = 1;
-  slowdown->sprite    = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
-  sp1_AddColSpr(slowdown->sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
+  slowdown->sprite    = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, SLOWDOWN_PILL_PLANE);
+  sp1_AddColSpr(slowdown->sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, SLOWDOWN_PILL_PLANE);
 
   /* Pill sprite is created using absolute graphic data address */
   sp1_MoveSprPix(slowdown->sprite, &full_screen,

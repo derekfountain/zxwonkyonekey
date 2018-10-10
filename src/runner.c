@@ -163,10 +163,12 @@ const int8_t jump_y_offsets[40] =  { 2,  2,  2,  2,    2,  1,  1,  1,
  */
 RUNNER runner;
 
+#define RUNNER_PLANE    (uint8_t)(2)
+
 RUNNER* create_runner( DIRECTION initial_direction )
 {
-  runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, 0);
-  sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, 0);
+  runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, RUNNER_PLANE);
+  sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, RUNNER_PLANE);
 
   /*
    * The sprite is actually 6 pixels wide, not 8, so it can be rotated
