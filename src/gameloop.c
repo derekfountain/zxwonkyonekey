@@ -56,6 +56,7 @@ typedef enum _gameloop_tracetype
   KEY_STATE,
   ACTION,
   INT_100MS,
+  INT_500MS,
   EXIT,
 } GAMELOOP_TRACETYPE;
 
@@ -123,7 +124,25 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
 
 PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action )
 {
-  (void)data;
+  if( interrupt_service_required_500ms )
+  {
+    GAME_STATE* game_state = (GAME_STATE*)data;
+    SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
+
+    while( slowdown->x || slowdown->y )
+    {
+      animate_slowdown_pill( slowdown );
+      slowdown++;
+    }
+      
+    GAMELOOP_TRACE_CREATE(INT_500MS, 0, 0, 0, 0, 0, 0);
+
+    /*
+     * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
+     * need atomic protection.
+     */
+    interrupt_service_required_500ms = 0;
+  }
 
   *output_action = NO_ACTION;
   return KEEP_PROCESSING;

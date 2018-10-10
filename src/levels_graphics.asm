@@ -128,8 +128,8 @@ PUBLIC _slowdown_pill_f1
 	defb @00000000
 	defb @00000000
 	defb @00000000
-	defb @00011000
-	defb @00011000
+	defb @00000000
+	defb @00010000
 	defb @00000000
 	defb @00000000
 	defb @00000000
@@ -147,10 +147,10 @@ PUBLIC _slowdown_pill_f2
 ._slowdown_pill_f2
 	defb @00000000
 	defb @00000000
+	defb @00000000
 	defb @00011000
-	defb @00111100
-	defb @00111100
 	defb @00011000
+	defb @00000000
 	defb @00000000
 	defb @00000000
 
@@ -166,12 +166,12 @@ PUBLIC _slowdown_pill_f2
 PUBLIC _slowdown_pill_f3
 ._slowdown_pill_f3
 	defb @00000000
+	defb @00000000
 	defb @00011000
-	defb @00111100
-	defb @01111110
-	defb @01111110
-	defb @00111100
+	defb @00100100
+	defb @00100100
 	defb @00011000
+	defb @00000000
 	defb @00000000
 
 	defb @00000000
@@ -182,24 +182,3 @@ PUBLIC _slowdown_pill_f3
 	defb @00000000
 	defb @00000000
 	defb @00000000
-
-PUBLIC _slowdown_pill_f4
-._slowdown_pill_f4
-	defb @00011000
-	defb @00011000
-	defb @00111100
-	defb @11111111
-	defb @11111111
-	defb @00111100
-	defb @00011000
-	defb @00011000
-
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-                

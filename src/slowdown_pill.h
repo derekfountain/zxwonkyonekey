@@ -25,14 +25,19 @@
  */
 typedef struct _slowdown_definition
 {
+  /* Keep these first because they're statically initialised in the level data */
   uint8_t x;
   uint8_t y;
 
+  /* These are not statically initialised */
   struct sp1_ss*   sprite;
+  uint8_t          frame;
+  uint8_t          expanding;
 
 } SLOWDOWN_DEFINITION;
 
 
 void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
+void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
 
 #endif
