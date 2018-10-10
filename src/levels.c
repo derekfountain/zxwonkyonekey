@@ -104,8 +104,8 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 };
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
-  { 184, 176 },
-  {  24,  64 },
+  { 184, 176,  188, 180,  1 },
+  {  24,  64,   28,  68,  1 },
   {0}
 };
 

@@ -277,6 +277,12 @@ void gameloop( GAME_STATE* game_state )
      * If the level has teleporters the cells they occupy are validated so
      * the runner doesn't get redrawn when he moves "onto" one. The effect
      * is for him to move "into" it which is what I want.
+     *
+     * This invalidation has to be done here each time round the loop because
+     * when the runner sprite gets close the process of drawing him invalidates
+     * the cell the teleporter is on, so the cell gets redrawn as runner sprite
+     * but no teleporter. Specifically revalidating the teleporters ensures
+     * they always appear even at the "cost" of not drawing the runner.
      */
     if( game_state->current_level->teleporters )
     {
@@ -298,6 +304,19 @@ void gameloop( GAME_STATE* game_state )
       }
     }
 
+    /* Check if he's walked onto a slowdown pill */
+    if( game_state->current_level->slowdowns )
+    {
+      SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
+
+      while( slowdown->x || slowdown->y )
+      {
+        /* This doesn't look right - surely this should be in a game action? */
+        slowdown++;
+      }
+    }
+
+    /* Halt to lock the game to 50fps, then update everything */
     intrinsic_halt();
     sp1_UpdateNow();
   }

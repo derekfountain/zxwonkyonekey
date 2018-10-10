@@ -28,6 +28,9 @@ typedef struct _slowdown_definition
   /* Keep these first because they're statically initialised in the level data */
   uint8_t x;
   uint8_t y;
+  uint8_t centre_x;
+  uint8_t centre_y;
+  uint8_t available;
 
   /* These are not statically initialised */
   struct sp1_ss*   sprite;

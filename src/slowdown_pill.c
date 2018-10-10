@@ -72,44 +72,54 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
    */
   uint8_t* next_frame;
 
-  if( slowdown->expanding )
+  if( ! slowdown->available )
   {
-    if( slowdown->frame == 0 )
-    {
-      slowdown->frame = 1;
-      next_frame = (uint8_t*)slowdown_pill_f2;
-    }
-    else if( slowdown->frame == 1 )
-    {
-      slowdown->frame = 2;
-      next_frame = (uint8_t*)slowdown_pill_f3;
-    }
-    else /* slowdown->frame == 2 */
-    {
-      slowdown->expanding = 0;
-      next_frame = (uint8_t*)slowdown_pill_f3;
-    }
+    next_frame = (uint8_t*)slowdown_pill_f1;
+    sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
   }
   else
   {
-    if( slowdown->frame == 0 )
+    if( slowdown->expanding )
     {
-      slowdown->expanding = 1;
-      next_frame = (uint8_t*)slowdown_pill_f1;
+      if( slowdown->frame == 0 )
+      {
+        slowdown->frame = 1;
+        next_frame = (uint8_t*)slowdown_pill_f2;
+      }
+      else if( slowdown->frame == 1 )
+      {
+        slowdown->frame = 2;
+        next_frame = (uint8_t*)slowdown_pill_f3;
+      }
+      else /* slowdown->frame == 2 */
+      {
+        slowdown->expanding = 0;
+        next_frame = (uint8_t*)slowdown_pill_f3;
+      }
     }
-    else if( slowdown->frame == 1 )
+    else
     {
-      slowdown->frame = 0;
-      next_frame = (uint8_t*)slowdown_pill_f1;
+      if( slowdown->frame == 0 )
+      {
+        slowdown->expanding = 1;
+        next_frame = (uint8_t*)slowdown_pill_f1;
+      }
+      else if( slowdown->frame == 1 )
+      {
+        slowdown->frame = 0;
+        next_frame = (uint8_t*)slowdown_pill_f1;
+      }
+      else /* slowdown->frame == 2 */
+      {
+        slowdown->frame = 1;
+        next_frame = (uint8_t*)slowdown_pill_f2;
+      }
     }
-    else /* slowdown->frame == 2 */
-    {
-      slowdown->frame = 1;
-      next_frame = (uint8_t*)slowdown_pill_f2;
-    }
+
+    /* Set the correct graphic on the pill sprite */
+    sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, slowdown->x, slowdown->y);
   }
 
-  /* Set the correct graphic on the pill sprite and invalidate to it redraws */
-  sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, slowdown->x, slowdown->y);
+  /* Finally, invalidate the pill sprite so it redraws */
   sp1_IterateUpdateSpr(slowdown->sprite, invalidatePill);
 }
