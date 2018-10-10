@@ -105,7 +105,8 @@ PUBLIC _level0_map
         defb 0x9                ; right one
         defb 0x80               ; grassh
 
-        defb 0x16, 0x09, 0x04   ; AT 9,4
+        defb 0x16, 0x09, 0x03   ; AT 9,4
+        defb 0x80               ; grassh
         defb 0x80               ; grassh
         defb 0x80               ; grassh
 

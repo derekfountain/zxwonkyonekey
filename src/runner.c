@@ -163,7 +163,12 @@ const int8_t jump_y_offsets[40] =  { 2,  2,  2,  2,    2,  1,  1,  1,
  */
 RUNNER runner;
 
-#define RUNNER_PLANE    (uint8_t)(2)
+/*
+ * Runner is LOAD'ed into the display at the back, which is the quickest
+ * way of getting him on screen. Other artefacts are placed closer to the
+ * viewer and are OR'ed into what's already there, including the runner.
+ */
+#define RUNNER_PLANE    (uint8_t)(20)
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {

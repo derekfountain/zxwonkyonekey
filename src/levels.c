@@ -105,6 +105,7 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
   { 184, 176 },
+  {  24,  64 },
   {0}
 };
 
@@ -284,11 +285,6 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
     /*
-Change of plan. The slowdown pills are now sprites, animated to pulse.
-I need to update all the pills onscreen at maybe 2Hz, so I need a new timer.
-The pills need to be the same colour as the runner so there's no colour clash
-when he reaches one. Probably ORed in at a higher screen layer so he doesn't
-partially obliterate them.
 Collision is still going to be done by screen position.
      */
     while( slowdown->x || slowdown->y )
