@@ -36,6 +36,15 @@
 #define RUNNER_JUMPING(offset) (((uint8_t)(offset)) != NO_JUMP)
 
 /*
+ * The x,y position of the runner sprite is the top left corner.
+ * For some types of collision detection it makes more sense to
+ * test the centre point of the sprite (or as close to the 6x8
+ * pixel sprite as is possible).
+ */
+#define RUNNER_CENTRE_X(x) (x+3)
+#define RUNNER_CENTRE_Y(y) (y+4)
+
+/*
  * Directions. Up and down may be added at some point.
  * This is currently only used for the runner, hence it's
  * in this file. If the general concept of direction is
@@ -78,6 +87,8 @@ typedef struct _runner
 
   DIRECTION        facing;
   uint8_t          jump_offset;
+
+  uint8_t          slowdown;
 } RUNNER;
 
 
@@ -100,6 +111,9 @@ DIRECTION   get_runner_facing( void );
 void        set_runner_colour( uint8_t );
 uint8_t     get_runner_jump_offset( void );
 JUMP_STATUS get_runner_jump_status(void);
+uint8_t     get_runner_slowdown( void );
+void        set_runner_slowdown( uint8_t );
+
 
 /*
  * Initialise trace table for runner

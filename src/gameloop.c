@@ -68,6 +68,7 @@ typedef struct _gameloop_trace
   uint8_t            key_processed;
   uint8_t            xpos;
   uint8_t            ypos;
+  uint8_t            slowdown_active;
   GAME_ACTION        action;
   PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
@@ -77,7 +78,7 @@ typedef struct _gameloop_trace
 #define GAMELOOP_TRACETABLE_SIZE ((size_t)sizeof(GAMELOOP_TRACE)*GAMELOOP_TRACE_ENTRIES)
 
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
-#define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,act,pflag) { \
+#define GAMELOOP_TRACE_CREATE(ttype,keypressed,keyprocessed,x,y,sd,act,pflag) { \
     if( gameloop_tracetable != TRACING_INACTIVE ) { \
       GAMELOOP_TRACE      glt;   \
       glt.ticker          = GET_TICKER; \
@@ -86,6 +87,7 @@ typedef struct _gameloop_trace
       glt.key_processed   = keyprocessed; \
       glt.xpos            = x; \
       glt.ypos            = y; \
+      glt.slowdown_active = sd; \
       glt.action          = act; \
       glt.processing_flag = pflag; \
       gameloop_add_trace(&glt); \
@@ -103,19 +105,25 @@ void init_gameloop_trace(void)
 
 PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action )
 {
-  (void)data;
-
   if( interrupt_service_required_100ms )
   {
-      GAMELOOP_TRACE_CREATE(INT_100MS, 0, 0, 0, 0, 0, 0);
+    GAME_STATE* game_state = (GAME_STATE*)data;
 
-      decrement_level_score( 1 );
+    GAMELOOP_TRACE_CREATE(INT_100MS,
+                          game_state->key_pressed,
+                          game_state->key_processed,
+                          get_runner_xpos(),
+                          get_runner_ypos(),
+                          get_runner_slowdown(),
+                          0, 0);
 
-      /*
-       * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
-       * need atomic protection.
-       */
-      interrupt_service_required_100ms = 0;
+    decrement_level_score( 1 );
+
+    /*
+     * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
+     * need atomic protection.
+     */
+    interrupt_service_required_100ms = 0;
   }
 
   *output_action = NO_ACTION;
@@ -135,7 +143,13 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
       slowdown++;
     }
       
-    GAMELOOP_TRACE_CREATE(INT_500MS, 0, 0, 0, 0, 0, 0);
+    GAMELOOP_TRACE_CREATE(INT_500MS,
+                          game_state->key_pressed,
+                          game_state->key_processed,
+                          get_runner_xpos(),
+                          get_runner_ypos(),
+                          get_runner_slowdown(),
+                          0, 0);
 
     /*
      * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
@@ -170,9 +184,14 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
 LOOP_ACTION game_actions[] =
   {
     {service_interrupt_100ms        },
+    /* FIXME This 500ms service can't do the pill erase/redraw. It needs to happen
+     * in the same cycle as the runner hits the pill or the timer expires. The pulsing
+     * can happen here, but the timer checks can't
+     */
     {service_interrupt_500ms        },
     {test_for_finish                },
     {test_for_teleporter            },
+    {test_for_slowdown_pill         },
     {test_for_falling               },
     {test_for_start_jump            },
     {test_for_direction_change      },
@@ -227,6 +246,7 @@ void gameloop( GAME_STATE* game_state )
 			              game_state->key_processed,
                                       get_runner_xpos(),
                                       get_runner_ypos(),
+                                      get_runner_slowdown(),
                                       required_action,
                                       flag);
       }
@@ -235,6 +255,14 @@ void gameloop( GAME_STATE* game_state )
         {
         case TOGGLE_DIRECTION:
           toggle_runner_direction();
+          break;
+
+        case ACTIVATE_SLOWDOWN:
+          set_runner_slowdown( TRUE );
+          break;
+
+        case DEACTIVATE_SLOWDOWN:
+          set_runner_slowdown( FALSE );
           break;
 
         case JUMP:
@@ -283,6 +311,9 @@ void gameloop( GAME_STATE* game_state )
      * the cell the teleporter is on, so the cell gets redrawn as runner sprite
      * but no teleporter. Specifically revalidating the teleporters ensures
      * they always appear even at the "cost" of not drawing the runner.
+     *
+     * This has to be done after the runner is redrawn, so it can't be in the
+     * sequence of game actions.
      */
     if( game_state->current_level->teleporters )
     {
@@ -301,18 +332,6 @@ void gameloop( GAME_STATE* game_state )
         sp1_Validate(&validate_cell);
 
         teleporter++;
-      }
-    }
-
-    /* Check if he's walked onto a slowdown pill */
-    if( game_state->current_level->slowdowns )
-    {
-      SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
-
-      while( slowdown->x || slowdown->y )
-      {
-        /* This doesn't look right - surely this should be in a game action? */
-        slowdown++;
       }
     }
 

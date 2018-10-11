@@ -20,6 +20,9 @@
 #ifndef __UTILS_H
 #define __UTILS_H
 
+#define FALSE ((uint8_t)0)
+#define TRUE  ((uint8_t)1)
+
 /*
  * Switch point to turn off static allocations. In some places the symbols
  * end up missing from the compiler's symbols output file, which means they

@@ -75,7 +75,8 @@ typedef struct _runner_trace
   RUNNER_TRACETYPE   tracetype;
   uint8_t            xpos;
   uint8_t            ypos;
-  int8_t            ydelta;
+  uint8_t            slowdown_active;
+  int8_t             ydelta;
 } RUNNER_TRACE;
 
 /* BE:PICKUPDEF */
@@ -95,15 +96,16 @@ void init_runner_trace(void)
  * but since this one is called several times a function is more
  * economical.
  */
-void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t yd )
+void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t yd, uint8_t sd )
 {
   if( runner_tracetable != TRACING_INACTIVE ) {
     RUNNER_TRACE  rt;		  
-    rt.ticker     = GET_TICKER;			
-    rt.tracetype  = ttype; 
-    rt.xpos       = x;	 
-    rt.ypos       = y;	  
-    rt.ydelta     = yd;	     
+    rt.ticker          = GET_TICKER;			
+    rt.tracetype       = ttype; 
+    rt.xpos            = x;	 
+    rt.ypos            = y;	  
+    rt.slowdown_active = sd;	  
+    rt.ydelta          = yd;	     
     runner_add_trace(&rt);			
   }						
 }
@@ -188,6 +190,7 @@ RUNNER* create_runner( DIRECTION initial_direction )
   runner.xpos        = 0;
   runner.ypos        = 0;
   runner.facing      = initial_direction;
+  runner.slowdown    = FALSE;
 
   runner.jump_offset = NO_JUMP;
 
@@ -232,6 +235,21 @@ void set_runner_facing( DIRECTION dir )
 DIRECTION get_runner_facing( void )
 {
   return runner.facing;
+}
+
+/*
+ * FIXME Slowdown needs to be an enum. The 0/1 in the trace is
+ * hard to read.
+ */
+uint8_t get_runner_slowdown( void )
+{
+  return runner.slowdown;
+}
+
+void set_runner_slowdown( uint8_t s )
+{
+zx_border(s);
+  runner.slowdown = s;
 }
 
 static uint8_t required_colour;
@@ -304,7 +322,7 @@ PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
       runner.jump_offset = NO_JUMP;
 
       /* Note that this trace is logged *before* the final y adjustment */
-      RUNNER_TRACE_CREATE(JUMP_LAST, runner.xpos, runner.ypos, y_delta);
+      RUNNER_TRACE_CREATE(JUMP_LAST, runner.xpos, runner.ypos, y_delta, runner.slowdown);
     }
     else {
 
@@ -314,10 +332,10 @@ PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
        */
       if( y_delta < 0 ) {
 
-	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta);
+	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta, runner.slowdown);
       }
       else {
-	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta);
+	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta, runner.slowdown);
       }
     }
 
@@ -385,7 +403,7 @@ void start_runner_jumping(void)
 {
   runner.jump_offset = 0;
 
-  RUNNER_TRACE_CREATE(JUMP_START, 0, 0, 0);
+  RUNNER_TRACE_CREATE(JUMP_START, runner.xpos, runner.ypos, 0, runner.slowdown);
 }
 
 
@@ -393,7 +411,7 @@ void stop_runner_jumping(void)
 {
   runner.jump_offset = NO_JUMP;
 
-  RUNNER_TRACE_CREATE(JUMP_STOP, 0, 0, 0);
+  RUNNER_TRACE_CREATE(JUMP_STOP, runner.xpos, runner.ypos, 0, runner.slowdown);
 }
 
 

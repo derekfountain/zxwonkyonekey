@@ -440,3 +440,76 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
   return KEEP_PROCESSING;
 }
+
+
+
+
+/***
+ *       _____ _                  _                       _____ _ _ _ ___  
+ *      / ____| |                | |                     |  __ (_| | |__ \ 
+ *     | (___ | | _____      ____| | _____      ___ __   | |__) _| | |  ) |
+ *      \___ \| |/ _ \ \ /\ / / _` |/ _ \ \ /\ / | '_ \  |  ___| | | | / / 
+ *      ____) | | (_) \ V  V | (_| | (_) \ V  V /| | | | | |   | | | ||_|  
+ *     |_____/|_|\___/ \_/\_/ \__,_|\___/ \_/\_/ |_| |_| |_|   |_|_|_|(_)  
+ *                                                                         
+ *                                                                         
+ */
+
+PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+
+  *output_action = NO_ACTION;
+
+  /* Check if he's walked onto a slowdown pill */
+  if( game_state->current_level->slowdowns )
+  {
+    SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
+
+    uint8_t xpos = get_runner_xpos();
+    uint8_t ypos = get_runner_ypos();
+
+    while( slowdown->x || slowdown->y )
+    {
+      /*
+       * If the pill has been consumed and is active, reduce the
+       * timer. If that's got to zero, reinstate the pill. It could
+       * (at least in theory) be reconsumed this cycle.
+       */
+      if( (slowdown->available == FALSE) && (--slowdown->complete_timer == 0) )
+      {
+        slowdown->available = TRUE;
+
+        *output_action = DEACTIVATE_SLOWDOWN;
+        break;
+
+        /*
+         * FIXME: In theory there can be more than one slowdown pill active.
+         * If there is, resetting the runner's slowdown flag here negates
+         * the other timer which probably hasn't expired yet. This should
+         * check all other slowdown pills and only return the deactivate
+         * code if they're all available.
+         */
+      }
+
+      if( slowdown->available )
+      {
+        if( (RUNNER_CENTRE_X(xpos) == slowdown->centre_x) &&
+            (RUNNER_CENTRE_Y(ypos) == slowdown->centre_y) )
+        {
+          slowdown->available = FALSE;
+
+          /* TODO This needs to come from the level. 10 secs for now */
+          slowdown->complete_timer = 500; 
+
+          *output_action = ACTIVATE_SLOWDOWN;
+          break;
+        }
+      }
+
+      slowdown++;
+    }
+  }
+
+  return KEEP_PROCESSING;
+}
