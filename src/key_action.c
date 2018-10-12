@@ -49,6 +49,8 @@ typedef enum _key_action_tracetype
   TEST_FALL_RIGHT_UNROTATED,
   TEST_FALL_RIGHT_NO_TOE_SUPPORT,
   TEST_FALL_LEFT_HEEL_SUPPORT,
+  ENTER_TELEPORTER,
+  JUST_TELEPORTED,
   TEST_FINISH,
 } KEY_ACTION_TRACETYPE;
 
@@ -65,6 +67,7 @@ typedef struct _key_action_trace
     n16 dec valid "tracetype==TEST_JUMP_PARTIAL_ON_BLOCK"  "mod(8) xpos"
     n16 dec valid "tracetype==TEST_FALL_RIGHT_NO_TOE_SUPPORT"  "mod(8) xpos"
     n16 dec valid "tracetype==TEST_FALL_LEFT_HEEL_SUPPORT"  "mod(8) xpos"
+    n16 dec valid "tracetype==ENTER_TELEPORTER"  "toggle direction"
   }    
   BE:LITERAL:END */
 
@@ -89,13 +92,6 @@ void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype, uint16_t d )
     ka.ticker       = GET_TICKER;			
     ka.tracetype    = ttype;
     ka.data         = d;
-    /*
-    if( d == 0 ) {
-      ka.bounced    = 1;
-    } else {
-      ka.key_pressed= 1;
-    }
-    */
     key_action_add_trace(&ka);			
   }						
 }
@@ -413,24 +409,50 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
   while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
 
+    /*
+     * There's an issue here with the slowdown code. If slowdown is on then he only
+     * moves every other cycle. That means if he teleports when slowdown is on his
+     * x,y position is updated to the destination end of the teleporter, but then
+     * he doesn't move. Next cycle this code finds him at the teleporter trigger
+     * location and he's teleported back. He still doesn't move for this cycle so
+     * we go round again. He's stuck in an endless teleport sequence!
+     * The fix is to keep a flag saying he's just teleported. If that's set then
+     * reset it and don't do the teleport sequence. That frees up a cycle to move
+     * his location by a pixel, he leaves the teleport trigger point and then it
+     * all works again.
+     */
+    if( teleporter->just_teleported ) {
+      KEY_ACTION_TRACE_CREATE( JUST_TELEPORTED, (*output_action == TOGGLE_DIRECTION) );
+      teleporter->just_teleported = 0;
+      break;
+    }
+
     if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
 
       set_runner_xpos( teleporter->end_2_x );
       set_runner_ypos( teleporter->end_2_y );
+      teleporter->just_teleported = 1;
       
       if( teleporter->change_direction ) {
         *output_action = TOGGLE_DIRECTION;
       }
+
+      KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
+
       break;
 
     } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
 
       set_runner_xpos( teleporter->end_1_x );
       set_runner_ypos( teleporter->end_1_y );
+      teleporter->just_teleported = 1;
 
       if( teleporter->change_direction ) {
         *output_action = TOGGLE_DIRECTION;
       }
+
+      KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
+
       break;
 
     }

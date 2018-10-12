@@ -250,7 +250,7 @@ void gameloop( GAME_STATE* game_state )
 	 * and the ticker cycle is one of the every other ones we skip. Don't run the action.
 	 */
 	flag = KEEP_PROCESSING;
-	required_action = NO_ACTION;
+	required_action = SKIP_CYCLE;
       }
       else
       {
@@ -308,6 +308,9 @@ void gameloop( GAME_STATE* game_state )
         case FINISH:
           finish_level();
           return;
+
+        case SKIP_CYCLE:
+          break;
         }
 
       if( flag == STOP_PROCESSING )

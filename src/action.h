@@ -29,6 +29,7 @@ typedef enum _processing_flag
 typedef enum _game_action
 {
   NO_ACTION,
+  SKIP_CYCLE,
   MOVE_RIGHT,
   MOVE_LEFT,
   MOVE_UP,

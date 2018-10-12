@@ -110,6 +110,12 @@ SLOWDOWN_DEFINITION level0_slowdowns[] = {
   {0}
 };
 
+SLOWDOWN_DEFINITION level1_slowdowns[] = {
+  { 180, 128,  184, 132,  PILL_AVAILABLE },
+  { 240,  88,  244,  92,  PILL_AVAILABLE },
+  {0}
+};
+
 LEVEL_DATA level_data[] = {
 
   /***
@@ -162,7 +168,7 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level1_tiles[0],
     &level1_teleporters[0],
-    NULL,
+    &level1_slowdowns[0],
     MAX_POINTS(15000),
     MAX_BONUS(8000),
     { NAMED_VALUES_5("Level score X", 14,
