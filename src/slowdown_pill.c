@@ -56,7 +56,7 @@ void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
  * Invalidator, called at screen update time to ensure the pill
  * sprite tiles are invalidated and hence redrawn
  */
-static void invalidatePill(unsigned int count, struct sp1_update *u)
+static void invalidatePillSprite(unsigned int count, struct sp1_update *u)
 {
   (void)count;
 
@@ -72,8 +72,9 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
    */
   uint8_t* next_frame;
 
-  if( ! slowdown->available )
+  if( slowdown->available == PILL_NOT_AVAILABLE )
   {
+    /* Move it off screen so it disappears */
     next_frame = (uint8_t*)slowdown_pill_f1;
     sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
   }
@@ -121,5 +122,5 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
   }
 
   /* Finally, invalidate the pill sprite so it redraws */
-  sp1_IterateUpdateSpr(slowdown->sprite, invalidatePill);
+  sp1_IterateUpdateSpr(slowdown->sprite, invalidatePillSprite);
 }

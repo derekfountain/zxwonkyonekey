@@ -68,7 +68,7 @@ typedef struct _gameloop_trace
   uint8_t            key_processed;
   uint8_t            xpos;
   uint8_t            ypos;
-  uint8_t            slowdown_active;
+  SLOWDOWN_STATUS    slowdown_active;
   GAME_ACTION        action;
   PROCESSING_FLAG    processing_flag;
 } GAMELOOP_TRACE;
@@ -137,6 +137,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
     GAME_STATE* game_state = (GAME_STATE*)data;
     SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
 
+    /* Loop over any slowdown pills on screen and animate their graphic frames */
     while( slowdown->x || slowdown->y )
     {
       animate_slowdown_pill( slowdown );
@@ -183,21 +184,21 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
 
 LOOP_ACTION game_actions[] =
   {
-    {service_interrupt_100ms        },
+    {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     /* FIXME This 500ms service can't do the pill erase/redraw. It needs to happen
      * in the same cycle as the runner hits the pill or the timer expires. The pulsing
      * can happen here, but the timer checks can't
      */
-    {service_interrupt_500ms        },
-    {test_for_finish                },
-    {test_for_teleporter            },
-    {test_for_slowdown_pill         },
-    {test_for_falling               },
-    {test_for_start_jump            },
-    {test_for_direction_change      },
-    {act_on_collision               },
-    {adjust_for_jump                },
-    {move_sideways                  },
+    {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
+    {test_for_finish,            NORMAL_WHEN_SLOWDOWN    },
+    {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
+    {test_for_slowdown_pill,     NORMAL_WHEN_SLOWDOWN    },
+    {test_for_falling,           NORMAL_WHEN_SLOWDOWN    },
+    {test_for_start_jump,        NORMAL_WHEN_SLOWDOWN    },
+    {test_for_direction_change,  NORMAL_WHEN_SLOWDOWN    },
+    {act_on_collision,           NORMAL_WHEN_SLOWDOWN    },
+    {adjust_for_jump,            SLOW_WHEN_SLOWDOWN      },
+    {move_sideways,              SLOW_WHEN_SLOWDOWN      },
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
@@ -239,7 +240,19 @@ void gameloop( GAME_STATE* game_state )
       PROCESSING_FLAG flag;
       GAME_ACTION     required_action;
 
-      flag = (game_actions[i].test_action)(game_state, &required_action);
+      if( (get_runner_slowdown() == SLOWDOWN_ACTIVE) && (game_actions[i].slowdown_flag == SLOW_WHEN_SLOWDOWN) && (GET_TICKER & 1) )
+      {
+	/*
+	 * Runner has eaten a slowdown pill, the action function needs to respect the slowdown,
+	 * and the ticker cycle is one of the every other ones we skip. Don't run the action.
+	 */
+	flag = KEEP_PROCESSING;
+	required_action = NO_ACTION;
+      }
+      else
+      {
+	flag = (game_actions[i].test_action)(game_state, &required_action);
+      }
 
       if( required_action != NO_ACTION ) {
 	GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
@@ -258,11 +271,11 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case ACTIVATE_SLOWDOWN:
-          set_runner_slowdown( TRUE );
+          set_runner_slowdown( SLOWDOWN_ACTIVE );
           break;
 
         case DEACTIVATE_SLOWDOWN:
-          set_runner_slowdown( FALSE );
+          set_runner_slowdown( SLOWDOWN_INACTIVE );
           break;
 
         case JUMP:
@@ -337,6 +350,7 @@ void gameloop( GAME_STATE* game_state )
 
     /* Halt to lock the game to 50fps, then update everything */
     intrinsic_halt();
+
     sp1_UpdateNow();
   }
 }

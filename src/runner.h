@@ -23,6 +23,7 @@
 #include <stdint.h>
 
 #include "action.h"
+#include "slowdown_pill.h"
 
 /*
  * Jump offset value is an index into an array. This value
@@ -88,7 +89,7 @@ typedef struct _runner
   DIRECTION        facing;
   uint8_t          jump_offset;
 
-  uint8_t          slowdown;
+  SLOWDOWN_STATUS  slowdown;
 } RUNNER;
 
 
@@ -100,19 +101,19 @@ RUNNER* create_runner( DIRECTION initial_direction );
 /*
  * Runner screen movement getters and setters.
  */
-uint8_t     get_runner_xpos( void );
-uint8_t     get_runner_ypos( void );
-void        set_runner_xpos( uint8_t pos );
-void        set_runner_ypos( uint8_t pos );
-void        move_runner_xpos( int8_t delta );
-void        move_runner_ypos( int8_t delta );
-void        set_runner_facing( DIRECTION d );
-DIRECTION   get_runner_facing( void );
-void        set_runner_colour( uint8_t );
-uint8_t     get_runner_jump_offset( void );
-JUMP_STATUS get_runner_jump_status(void);
-uint8_t     get_runner_slowdown( void );
-void        set_runner_slowdown( uint8_t );
+uint8_t         get_runner_xpos( void );
+uint8_t         get_runner_ypos( void );
+void            set_runner_xpos( uint8_t pos );
+void            set_runner_ypos( uint8_t pos );
+void            move_runner_xpos( int8_t delta );
+void            move_runner_ypos( int8_t delta );
+void            set_runner_facing( DIRECTION d );
+DIRECTION       get_runner_facing( void );
+void            set_runner_colour( uint8_t );
+uint8_t         get_runner_jump_offset( void );
+JUMP_STATUS     get_runner_jump_status(void);
+SLOWDOWN_STATUS get_runner_slowdown( void );
+void            set_runner_slowdown( SLOWDOWN_STATUS );
 
 
 /*

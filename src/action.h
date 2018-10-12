@@ -41,9 +41,23 @@ typedef enum _game_action
   FINISH,
 } GAME_ACTION;
 
+typedef enum _when_slowdown
+{
+  NORMAL_WHEN_SLOWDOWN,
+  SLOW_WHEN_SLOWDOWN,
+} WHEN_SLOWDOWN;
+
 typedef struct _loop_action
 {
+  /* Pointer to a function which implements the action to run */
   PROCESSING_FLAG (*test_action)(void* input_data, GAME_ACTION* output_action);
+
+  /*
+   * Flag indicating what to do when a slowdown pill is active. Things like
+   * collision detection and interrupt servicing need to run every frame as
+   * normal. Things like moving the player run slowly.
+   */
+  WHEN_SLOWDOWN   slowdown_flag;
 } LOOP_ACTION;
 
 #endif

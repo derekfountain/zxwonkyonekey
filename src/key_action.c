@@ -461,7 +461,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 
   *output_action = NO_ACTION;
 
-  /* Check if he's walked onto a slowdown pill */
+  /* Skip everything if this level doesn't have slowdown pills */
   if( game_state->current_level->slowdowns )
   {
     SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
@@ -469,38 +469,63 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
     uint8_t xpos = get_runner_xpos();
     uint8_t ypos = get_runner_ypos();
 
+    /* Loop over slowdown pills */
     while( slowdown->x || slowdown->y )
     {
       /*
        * If the pill has been consumed and is active, reduce the
-       * timer. If that's got to zero, reinstate the pill. It could
-       * (at least in theory) be reconsumed this cycle.
+       * timer. If that's got to zero, reinstate the pill.
        */
-      if( (slowdown->available == FALSE) && (--slowdown->complete_timer == 0) )
+      if( (slowdown->available == PILL_NOT_AVAILABLE) )
       {
-        slowdown->available = TRUE;
+	if( --slowdown->complete_timer == 0 )
+	{
+	  slowdown->available = PILL_AVAILABLE;
+	  *output_action = DEACTIVATE_SLOWDOWN;
 
-        *output_action = DEACTIVATE_SLOWDOWN;
-        break;
+	  {
+	    /*
+	     * There can be more than one slowdown pill active. i.e. the consumes
+	     * one pill and its timer starts, then he consumes another pill before
+	     * the first one has expired. The code gets here when the first pill
+	     * timer expires, but it can't deactivate the slowdown because the
+	     * second timer is still ticking down.
+	     * So this loop checks the other pills in the level and only sets the
+	     * deactivation return value if none of them is counting down its timer.
+	     */
+	    SLOWDOWN_DEFINITION* check_slowdown = game_state->current_level->slowdowns;
 
-        /*
-         * FIXME: In theory there can be more than one slowdown pill active.
-         * If there is, resetting the runner's slowdown flag here negates
-         * the other timer which probably hasn't expired yet. This should
-         * check all other slowdown pills and only return the deactivate
-         * code if they're all available.
-         */
+	    while( check_slowdown->x || check_slowdown->y )
+	    {
+	      /*
+	       * Pill availability is an 8 bit check, which is quicker than checking
+	       * the 16 bit timer value for non-zero. I think. :)
+	       */
+	      if( check_slowdown->available == PILL_NOT_AVAILABLE )
+	      {
+		/* Pill not available, so it's timer is ticking down. Don't deactivate slowdown */
+		*output_action = NO_ACTION;
+		break;
+	      }
+	      check_slowdown++;
+	    }
+          }
+        }
+
       }
-
-      if( slowdown->available )
+      else
       {
+	/*
+	 * Pill is available. If he's walked onto it mark it unavailable and start
+	 * it's timer.
+	 */
         if( (RUNNER_CENTRE_X(xpos) == slowdown->centre_x) &&
             (RUNNER_CENTRE_Y(ypos) == slowdown->centre_y) )
         {
-          slowdown->available = FALSE;
+          slowdown->available = PILL_NOT_AVAILABLE;
 
-          /* TODO This needs to come from the level. 10 secs for now */
-          slowdown->complete_timer = 500; 
+          /* TODO This needs to come from the level. 15 secs for now */
+          slowdown->complete_timer = 750;
 
           *output_action = ACTIVATE_SLOWDOWN;
           break;

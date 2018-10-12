@@ -108,6 +108,10 @@ int main()
     /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );
 
+    /*
+     * FIXME I need to tear down slowdown pill sprites and reset the timers.
+     */
+
     if( ++current_level_num == NUM_LEVELS ) {
       game_over();
       current_level_num = 0;

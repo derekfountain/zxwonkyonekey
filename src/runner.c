@@ -237,18 +237,13 @@ DIRECTION get_runner_facing( void )
   return runner.facing;
 }
 
-/*
- * FIXME Slowdown needs to be an enum. The 0/1 in the trace is
- * hard to read.
- */
-uint8_t get_runner_slowdown( void )
+SLOWDOWN_STATUS get_runner_slowdown( void )
 {
   return runner.slowdown;
 }
 
-void set_runner_slowdown( uint8_t s )
+void set_runner_slowdown( SLOWDOWN_STATUS s )
 {
-zx_border(s);
   runner.slowdown = s;
 }
 

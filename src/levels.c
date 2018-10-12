@@ -104,8 +104,9 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 };
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
-  { 184, 176,  188, 180,  1 },
-  {  24,  64,   28,  68,  1 },
+  { 184, 176,  188, 180,  PILL_AVAILABLE },
+  {  24,  64,   28,  68,  PILL_AVAILABLE },
+  { 208, 104,  210, 108,  PILL_AVAILABLE },
   {0}
 };
 
@@ -236,7 +237,7 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
                                                                    SP1_RFLAG_COLOUR|
                                                                    SP1_RFLAG_SPRITE );
 
-  /* Loop over tile defintitions, redefining them for the level */
+  /* Loop over tile definitions, redefining them for the level */
   tile_ptr = level_data->level_tiles;
   while( tile_ptr->tile_num != 0 )
   {
