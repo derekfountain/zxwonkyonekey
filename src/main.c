@@ -100,6 +100,7 @@ int main()
     set_runner_xpos( game_state.current_level->start_x );
     set_runner_ypos( game_state.current_level->start_y );
     set_runner_colour( game_state.current_level->background_att );
+    set_runner_slowdown( SLOWDOWN_INACTIVE );
 
     set_level_score( game_state.current_level->max_score );
     set_level_bonus( game_state.current_level->max_bonus );

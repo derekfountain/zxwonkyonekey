@@ -137,11 +137,14 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
     GAME_STATE* game_state = (GAME_STATE*)data;
     SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
 
-    /* Loop over any slowdown pills on screen and animate their graphic frames */
-    while( slowdown->x || slowdown->y )
+    if( slowdown != NULL )
     {
-      animate_slowdown_pill( slowdown );
-      slowdown++;
+      /* Loop over any slowdown pills on screen and animate their graphic frames */
+      while( slowdown->x || slowdown->y )
+      {
+	animate_slowdown_pill( slowdown );
+	slowdown++;
+      }
     }
       
     GAMELOOP_TRACE_CREATE(INT_500MS,
