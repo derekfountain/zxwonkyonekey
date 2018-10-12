@@ -52,6 +52,13 @@ void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
                  slowdown->x, slowdown->y);
 }
 
+void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
+{
+  /* Move sprite offscreen before calling delete function */
+  sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
+  sp1_DeleteSpr(slowdown->sprite);
+}
+
 /*
  * Invalidator, called at screen update time to ensure the pill
  * sprite tiles are invalidated and hence redrawn

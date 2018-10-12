@@ -121,6 +121,7 @@ LEVEL_DATA level_data[] = {
    */
   { print_level_from_sp1_string,
     level0_map,
+    teardown_level,
     START_POINT(0,135),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
@@ -150,6 +151,7 @@ LEVEL_DATA level_data[] = {
    */
   { print_level_from_sp1_string,
     level1_map,
+    teardown_level,
     START_POINT(0,155),
     LEVEL_BORDER(INK_BLUE),
     START_FACING(RIGHT),
@@ -179,6 +181,7 @@ LEVEL_DATA level_data[] = {
    */
   { print_level_from_sp1_string,
     level2_map,
+    teardown_level,
     START_POINT(240,00),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
@@ -285,13 +288,27 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
   {
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
-    /*
-Collision is still going to be done by screen position.
-     */
     while( slowdown->x || slowdown->y )
     {
       create_slowdown_pill( slowdown );
       slowdown++;
     }
   }
+}
+
+
+void teardown_level(LEVEL_DATA* level_data)
+{
+  /* Reclaim slowdown pill memory (SP1 structs, etc)*/
+  if( level_data->slowdowns )
+  {
+    SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
+
+    while( slowdown->x || slowdown->y )
+    {
+      destroy_slowdown_pill( slowdown );
+      slowdown++;
+    }
+  }
+
 }

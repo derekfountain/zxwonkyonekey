@@ -79,7 +79,7 @@ int main()
 
   create_runner( RIGHT );
 
-  current_level_num = 0; /* TODO Should start at 0 */
+  current_level_num = 0;
   while( 1 ) {
     
     /* Get the level data and call it's draw function to draw it */
@@ -108,9 +108,8 @@ int main()
     /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );
 
-    /*
-     * FIXME I need to tear down slowdown pill sprites and reset the timers.
-     */
+    /* Call the level's teardown function to reclaim resources */
+    (game_state.current_level->teardown_func)(game_state.current_level);
 
     if( ++current_level_num == NUM_LEVELS ) {
       game_over();

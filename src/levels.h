@@ -70,6 +70,8 @@ typedef struct _level_data
   void      (*draw_func)(struct _level_data*);
   void*     draw_data;
 
+  void      (*teardown_func)(struct _level_data*);
+
   uint8_t   start_x;
   uint8_t   start_y;
 

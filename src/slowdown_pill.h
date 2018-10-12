@@ -72,6 +72,7 @@ typedef struct _slowdown_definition
 
 
 void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
+void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
 void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
 
 #endif
