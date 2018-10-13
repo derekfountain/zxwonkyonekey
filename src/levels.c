@@ -158,7 +158,7 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level1_map,
     teardown_level,
-    START_POINT(16,45),
+    START_POINT(0,155),
     LEVEL_BORDER(INK_BLUE),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_MAGENTA|PAPER_BLACK,
