@@ -51,6 +51,7 @@ typedef enum _key_action_tracetype
   TEST_FALL_LEFT_HEEL_SUPPORT,
   ENTER_TELEPORTER,
   JUST_TELEPORTED,
+  SKIP_DIR_CHG_TELEPORTER,
   TEST_FINISH,
 } KEY_ACTION_TRACETYPE;
 
@@ -102,6 +103,11 @@ void init_key_action_trace(void)
     key_action_tracetable = key_action_next_trace = allocate_tracememory(KEY_ACTION_TRACETABLE_SIZE);
 }
 
+/*
+ * See comment in test_for_teleporter() to see what this is for
+ */
+uint8_t just_teleported = 0;
+
 
 /***
  *      _____  _               _   _                _____ _                            
@@ -129,6 +135,36 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
 
   /* If the user pressed the button, turn him */
   if( game_state->key_pressed && ! game_state->key_processed ) {
+
+    /*
+     * Direction change keypress has been hit. But before this happens
+     * check he's not standing right on the trigger point of a teleporter.
+     * If he is things go wrong: this code will change his direction,
+     * then the teleporter code might also change his direction, which
+     * means he comes out of the teleporter the wrong side. So don't
+     * allow the direction change to happen at this moment, just keep
+     * the flags so next time round the cycle when he's moved off the
+     * teleporter it's safe to change direction.
+     */
+    LEVEL_DATA* level_data            = game_state->current_level;
+    TELEPORTER_DEFINITION* teleporter = level_data->teleporters;
+
+    if( teleporter )
+    {
+      while( (teleporter->end_1_x || teleporter->end_1_y) ) {
+
+	if( (xpos == teleporter->end_1_x && ypos == teleporter->end_1_y) ||
+	    (xpos == teleporter->end_2_x && ypos == teleporter->end_2_y) )
+	{
+	  KEY_ACTION_TRACE_CREATE( SKIP_DIR_CHG_TELEPORTER, (uint16_t)teleporter );
+
+	  *output_action = NO_ACTION;
+	  return KEEP_PROCESSING;
+	}
+	teleporter++;
+      }
+    }
+
     game_state->key_processed = 1;
     *output_action = TOGGLE_DIRECTION;
 
@@ -421,9 +457,9 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
      * his location by a pixel, he leaves the teleport trigger point and then it
      * all works again.
      */
-    if( teleporter->just_teleported ) {
+    if( just_teleported ) {
       KEY_ACTION_TRACE_CREATE( JUST_TELEPORTED, (*output_action == TOGGLE_DIRECTION) );
-      teleporter->just_teleported = 0;
+      just_teleported = 0;
       break;
     }
 
@@ -431,7 +467,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
       set_runner_xpos( teleporter->end_2_x );
       set_runner_ypos( teleporter->end_2_y );
-      teleporter->just_teleported = 1;
+      just_teleported = 1;
       
       if( teleporter->change_direction ) {
         *output_action = TOGGLE_DIRECTION;
@@ -445,7 +481,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
       set_runner_xpos( teleporter->end_1_x );
       set_runner_ypos( teleporter->end_1_y );
-      teleporter->just_teleported = 1;
+      just_teleported = 1;
 
       if( teleporter->change_direction ) {
         *output_action = TOGGLE_DIRECTION;

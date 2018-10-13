@@ -53,11 +53,10 @@ typedef struct _teleporter_defintion
 
   uint8_t change_direction;
 
-  uint8_t just_teleported;
 } TELEPORTER_DEFINITION;
 
 /*
- * Tile defintion is essentially a user defined graphic for the sp1 library.
+ * Tile definition is essentially a user defined graphic for the sp1 library.
  * Tile numbers for UDGs start at 128.
  */
 typedef struct _tile_definition
