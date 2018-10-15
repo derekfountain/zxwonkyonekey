@@ -59,7 +59,7 @@ typedef struct _slowdown_definition
    * expires and it reappears.
    */
   PILL_AVAILABILITY  available;
-
+  uint8_t            duration_secs;
 
   /* These are not statically initialised */
   struct sp1_ss* sprite;

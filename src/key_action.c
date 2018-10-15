@@ -594,8 +594,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
           /* Design breakage - see comment above */
           animate_slowdown_pill( slowdown );
 
-          /* TODO This needs to come from the level. 15 secs for now */
-          slowdown->complete_timer = 750;
+          slowdown->complete_timer = slowdown->duration_secs*50;
 
           *output_action = ACTIVATE_SLOWDOWN;
           break;

@@ -111,6 +111,7 @@ typedef struct _level_data
 #define START_FACING(f) f
 #define MAX_POINTS(m) m
 #define MAX_BONUS(b) b
+#define SLOWDOWN_SECS(s) s
 
 LEVEL_DATA* get_level_data( uint8_t level );
 
