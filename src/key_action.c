@@ -541,6 +541,15 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 	  slowdown->available = PILL_AVAILABLE;
 	  *output_action = DEACTIVATE_SLOWDOWN;
 
+          /*
+           * Update screen. This should really be done in the gameloop
+           * but that only updates every few hundred millisecs to animate
+           * the pulsing. I could create a new gameloop action but it
+           * seems harmless to do this update here, even if it does break
+           * the design a bit.
+           */
+          animate_slowdown_pill( slowdown );
+
 	  {
 	    /*
 	     * There can be more than one slowdown pill active. i.e. the consumes
@@ -575,12 +584,15 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       {
 	/*
 	 * Pill is available. If he's walked onto it mark it unavailable and start
-	 * it's timer.
+	 * it's timer. Call the code which animates it.
 	 */
         if( (RUNNER_CENTRE_X(xpos) == slowdown->centre_x) &&
             (RUNNER_CENTRE_Y(ypos) == slowdown->centre_y) )
         {
           slowdown->available = PILL_NOT_AVAILABLE;
+
+          /* Design breakage - see comment above */
+          animate_slowdown_pill( slowdown );
 
           /* TODO This needs to come from the level. 15 secs for now */
           slowdown->complete_timer = 750;
