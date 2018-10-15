@@ -285,7 +285,7 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
  * facing right and is on left pixel 0, 1 or 2 of the cell. In which
  * case fall through.
  *
- * TODO The collision detection code could probably be used instead of
+ * The collision detection code could probably be used instead of
  * this, saving a few bytes.
  */
 PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
@@ -307,7 +307,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
   background_attribute = game_state->current_level->background_att;
 
   /*
-   * TODO I can probably optimise this for space but pulling out
+   * I can probably optimise this for space but pulling out
    * the repeated zx_pxy2aaddr() calls.
    */
 
@@ -395,7 +395,7 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
 
   /* If he's not on a character cell boundary he can't be up against a wall */
   /*
-   * TODO This won't work if he approaches the finish from the left side
+   * This won't work if he approaches the finish from the left side
    * i.e. facing right. Or falling, etc. This might have to go into the
    * collision code.
    */

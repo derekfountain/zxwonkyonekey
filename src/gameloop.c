@@ -177,8 +177,8 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  *                                                                       
  * Game actions are the actions which happen every game loop. This is a carefully
  * ordered list of functions, called each time round the loop. When one returns
- * a value which isn't NO_ACTION the list processing stops and what was returned
- * is the action to take for this time round the game loop.
+ * a value which isn't NO_ACTION the action it returns is processed. If the function
+ * indicates processing should stop for this cycle the rest of the list is skipped.
  *
  * This loop starts as the player has just been moved and respawned in his new
  * place, so the first checks should be to see if he's moved onto a gap to fall
@@ -188,10 +188,6 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
 LOOP_ACTION game_actions[] =
   {
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
-    /* FIXME This 500ms service can't do the pill erase/redraw. It needs to happen
-     * in the same cycle as the runner hits the pill or the timer expires. The pulsing
-     * can happen here, but the timer checks can't
-     */
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
     {test_for_finish,            NORMAL_WHEN_SLOWDOWN    },
     {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
