@@ -125,6 +125,7 @@ void init_runner_trace(void);
  * Adjust the runner's screen position depending on where he
  * is in the cycle of the jump animation, if at all.
  */
+PROCESSING_FLAG calculate_adjust_for_jump(void* data, GAME_ACTION* output_action);
 PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action);
 
 /*

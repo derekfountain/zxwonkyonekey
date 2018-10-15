@@ -195,6 +195,7 @@ LOOP_ACTION game_actions[] =
     {test_for_falling,           NORMAL_WHEN_SLOWDOWN    },
     {test_for_start_jump,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_direction_change,  NORMAL_WHEN_SLOWDOWN    },
+    {calculate_adjust_for_jump,  SLOW_WHEN_SLOWDOWN      },
     {act_on_collision,           NORMAL_WHEN_SLOWDOWN    },
     {adjust_for_jump,            SLOW_WHEN_SLOWDOWN      },
     {move_sideways,              SLOW_WHEN_SLOWDOWN      },

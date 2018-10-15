@@ -36,6 +36,7 @@ typedef struct _game_state
   uint8_t     key_processed;
 
   LEVEL_DATA* current_level;
+  int8_t      y_delta;
 } GAME_STATE;
 
 #endif

@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 #include <arch/zx.h>
 
 #include "collision.h"
@@ -95,6 +96,7 @@ static uint8_t is_attr_not( uint8_t x, uint8_t y, uint8_t att1, uint8_t att2 )
 }
 
 REACTION test_direction_blocked( uint8_t x, uint8_t y,
+				 int8_t  y_delta,
                                  DIRECTION facing, JUMP_STATUS jump_status, uint8_t background_att,
                                                                             uint8_t teleporter_att )
 {
@@ -182,7 +184,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
         /* Check if he's about to bang his foot */
         check_x = x+SPRITE_WIDTH;
-        check_y = y+SPRITE_HEIGHT-1;
+        check_y = y+SPRITE_HEIGHT-abs(y_delta);
 
 	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
@@ -191,7 +193,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
           /* Check if he's about to bang the front of his head */
           check_x = x+SPRITE_WIDTH;
-          check_y = y-1;
+          check_y = y-abs(y_delta);
 
 	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = DROP_VERTICALLY;
@@ -200,7 +202,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
 	    /* Check if he's about to bang the back of his head */
 	    check_x = x;
-	    check_y = y-1;
+	    check_y = y-abs(y_delta);
 
 	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
 	      result = DROP_VERTICALLY;
@@ -224,7 +226,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
         /* Check if he's about to bang his foot */
         check_x = x-1;
-        check_y = y+SPRITE_HEIGHT-1;
+        check_y = y+SPRITE_HEIGHT-abs(y_delta);
 
 	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
@@ -233,7 +235,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
           /* Check if he's about to bang the front of his head */
           check_x = x-1;
-          check_y = y-1;
+          check_y = y-abs(y_delta);
 
 	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = DROP_VERTICALLY;
@@ -242,7 +244,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
 	    /* Check if he's about to bang the back of his head */
 	    check_x = x+SPRITE_WIDTH;
-	    check_y = y-1;
+	    check_y = y-abs(y_delta);
 
 	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
 	      result = DROP_VERTICALLY;
@@ -266,7 +268,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
         /* Check if he's about to bang his foot */
         check_x = x+SPRITE_WIDTH;
-        check_y = y+SPRITE_HEIGHT-1;
+        check_y = y+SPRITE_HEIGHT-abs(y_delta);
 
 	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
@@ -307,7 +309,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
         /* Check if he's about to bang his foot */
         check_x = x-1;
-        check_y = y+SPRITE_HEIGHT-1;
+        check_y = y+SPRITE_HEIGHT-abs(y_delta);
 
 	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
@@ -358,7 +360,7 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
   uint8_t     background = game_state->current_level->background_att;
   uint8_t     teleporter = game_state->current_level->teleporter_att;
 
-  reaction = test_direction_blocked( xpos, ypos, facing, jump_status, background, teleporter );
+  reaction = test_direction_blocked( xpos, ypos, game_state->y_delta, facing, jump_status, background, teleporter );
   switch( reaction )
   {
   case BOUNCE:

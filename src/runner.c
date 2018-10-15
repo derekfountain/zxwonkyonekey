@@ -302,9 +302,9 @@ JUMP_STATUS get_runner_jump_status( void )
 }
 
 
-PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
+PROCESSING_FLAG calculate_adjust_for_jump(void* data, GAME_ACTION* output_action)
 {
-  (void)data;  /* Unused parameter, stop the compiler warning */
+  GAME_STATE* game_state = (GAME_STATE*)data;
 
   if( RUNNER_JUMPING(runner.jump_offset) ) {
     int8_t y_delta = jump_y_offsets[runner.jump_offset];
@@ -334,8 +334,24 @@ PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
       }
     }
 
-    runner.ypos -= y_delta;
+    game_state->y_delta = y_delta;
   }
+  else
+  {
+    game_state->y_delta = 0;
+  }
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}
+
+
+PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+
+  runner.ypos -= game_state->y_delta;
+  game_state->y_delta = 0;
 
   *output_action = NO_ACTION;
   return KEEP_PROCESSING;
