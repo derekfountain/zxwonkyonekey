@@ -25,35 +25,32 @@
 #include "runner.h"
 #include "utils.h"
 #include "scoring.h"
+#include "teleporter.h"
 #include "slowdown_pill.h"
 
 /*
- * Teleporter moves the runner from one screen location to another.
- * The x,y coords are pixels, required for testing against where
- * the sprite is. The x_cell,y_cell coords are cells, required for
- * tile invalidation. Both coord types are required each game loop
- * so it makes sense to store both types rather than calculate them
- * each time round.
- * Some teleporters change the runner's direction, so he might go in
- * facing left and come out facing right. That's the flag at the end.
+ * TODO I think I need a door.h and door.c
  */
-typedef struct _teleporter_defintion
+typedef struct _door_definition
 {
-  uint8_t end_1_y;
-  uint8_t end_1_x;
+  uint8_t switch_x;
+  uint8_t switch_y;
 
-  uint8_t end_1_y_cell;
-  uint8_t end_1_x_cell;
+  uint8_t            centre_x;
+  uint8_t            centre_y;
 
-  uint8_t end_2_y;
-  uint8_t end_2_x;
-
-  uint8_t end_2_y_cell;
-  uint8_t end_2_x_cell;
-
-  uint8_t change_direction;
-
-} TELEPORTER_DEFINITION;
+  /*
+   * TODO
+   * Active (or permanently open)
+   * Cell x,y
+   * "Under" range x-x,y
+   * Door colour
+   * Timer
+   * Animation timer
+   * Animation door y position
+   * 
+   */
+} DOOR_DEFINITION;
 
 /*
  * Tile definition is essentially a user defined graphic for the sp1 library.
@@ -98,6 +95,7 @@ typedef struct _level_data
   TILE_DEFINITION*       level_tiles;
   TELEPORTER_DEFINITION* teleporters;
   SLOWDOWN_DEFINITION*   slowdowns;
+  DOOR_DEFINITION*       doors;
 
   uint16_t               max_score;
   uint16_t               max_bonus;

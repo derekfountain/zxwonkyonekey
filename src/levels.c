@@ -23,6 +23,7 @@
 #include <malloc.h>
 
 #include "utils.h"
+#include "teleporter.h"
 #include "levels.h"
 
 /*
@@ -116,6 +117,11 @@ SLOWDOWN_DEFINITION level1_slowdowns[] = {
   {0}
 };
 
+DOOR_DEFINITION level2_doors[] = {
+  { 96, 128,  100, 132  },
+  {0}
+};
+
 LEVEL_DATA level_data[] = {
 
   /***
@@ -139,6 +145,7 @@ LEVEL_DATA level_data[] = {
     &level0_tiles[0],
     NULL,
     &level0_slowdowns[0],
+    NULL,
     MAX_POINTS(12500),
     MAX_BONUS(5000),
     { NAMED_VALUES_5("Level score X", 19,
@@ -169,6 +176,7 @@ LEVEL_DATA level_data[] = {
     &level1_tiles[0],
     &level1_teleporters[0],
     &level1_slowdowns[0],
+    NULL,
     MAX_POINTS(15000),
     MAX_BONUS(8000),
     { NAMED_VALUES_5("Level score X", 14,
@@ -188,7 +196,7 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level2_map,
     teardown_level,
-    START_POINT(240,00),
+    START_POINT(0,135),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
@@ -199,6 +207,7 @@ LEVEL_DATA level_data[] = {
     &level0_tiles[0],
     NULL,
     NULL,
+    &level2_doors[0],
     MAX_POINTS(20000),
     MAX_BONUS(12000),
     { NAMED_VALUES_5("Level score X", 19,

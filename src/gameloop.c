@@ -33,6 +33,7 @@
 #include "tracetable.h"
 #include "local_assert.h"
 #include "int.h"
+#include "teleporter.h"
 #include "collision.h"
 #include "scoring.h"
 

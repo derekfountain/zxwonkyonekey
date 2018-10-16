@@ -23,6 +23,7 @@
 #include "utils.h"
 #include "action.h"
 #include "runner.h"
+#include "teleporter.h"
 #include "game_state.h"
 #include "tracetable.h"
 #include "int.h"

@@ -95,6 +95,7 @@ HEADERS = action.h \
 	  gameloop.h \
 	  game_state.h \
 	  int.h \
+	  teleporter.h \
 	  key_action.h \
 	  levels.h \
 	  local_assert.h \
