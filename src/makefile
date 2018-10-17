@@ -90,12 +90,12 @@ PREPROCESSED = $(C_OBJECTS:.o=.cpre)
 # in the structures need to be avoided.
 HEADERS = action.h \
 	  collision.h \
+	  collectable.h \
 	  slowdown_pill.h \
 	  scoring.h \
 	  gameloop.h \
 	  game_state.h \
 	  int.h \
-	  collectable.h \
 	  teleporter.h \
 	  door.h \
 	  key_action.h \

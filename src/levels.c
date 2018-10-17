@@ -117,15 +117,16 @@ SLOWDOWN_DEFINITION level0_slowdowns[] = {
 
 SLOWDOWN_DEFINITION level1_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 180, "Sprite y", 128,
-                            "Sprite x", 184, "Sprite y", 132)}, PILL_AVAILABLE, SLOWDOWN_SECS(15)  },
+                            "Centre x", 184, "Centre y", 132)}, PILL_AVAILABLE, SLOWDOWN_SECS(15)  },
   { {INITIALISE_COLLECTABLE("Sprite x", 240, "Sprite y", 88,
-                            "Sprite x", 244, "Sprite y", 92)},  PILL_AVAILABLE, SLOWDOWN_SECS(12)  },
+                            "Centre x", 244, "Centre y", 92)},  PILL_AVAILABLE, SLOWDOWN_SECS(12)  },
   {{0,0,0,0},0}
 };
 
 DOOR_DEFINITION level2_doors[] = {
-  { 96, 128,  100, 132  },
-  {0}
+  { {INITIALISE_COLLECTABLE("Sprite x",  96, "Sprite y", 128,
+                            "Centre x", 100, "Centre y", 132)}, },
+  {{0,0,0,0}}
 };
 
 LEVEL_DATA level_data[] = {

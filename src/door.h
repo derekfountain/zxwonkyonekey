@@ -22,16 +22,19 @@
 
 #include <stdint.h>
 
+#include "collectable.h"
+
 /*
  *
  */
 typedef struct _door_definition
 {
-  uint8_t switch_x;
-  uint8_t switch_y;
+  COLLECTABLE        collectable;
 
-  uint8_t            centre_x;
-  uint8_t            centre_y;
+  /*
+Collectable works. It's not quite right, the interface needs to be generic
+enough to work on a door or a slowdown pill, but it's getting there.
+   */
 
   /*
    * TODO
