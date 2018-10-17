@@ -24,6 +24,7 @@
 
 #include "utils.h"
 #include "teleporter.h"
+#include "door.h"
 #include "levels.h"
 
 /*

@@ -26,31 +26,8 @@
 #include "utils.h"
 #include "scoring.h"
 #include "teleporter.h"
+#include "door.h"
 #include "slowdown_pill.h"
-
-/*
- * TODO I think I need a door.h and door.c
- */
-typedef struct _door_definition
-{
-  uint8_t switch_x;
-  uint8_t switch_y;
-
-  uint8_t            centre_x;
-  uint8_t            centre_y;
-
-  /*
-   * TODO
-   * Active (or permanently open)
-   * Cell x,y
-   * "Under" range x-x,y
-   * Door colour
-   * Timer
-   * Animation timer
-   * Animation door y position
-   * 
-   */
-} DOOR_DEFINITION;
 
 /*
  * Tile definition is essentially a user defined graphic for the sp1 library.
