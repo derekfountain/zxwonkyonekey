@@ -20,6 +20,8 @@
 #ifndef __SLOWDOWN_PILL_H
 #define __SLOWDOWN_PILL_H
 
+#include "collectable.h"
+
 typedef enum _slowdown_status
 {
   SLOWDOWN_INACTIVE,
@@ -40,18 +42,7 @@ typedef struct _slowdown_definition
 {
   /* Keep these first because they're statically initialised in the level data */
 
-  /* x,y pixel position to place the sprite */
-  uint8_t            x;
-  uint8_t            y;
-
-  /*
-   * The x,y position is the top left corner of the sprite. For collision purposes
-   * I want to check on the centre of sprite. This location is x,y plus 3 pixels
-   * in both directions, but since it's used every frame I store the values rather
-   * than do those additions every time.
-   */
-  uint8_t            centre_x;
-  uint8_t            centre_y;
+  COLLECTABLE        collectable;
 
   /*
    * Is pill available? This starts as yes, and is set to no when it gets eaten.
@@ -70,6 +61,13 @@ typedef struct _slowdown_definition
 
 } SLOWDOWN_DEFINITION;
 
+#define SLOWDOWN_SCREEN_LOCATION(slowdown) COLLECTABLE_SCREEN_LOCATION(slowdown->collectable)
+
+/*
+ * Macro answers true if the slowdown pointed to is valid. At the moment
+ * that's defined as the collectable being valid.
+ */
+#define IS_VALID_SLOWDOWN(slowdown) (IS_VALID_COLLECTABLE(slowdown->collectable))
 
 void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
 void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );

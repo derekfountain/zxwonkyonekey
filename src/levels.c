@@ -106,16 +106,21 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 };
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
-  { 184, 176,  188, 180,  PILL_AVAILABLE, SLOWDOWN_SECS(12) },
-  {  24,  64,   28,  68,  PILL_AVAILABLE, SLOWDOWN_SECS(15) },
-  { 208, 104,  210, 108,  PILL_AVAILABLE, SLOWDOWN_SECS(15) },
-  {0}
+  { {INITIALISE_COLLECTABLE("Sprite x", 184, "Sprite y", 176,
+                            "Centre x", 188, "Centre y", 180)}, PILL_AVAILABLE, SLOWDOWN_SECS(12) },
+  { {INITIALISE_COLLECTABLE("Sprite x",  24, "Sprite y",  64,
+                            "Centre x",  28, "Centre y",  68)}, PILL_AVAILABLE, SLOWDOWN_SECS(15) },
+  { {INITIALISE_COLLECTABLE("Sprite x", 208, "Sprite y", 104,
+                            "Centre x", 210, "Centre y", 108)}, PILL_AVAILABLE, SLOWDOWN_SECS(15) },
+  {{0,0,0,0},0}
 };
 
 SLOWDOWN_DEFINITION level1_slowdowns[] = {
-  { 180, 128,  184, 132,  PILL_AVAILABLE, SLOWDOWN_SECS(15)  },
-  { 240,  88,  244,  92,  PILL_AVAILABLE, SLOWDOWN_SECS(12)  },
-  {0}
+  { {INITIALISE_COLLECTABLE("Sprite x", 180, "Sprite y", 128,
+                            "Sprite x", 184, "Sprite y", 132)}, PILL_AVAILABLE, SLOWDOWN_SECS(15)  },
+  { {INITIALISE_COLLECTABLE("Sprite x", 240, "Sprite y", 88,
+                            "Sprite x", 244, "Sprite y", 92)},  PILL_AVAILABLE, SLOWDOWN_SECS(12)  },
+  {{0,0,0,0},0}
 };
 
 DOOR_DEFINITION level2_doors[] = {
@@ -304,7 +309,7 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
   {
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
-    while( slowdown->x || slowdown->y )
+    while( IS_VALID_COLLECTABLE(slowdown->collectable) )
     {
       create_slowdown_pill( slowdown );
       slowdown++;
@@ -320,7 +325,7 @@ void teardown_level(LEVEL_DATA* level_data)
   {
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
-    while( slowdown->x || slowdown->y )
+    while( IS_VALID_COLLECTABLE(slowdown->collectable) )
     {
       destroy_slowdown_pill( slowdown );
       slowdown++;

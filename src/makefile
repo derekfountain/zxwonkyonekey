@@ -95,6 +95,7 @@ HEADERS = action.h \
 	  gameloop.h \
 	  game_state.h \
 	  int.h \
+	  collectable.h \
 	  teleporter.h \
 	  door.h \
 	  key_action.h \

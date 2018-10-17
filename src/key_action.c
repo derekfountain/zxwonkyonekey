@@ -529,7 +529,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
     uint8_t ypos = get_runner_ypos();
 
     /* Loop over slowdown pills */
-    while( slowdown->x || slowdown->y )
+    while( IS_VALID_SLOWDOWN(slowdown) )
     {
       /*
        * If the pill has been consumed and is active, reduce the
@@ -563,7 +563,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 	     */
 	    SLOWDOWN_DEFINITION* check_slowdown = game_state->current_level->slowdowns;
 
-	    while( check_slowdown->x || check_slowdown->y )
+	    while( IS_VALID_SLOWDOWN(check_slowdown) )
 	    {
 	      /*
 	       * Pill availability is an 8 bit check, which is quicker than checking
@@ -571,7 +571,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 	       */
 	      if( check_slowdown->available == PILL_NOT_AVAILABLE )
 	      {
-		/* Pill not available, so it's timer is ticking down. Don't deactivate slowdown */
+		/* Pill not available, so its timer is ticking down. Don't deactivate slowdown */
 		*output_action = NO_ACTION;
 		break;
 	      }
@@ -585,10 +585,10 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       {
 	/*
 	 * Pill is available. If he's walked onto it mark it unavailable and start
-	 * it's timer. Call the code which animates it.
+	 * its timer. Call the code which animates it.
 	 */
-        if( (RUNNER_CENTRE_X(xpos) == slowdown->centre_x) &&
-            (RUNNER_CENTRE_Y(ypos) == slowdown->centre_y) )
+        if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
+                                 RUNNER_CENTRE_Y(ypos), slowdown->collectable) )
         {
           slowdown->available = PILL_NOT_AVAILABLE;
 

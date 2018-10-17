@@ -46,10 +46,15 @@ void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
   slowdown->sprite    = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, SLOWDOWN_PILL_PLANE);
   sp1_AddColSpr(slowdown->sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, SLOWDOWN_PILL_PLANE);
 
-  /* Pill sprite is created using absolute graphic data address */
-  sp1_MoveSprPix(slowdown->sprite, &full_screen,
-                 (void*)slowdown_pill_f1,
-                 slowdown->x, slowdown->y);
+  /*
+   * Pill sprite is created using absolute graphic data address.
+   * I use the _callee version specifically here because sp1_MoveSprPix()
+   * is itself a macro and putting the SLOWDOWN_SCREEN_LOCATION macro
+   * in the arguments breaks the preprocessor.
+   */
+  sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
+                        (void*)slowdown_pill_f1,
+                        SLOWDOWN_SCREEN_LOCATION(slowdown));
 }
 
 void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
@@ -125,7 +130,9 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
     }
 
     /* Set the correct graphic on the pill sprite */
-    sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, slowdown->x, slowdown->y);
+    sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
+                          next_frame,
+                          SLOWDOWN_SCREEN_LOCATION(slowdown));
   }
 
   /* Finally, invalidate the pill sprite so it redraws */

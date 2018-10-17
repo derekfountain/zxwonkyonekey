@@ -33,6 +33,7 @@
 #include "tracetable.h"
 #include "local_assert.h"
 #include "int.h"
+#include "slowdown_pill.h"
 #include "teleporter.h"
 #include "collision.h"
 #include "scoring.h"
@@ -141,7 +142,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
     if( slowdown != NULL )
     {
       /* Loop over any slowdown pills on screen and animate their graphic frames */
-      while( slowdown->x || slowdown->y )
+      while( IS_VALID_SLOWDOWN(slowdown) )
       {
 	animate_slowdown_pill( slowdown );
 	slowdown++;
