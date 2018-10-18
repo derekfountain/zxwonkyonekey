@@ -59,6 +59,7 @@ OBJECTS = gameloop.o \
           main.o \
           int.o \
 	  runner.o \
+	  collectable.o \
 	  slowdown_pill.o \
 	  runner_sprite.o \
           tracetable.o \
@@ -76,6 +77,7 @@ C_OBJECTS = gameloop.o \
             main.o \
             int.o \
 	    runner.o \
+	  collectable.o \
             slowdown_pill.o \
             tracetable.o \
 	    local_assert.o \

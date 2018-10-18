@@ -29,8 +29,11 @@
  * The interface is currently implemented using macros which is fast.
  */
 
+
 typedef struct _collectable
 {
+  uint16_t (*interface_fn)(uint16_t command, struct _collectable*, void* data);
+
   /* x,y pixel position to place the sprite */
   uint8_t            x;
   uint8_t            y;
@@ -47,8 +50,10 @@ typedef struct _collectable
 
 } COLLECTABLE;
 
+uint16_t collectable_interface( uint16_t command, COLLECTABLE* c, void* data );
+
 /* Named args macro to make initialisation code easier to read */
-#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc ) x,y,xc,yc
+#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc ) collectable_interface,x,y,xc,yc
 
 /* Macro to fetch the x,y location for a collectable's screen location */
 #define COLLECTABLE_SCREEN_LOCATION(c) c.x,c.y
@@ -64,6 +69,10 @@ typedef struct _collectable
  *                                                 
  *                                                 
  */
+
+#if 0
+#define IS_VALID_COLLECTABLE(obj)   ((COLLECTABLE*)&obj)->(c->interface_fn)(0,(COLLECTABLE*)&obj,(void*)0)
+#endif
 
 /*
  * Macro answers true if the collectable is valid. That's defined as its

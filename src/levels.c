@@ -114,7 +114,8 @@ SLOWDOWN_DEFINITION level0_slowdowns[] = {
                             "Centre x",  28, "Centre y",  68)}, PILL_AVAILABLE, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE("Sprite x", 208, "Sprite y", 104,
                             "Centre x", 210, "Centre y", 108)}, PILL_AVAILABLE, SLOWDOWN_SECS(15) },
-  {{0,0,0,0},0}
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0)}},
 };
 
 SLOWDOWN_DEFINITION level1_slowdowns[] = {
@@ -122,13 +123,15 @@ SLOWDOWN_DEFINITION level1_slowdowns[] = {
                             "Centre x", 184, "Centre y", 132)}, PILL_AVAILABLE, SLOWDOWN_SECS(15)  },
   { {INITIALISE_COLLECTABLE("Sprite x", 240, "Sprite y", 88,
                             "Centre x", 244, "Centre y", 92)},  PILL_AVAILABLE, SLOWDOWN_SECS(12)  },
-  {{0,0,0,0},0}
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0)}},
 };
 
 DOOR_DEFINITION level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Sprite x",  96, "Sprite y", 128,
                             "Centre x", 100, "Centre y", 132)}, },
-  {{0,0,0,0}}
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0)} },
 };
 
 LEVEL_DATA level_data[] = {
@@ -312,8 +315,16 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
   {
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
-    while( IS_VALID_COLLECTABLE(slowdown->collectable) )
+//    while( IS_VALID_COLLECTABLE(slowdown->collectable) )
+//    while( (*((COLLECTABLE*)slowdown)->interface_fn)(0,&(slowdown->collectable),(void*)0) )
+    while(1)
     {
+      COLLECTABLE* c = (COLLECTABLE*)slowdown;
+      if( !(c->interface_fn)( 0, c, 0 ) )
+	break;
+//      if( !(c->x) && !(c->y) )
+//	  break;
+
       create_slowdown_pill( slowdown );
       slowdown++;
     }
