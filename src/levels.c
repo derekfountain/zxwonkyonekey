@@ -38,6 +38,7 @@ extern uint8_t platform1v[8];
 extern uint8_t finish[8];
 extern uint8_t grassv[8];
 extern uint8_t teleporter[8];
+extern uint8_t door_key[8];
 
 /*
  * Maps, also in assembler because the strings require
@@ -74,6 +75,7 @@ TILE_DEFINITION level2_tiles[] = {
   {129, jumper},
   {130, finish},
   {131, grassv},
+  {132, door_key},
   {0,   {0}   }
 };
 
@@ -211,7 +213,7 @@ LEVEL_DATA level_data[] = {
                    "Jumper",     INK_RED|PAPER_GREEN,
                    "Teleporter", INK_BLACK|PAPER_WHITE,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
-    &level0_tiles[0],
+    &level2_tiles[0],
     NULL,
     NULL,
     &level2_doors[0],

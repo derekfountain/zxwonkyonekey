@@ -1,3 +1,8 @@
+	;LEVEL DESIGNER PASSTHROUGH START
+        defb 0x10, 0x00, 0x11, 0x07 ; ink black, paper white
+        defb 0x16, 0x16, 0x5   ; AT 22,5
+        defb 132 ; key
+	;LEVEL DESIGNER PASSTHROUGH END
         defb 0x10, 0x07, 0x11, 0x00 ; ink white, paper black
         defb 0x16, 0x14, 0x1F   ; AT 20,31
         defb 0x80 ; solidh

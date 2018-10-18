@@ -103,7 +103,27 @@ PUBLIC _teleporter
         defb @10100101
         defb @01000010
 
+PUBLIC _door_key
+._door_key
+        defb @01100000
+        defb @10010000
+        defb @01100000
+        defb @00010000
+        defb @00001000
+        defb @00010100
+        defb @00000010
+        defb @00000100
 
+PUBLIC _door
+._door
+        defb @11111111
+        defb @10110101
+        defb @11101011
+        defb @11011101
+        defb @11110111
+        defb @11111111
+        defb @11011011
+        defb @11000011
 
 
 ;;     _____ _                  _                       _____ _ _ _ 
