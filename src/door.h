@@ -34,6 +34,12 @@ typedef struct _door_definition
   /*
 Collectable works. It's not quite right, the interface needs to be generic
 enough to work on a door or a slowdown pill, but it's getting there.
+
+I need an animated sprite for the key, plus a non animated one for the door.
+
+Then I need to share the slowdown pill code which draws the pill graphic, I want
+to reuse it for the key. Then make the collection code generic so it's reused
+for the key collection.
    */
 
   /*
