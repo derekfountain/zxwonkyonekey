@@ -27,10 +27,6 @@ extern uint8_t slowdown_pill_f1[];
 extern uint8_t slowdown_pill_f2[];
 extern uint8_t slowdown_pill_f3[];
 
-extern uint8_t door_key_f1[];
-extern uint8_t door_key_f2[];
-extern uint8_t door_key_f3[];
-
 /*
  * This is defined in main.c. Just share it for now.
  */
@@ -57,7 +53,7 @@ void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
    * in the arguments breaks the preprocessor.
    */
   sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
-                        (void*)door_key_f1/*slowdown_pill_f1*/,
+                        (void*)slowdown_pill_f1,
                         SLOWDOWN_SCREEN_LOCATION(slowdown));
 }
 
@@ -91,7 +87,7 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
   if( slowdown->available == PILL_NOT_AVAILABLE )
   {
     /* Move it off screen so it disappears */
-    next_frame = (uint8_t*)door_key_f1/*slowdown_pill_f1*/;
+    next_frame = (uint8_t*)slowdown_pill_f1;
     sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
   }
   else
@@ -101,17 +97,17 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
       if( slowdown->frame == 0 )
       {
         slowdown->frame = 1;
-        next_frame = (uint8_t*)door_key_f2/*slowdown_pill_f2*/;
+        next_frame = (uint8_t*)slowdown_pill_f2;
       }
       else if( slowdown->frame == 1 )
       {
         slowdown->frame = 2;
-        next_frame = (uint8_t*)door_key_f3/*slowdown_pill_f3*/;
+        next_frame = (uint8_t*)slowdown_pill_f3;
       }
       else /* slowdown->frame == 2 */
       {
         slowdown->expanding = 0;
-        next_frame = (uint8_t*)door_key_f3/*slowdown_pill_f3*/;
+        next_frame = (uint8_t*)slowdown_pill_f3;
       }
     }
     else
@@ -119,17 +115,17 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
       if( slowdown->frame == 0 )
       {
         slowdown->expanding = 1;
-        next_frame = (uint8_t*)door_key_f1/*slowdown_pill_f1*/;
+        next_frame = (uint8_t*)slowdown_pill_f1;
       }
       else if( slowdown->frame == 1 )
       {
         slowdown->frame = 0;
-        next_frame = (uint8_t*)door_key_f1/*slowdown_pill_f1*/;
+        next_frame = (uint8_t*)slowdown_pill_f1;
       }
       else /* slowdown->frame == 2 */
       {
         slowdown->frame = 1;
-        next_frame = (uint8_t*)door_key_f2/*slowdown_pill_f2*/;
+        next_frame = (uint8_t*)slowdown_pill_f2;
       }
     }
 
