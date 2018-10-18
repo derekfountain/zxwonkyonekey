@@ -182,3 +182,66 @@ PUBLIC _slowdown_pill_f3
 	defb @00000000
 	defb @00000000
 	defb @00000000
+
+
+
+
+PUBLIC _door_key_f1
+._door_key_f1
+	defb @01100000
+	defb @10010000
+	defb @01100000
+	defb @00010000
+	defb @00001000
+	defb @00010100
+	defb @00000010
+	defb @00000100
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+PUBLIC _door_key_f2
+._door_key_f2
+	defb @00010000
+	defb @00010000
+	defb @00010000
+	defb @00010000
+	defb @00010000
+	defb @00010000
+	defb @00010000
+	defb @00010000
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+
+PUBLIC _door_key_f3
+._door_key_f3
+	defb @00000110
+	defb @00001001
+	defb @00000110
+	defb @00001000
+	defb @00010000
+	defb @00101000
+	defb @01000000
+	defb @00100000
+
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
+	defb @00000000
