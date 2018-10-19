@@ -18,21 +18,6 @@
  */
 
 #include <stdint.h>
-#include <arch/zx.h>
 #include "collectable.h"
 
-uint16_t collectable_interface( uint16_t command, COLLECTABLE* c, void* data )
-{
-#if 1
-  switch( command )
-  {
-    case 0:
-//      zx_border(1); while(1);
-      return (c->x || c->y);
-
-  }
-#endif
-
-      zx_border(1); while(1);
-  return 0;
-}
+/* NOP at the moment */

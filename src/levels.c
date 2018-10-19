@@ -315,16 +315,8 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
   {
     SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
 
-//    while( IS_VALID_COLLECTABLE(slowdown->collectable) )
-//    while( (*((COLLECTABLE*)slowdown)->interface_fn)(0,&(slowdown->collectable),(void*)0) )
-    while(1)
+    while( IS_VALID_COLLECTABLE(slowdown->collectable) )
     {
-      COLLECTABLE* c = (COLLECTABLE*)slowdown;
-      if( !(c->interface_fn)( 0, c, 0 ) )
-	break;
-//      if( !(c->x) && !(c->y) )
-//	  break;
-
       create_slowdown_pill( slowdown );
       slowdown++;
     }

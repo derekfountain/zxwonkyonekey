@@ -32,19 +32,10 @@ typedef struct _door_definition
   COLLECTABLE        collectable;
 
   /*
-Collectable works. It's not quite right, the interface needs to be generic
-enough to work on a door or a slowdown pill, but it's getting there. Keys
-are going to be collectable too, so I think I need to build a linked list
-of collectables in the collectable code which I can walk each game loop
-checking if the collectable is at the runner location. If it is run the
-collectable's collection function, which has to differ - keys will do
-something different to slowdown pills when collected.
-
 I used a non animated sprite for the key, which I need to make flicker using
 an attribute loop. The door needs to be a sprite (it's currently a UGD) so
 it can be pixel positioned. It doesn't need animation, but Y coord is
-necessary. X coord too if I make them able to be trapdoors. So maybe a
-Flickerable class? Probably not, at the moment it's hard to see the reuse case.
+necessary. X coord too if I make them able to be trapdoors.
 
 OTOH there's common ground here. The pills pulse. The keys will flicker. Loop
 over collectables, call their animation function if there is one?
