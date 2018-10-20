@@ -166,16 +166,21 @@ const int8_t jump_y_offsets[40] =  { 2,  2,  2,  2,    2,  1,  1,  1,
 RUNNER runner;
 
 /*
- * Runner is LOAD'ed into the display at the back, which is the quickest
- * way of getting him on screen. Other artefacts are placed closer to the
- * viewer and are OR'ed into what's already there, including the runner.
+ * Runner used to be LOAD'ed into the display at the back, which is the quickest
+ * way of getting him on screen. Other artefacts were placed closer to the
+ * viewer and OR'ed into what's already there, including the runner. That was
+ * fine until keys came along. They're a tile and LOADing the runner removed
+ * them - they flickered as he walked over them. Changing this is an OR makes
+ * him merge with the key until he reaches the pixel where he picks the key
+ * up. I was disappointed to lose the LOAD but the only option was to make
+ * the key a sprite which would probably have been more expensive still.
  */
 #define RUNNER_PLANE    (uint8_t)(20)
 
 RUNNER* create_runner( DIRECTION initial_direction )
 {
-  runner.sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, RUNNER_PLANE);
-  sp1_AddColSpr(runner.sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, RUNNER_PLANE);
+  runner.sprite = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, RUNNER_PLANE);
+  sp1_AddColSpr(runner.sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, RUNNER_PLANE);
 
   /*
    * The sprite is actually 6 pixels wide, not 8, so it can be rotated
