@@ -31,6 +31,18 @@ typedef struct _door_definition
 {
   COLLECTABLE        collectable;
 
+  uint8_t            key_ink;
+  uint8_t            key_paper;
+  uint8_t            key_x;
+  uint8_t            key_y;
+
+  /*
+   * Keys are displayed using a single tile - a UDG in effect. Which UDG depends on
+   * how the UDGs are set up for the level, so the actual key UDG is in the door
+   * definition.
+   */
+  uint8_t            key_tile_num;
+
   /*
 I used a non animated sprite for the key, which I need to make flicker using
 an attribute loop. The door needs to be a sprite (it's currently a UGD) so
@@ -53,6 +65,7 @@ over collectables, call their animation function if there is one?
    * 
    */
 } DOOR_DEFINITION;
+
 
 void create_door( DOOR_DEFINITION* door );
 void destroy_door( DOOR_DEFINITION* door );

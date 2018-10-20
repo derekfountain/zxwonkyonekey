@@ -129,9 +129,14 @@ SLOWDOWN_DEFINITION level1_slowdowns[] = {
 
 DOOR_DEFINITION level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Sprite x",  96, "Sprite y", 128,
-                            "Centre x", 100, "Centre y", 132)}, },
+                            "Centre x", 100, "Centre y", 132)},
+    NAMED_VALUES_1("Key ink",    0),
+    NAMED_VALUES_1("Key paper",  7),
+    NAMED_VALUES_1("Key X",      5),
+    NAMED_VALUES_1("Key Y",     22),
+    NAMED_VALUES_1("Key tile", 132) },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
-                            "Centre x",   0, "Centre y",   0)} },
+                            "Centre x",   0, "Centre y",   0)}, 0 },
 };
 
 LEVEL_DATA level_data[] = {
@@ -253,14 +258,23 @@ extern struct sp1_Rect full_screen;
  * bytes. There will be more efficient ways to do this. OTOH, this is
  * supposed to be an SP1 learning exercise, so I'm doing it the SP1 way.
  */
+
+/*
+ * Keep print control structure global so the compiler can allocate it.
+ * Also, this can be used from any other part of the level display
+ * which needs SP1 print control (after the level printing code which
+ * initialises it has run).
+ */
+struct sp1_pss level_print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
+                                       0, 0,
+                                       0x00, 0,
+                                       0,
+                                       0 };
 void print_level_from_sp1_string(LEVEL_DATA* level_data)
 {
   TILE_DEFINITION* tile_ptr;
-  struct sp1_pss print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
-                                   0, 0,
-                                   0x00, level_data->background_att,
-                                   0,
-                                   0 };
+
+  level_print_control.attr = level_data->background_att;
 
   /* Reset screen, remove tiles and sprites, and reset to new colours */
   sp1_ClearRectInv( &full_screen, level_data->background_att, ' ', SP1_RFLAG_TILE|
@@ -276,7 +290,7 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
   }
 
   /* Print the string from the levels map data */
-  sp1_PrintString(&print_control, (uint8_t*)(level_data->draw_data));
+  sp1_PrintString(&level_print_control, (uint8_t*)(level_data->draw_data));
 
   /*
    * If the level has teleporters they are filled in here. These could be
@@ -292,6 +306,7 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
 
     while( teleporter->end_1_x || teleporter->end_1_y )
     {
+      /* TODO Pull this out into a teleporter.c file */
       uint8_t print_string[5];
       
       print_string[0] = '\x16';
@@ -300,12 +315,12 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
       print_string[3] = '\x84';
       print_string[4] = '\0';
 
-      sp1_PrintString(&print_control, print_string);
+      sp1_PrintString(&level_print_control, print_string);
 
       print_string[1] = teleporter->end_2_y_cell;
       print_string[2] = teleporter->end_2_x_cell;
 
-      sp1_PrintString(&print_control, print_string);
+      sp1_PrintString(&level_print_control, print_string);
     
       teleporter++;
     }

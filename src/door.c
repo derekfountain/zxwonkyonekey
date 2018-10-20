@@ -28,14 +28,30 @@
 extern struct sp1_Rect full_screen;
 
 /*
+ * This is in the levels code. It can only be used after the levels code
+ * has initialised it.
+ */
+extern struct sp1_pss level_print_control;
+
+/*
  * The door sits closer to the viewer and is OR'ed into the display.
  * The runner is behind, LOAD'ed in so that's fast, the door is OR'ed
  * over the top.
  */
 #define DOOR_PLANE    (uint8_t)(1)
 
+static uint8_t key_sp1_string[9] = "\x16" "yx" "\x10" "i" "\x11" "p" "t";
 void create_door( DOOR_DEFINITION* door )
 {
+  /* Build and print the string to display the key */
+  key_sp1_string[1] = door->key_y;
+  key_sp1_string[2] = door->key_x;
+  key_sp1_string[4] = door->key_ink;
+  key_sp1_string[6] = door->key_paper;
+  key_sp1_string[7] = door->key_tile_num;
+
+  sp1_PrintString(&level_print_control, key_sp1_string);
+
   /*
    * Key is a tile, placed at its x,y cell. It's not a static thing like a jumper
    * so it's probably best handled here.
