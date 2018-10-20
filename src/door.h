@@ -54,5 +54,8 @@ over collectables, call their animation function if there is one?
    */
 } DOOR_DEFINITION;
 
+void create_door( DOOR_DEFINITION* door );
+void destroy_door( DOOR_DEFINITION* door );
+
 
 #endif

@@ -321,6 +321,18 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
       slowdown++;
     }
   }
+
+  if( level_data->doors )
+  {
+    DOOR_DEFINITION* door = level_data->doors;
+
+    while( IS_VALID_COLLECTABLE(door->collectable) )
+    {
+      create_door( door );
+      door++;
+    }
+  }
+
 }
 
 
@@ -335,6 +347,17 @@ void teardown_level(LEVEL_DATA* level_data)
     {
       destroy_slowdown_pill( slowdown );
       slowdown++;
+    }
+  }
+
+  if( level_data->doors )
+  {
+    DOOR_DEFINITION* door = level_data->doors;
+
+    while( IS_VALID_COLLECTABLE(door->collectable) )
+    {
+      destroy_door( door );
+      door++;
     }
   }
 
