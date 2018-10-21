@@ -25,12 +25,16 @@
 #include "collectable.h"
 
 /*
- *
+ * A door is made up of a key, which is a tile, and a door which moves
+ * when the key is collected. The door is a sprite.
  */
 typedef struct _door_definition
 {
   COLLECTABLE        collectable;
 
+  /*
+   * Key is a tile, so this is SP1 cell information
+   */
   uint8_t            key_ink;
   uint8_t            key_paper;
   uint8_t            key_x;

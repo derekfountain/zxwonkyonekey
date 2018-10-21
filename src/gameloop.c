@@ -194,6 +194,7 @@ LOOP_ACTION game_actions[] =
     {test_for_finish,            NORMAL_WHEN_SLOWDOWN    },
     {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_slowdown_pill,     NORMAL_WHEN_SLOWDOWN    },
+    // Add new one for key collection
     {test_for_falling,           NORMAL_WHEN_SLOWDOWN    },
     {test_for_start_jump,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_direction_change,  NORMAL_WHEN_SLOWDOWN    },
