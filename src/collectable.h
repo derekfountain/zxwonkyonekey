@@ -29,12 +29,17 @@
  * The interface is currently implemented using macros which is fast.
  */
 
+typedef enum _collectable_availability
+{
+  COLLECTABLE_NOT_AVAILABLE,
+  COLLECTABLE_AVAILABLE,
+} COLLECTABLE_AVAILABILITY;
 
 typedef struct _collectable
 {
   /* x,y pixel position to place the sprite */
-  uint8_t            x;
-  uint8_t            y;
+  uint8_t                   x;
+  uint8_t                   y;
 
   /*
    * The x,y position is the top left corner of the sprite. For collision purposes
@@ -43,13 +48,20 @@ typedef struct _collectable
    * store the values rather than do those additions every time. If different
    * sprites ever need to collide with collectable this will need a rethink.
    */
-  uint8_t            centre_x;
-  uint8_t            centre_y;
+  uint8_t                   centre_x;
+  uint8_t                   centre_y;
+
+  /*
+   * Is available? This typically starts as yes, and is set to no when it gets
+   * collected.
+   */
+  COLLECTABLE_AVAILABILITY  available;
 
 } COLLECTABLE;
 
 /* Named args macro to make initialisation code easier to read */
-#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc ) x,y,xc,yc
+#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc ) \
+                  x,y,xc,yc,COLLECTABLE_AVAILABLE
 
 /* Macro to fetch the x,y location for a collectable's screen location */
 #define COLLECTABLE_SCREEN_LOCATION(c) c.x,c.y
@@ -73,7 +85,16 @@ typedef struct _collectable
  */
 #define IS_VALID_COLLECTABLE(collectable) (collectable.x || collectable.y)
 
+/*
+ * Collection point is the x,y pixel location of the collectable.
+ */
 #define IS_COLLECTION_POINT(x,y,collectable) ( (x == collectable.centre_x) && \
                                                (y == collectable.centre_y) )
+
+/*
+ * Available is a simple flag in the structure.
+ */
+#define IS_COLLECTABLE_AVAILABLE(collectable) (collectable.available == COLLECTABLE_AVAILABLE)
+#define SET_COLLECTABLE_AVAILABLE(collectable,a) collectable.available=a
 
 #endif

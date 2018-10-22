@@ -109,20 +109,20 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 184, "Sprite y", 176,
-                            "Centre x", 188, "Centre y", 180)}, PILL_AVAILABLE, SLOWDOWN_SECS(12) },
+                            "Centre x", 188, "Centre y", 180)}, SLOWDOWN_SECS(12) },
   { {INITIALISE_COLLECTABLE("Sprite x",  24, "Sprite y",  64,
-                            "Centre x",  28, "Centre y",  68)}, PILL_AVAILABLE, SLOWDOWN_SECS(15) },
+                            "Centre x",  28, "Centre y",  68)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE("Sprite x", 208, "Sprite y", 104,
-                            "Centre x", 210, "Centre y", 108)}, PILL_AVAILABLE, SLOWDOWN_SECS(15) },
+                            "Centre x", 210, "Centre y", 108)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0)}},
 };
 
 SLOWDOWN_DEFINITION level1_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 180, "Sprite y", 128,
-                            "Centre x", 184, "Centre y", 132)}, PILL_AVAILABLE, SLOWDOWN_SECS(15)  },
+                            "Centre x", 184, "Centre y", 132)}, SLOWDOWN_SECS(15)  },
   { {INITIALISE_COLLECTABLE("Sprite x", 240, "Sprite y", 88,
-                            "Centre x", 244, "Centre y", 92)},  PILL_AVAILABLE, SLOWDOWN_SECS(12)  },
+                            "Centre x", 244, "Centre y", 92)},  SLOWDOWN_SECS(12)  },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0)}},
 };

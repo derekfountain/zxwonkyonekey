@@ -535,11 +535,11 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
        * If the pill has been consumed and is active, reduce the
        * timer. If that's got to zero, reinstate the pill.
        */
-      if( (slowdown->available == PILL_NOT_AVAILABLE) )
+      if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
       {
 	if( --slowdown->complete_timer == 0 )
 	{
-	  slowdown->available = PILL_AVAILABLE;
+	  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_AVAILABLE);
 	  *output_action = DEACTIVATE_SLOWDOWN;
 
           /*
@@ -569,7 +569,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 	       * Pill availability is an 8 bit check, which is quicker than checking
 	       * the 16 bit timer value for non-zero. I think. :)
 	       */
-	      if( check_slowdown->available == PILL_NOT_AVAILABLE )
+	      if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
 	      {
 		/* Pill not available, so its timer is ticking down. Don't deactivate slowdown */
 		*output_action = NO_ACTION;
@@ -590,7 +590,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
                                  RUNNER_CENTRE_Y(ypos), slowdown->collectable) )
         {
-          slowdown->available = PILL_NOT_AVAILABLE;
+	  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_NOT_AVAILABLE);
 
           /* Design breakage - see comment above */
           animate_slowdown_pill( slowdown );

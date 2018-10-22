@@ -28,12 +28,6 @@ typedef enum _slowdown_status
   SLOWDOWN_ACTIVE,
 } SLOWDOWN_STATUS;
 
-typedef enum _pill_availability
-{
-  PILL_AVAILABLE,
-  PILL_NOT_AVAILABLE,
-} PILL_AVAILABILITY;
-
 /*
  * Slowdown point, stored as an x,y pixel location. This structure also
  * contains the sprite and animation bits.
@@ -44,12 +38,6 @@ typedef struct _slowdown_definition
 
   COLLECTABLE        collectable;
 
-  /*
-   * Is pill available? This starts as yes, and is set to no when it gets eaten.
-   * The graphic is then removed from screen. It's reset yes when the timer
-   * expires and it reappears.
-   */
-  PILL_AVAILABILITY  available;
   uint8_t            duration_secs;
 
   /* These are not statically initialised */

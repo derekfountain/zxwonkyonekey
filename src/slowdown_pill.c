@@ -34,8 +34,9 @@ extern struct sp1_Rect full_screen;
 
 /*
  * The pill sits closer to the viewer and is OR'ed into the display.
- * The runner is behind, LOAD'ed in so that's fast, the pill is OR'ed
- * over the top.
+ * The runner is behind, OR'ed in, the pill is OR'ed over the top.
+ * The runner used to be LOAD'ed, these separate planes are probably
+ * now redundant.
  */
 #define SLOWDOWN_PILL_PLANE    (uint8_t)(1)
 
@@ -84,7 +85,7 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
    */
   uint8_t* next_frame;
 
-  if( slowdown->available == PILL_NOT_AVAILABLE )
+  if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
   {
     /* Move it off screen so it disappears */
     next_frame = (uint8_t*)slowdown_pill_f1;
