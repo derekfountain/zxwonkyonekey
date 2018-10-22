@@ -23,6 +23,7 @@
 #include <malloc.h>
 
 #include "utils.h"
+#include "slowdown_pill.h"
 #include "teleporter.h"
 #include "door.h"
 #include "levels.h"
@@ -109,34 +110,43 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 
 SLOWDOWN_DEFINITION level0_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 184, "Sprite y", 176,
-                            "Centre x", 188, "Centre y", 180)}, SLOWDOWN_SECS(12) },
+                            "Centre x", 188, "Centre y", 180,
+                            slowdown_collected)}, SLOWDOWN_SECS(12) },
   { {INITIALISE_COLLECTABLE("Sprite x",  24, "Sprite y",  64,
-                            "Centre x",  28, "Centre y",  68)}, SLOWDOWN_SECS(15) },
+                            "Centre x",  28, "Centre y",  68,
+                            slowdown_collected)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE("Sprite x", 208, "Sprite y", 104,
-                            "Centre x", 210, "Centre y", 108)}, SLOWDOWN_SECS(15) },
+                            "Centre x", 210, "Centre y", 108,
+                            slowdown_collected)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
-                            "Centre x",   0, "Centre y",   0)}},
+                            "Centre x",   0, "Centre y",   0,
+                            0)}},
 };
 
 SLOWDOWN_DEFINITION level1_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 180, "Sprite y", 128,
-                            "Centre x", 184, "Centre y", 132)}, SLOWDOWN_SECS(15)  },
+                            "Centre x", 184, "Centre y", 132,
+                            slowdown_collected)}, SLOWDOWN_SECS(15)  },
   { {INITIALISE_COLLECTABLE("Sprite x", 240, "Sprite y", 88,
-                            "Centre x", 244, "Centre y", 92)},  SLOWDOWN_SECS(12)  },
+                            "Centre x", 244, "Centre y", 92,
+                            slowdown_collected)},  SLOWDOWN_SECS(12)  },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
-                            "Centre x",   0, "Centre y",   0)}},
+                            "Centre x",   0, "Centre y",   0,
+                            0)}},
 };
 
 DOOR_DEFINITION level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Sprite x",  96, "Sprite y", 128,
-                            "Centre x", 100, "Centre y", 132)},
+                            "Centre x", 100, "Centre y", 132,
+                            slowdown_collected)},
     NAMED_VALUES_1("Key ink",    0),
     NAMED_VALUES_1("Key paper",  7),
     NAMED_VALUES_1("Key X",      5),
     NAMED_VALUES_1("Key Y",     22),
     NAMED_VALUES_1("Key tile", 132) },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
-                            "Centre x",   0, "Centre y",   0)}, 0 },
+                            "Centre x",   0, "Centre y",   0,
+                            0)}, 0 },
 };
 
 LEVEL_DATA level_data[] = {

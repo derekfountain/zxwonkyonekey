@@ -34,18 +34,15 @@ typedef enum _slowdown_status
  */
 typedef struct _slowdown_definition
 {
-  /* Keep these first because they're statically initialised in the level data */
-
   COLLECTABLE        collectable;
 
   uint8_t            duration_secs;
 
-  /* These are not statically initialised */
-  struct sp1_ss* sprite;
-  uint8_t        frame;
-  uint8_t        expanding;
+  struct sp1_ss*     sprite;
+  uint8_t            frame;
+  uint8_t            expanding;
 
-  uint16_t       complete_timer; 
+  uint16_t           complete_timer; 
 
 } SLOWDOWN_DEFINITION;
 
@@ -60,5 +57,7 @@ typedef struct _slowdown_definition
 void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
 void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
 void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
+
+void slowdown_collected(COLLECTABLE* collectable, void* data);
 
 #endif

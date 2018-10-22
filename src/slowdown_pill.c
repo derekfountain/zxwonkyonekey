@@ -139,3 +139,31 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
   /* Finally, invalidate the pill sprite so it redraws */
   sp1_IterateUpdateSpr(slowdown->sprite, invalidatePillSprite);
 }
+
+
+/*
+ * Collectable collection handler, called when the the runner
+ * collects the slowdown pill. Set the pill unavailable and
+ * update the screen accordingly, then start the timer to count
+ * down the time the runner is moving slowly.
+ */
+void slowdown_collected(COLLECTABLE* collectable, void* data)
+{
+  SLOWDOWN_DEFINITION* slowdown = (SLOWDOWN_DEFINITION*)data;
+  (void)collectable;
+
+  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_NOT_AVAILABLE);
+
+  /*
+   * Bit of a design breakage here. Updating screen data in a collectable
+   * handler. But it's simple and readable, and the option is to create
+   * a new gameloop action function to do it, which would be wasteful.
+   * Do it this way for now.
+   */
+  animate_slowdown_pill( slowdown );
+
+  slowdown->complete_timer = slowdown->duration_secs*50;
+
+  return;
+}
+

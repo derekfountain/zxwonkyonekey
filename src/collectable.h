@@ -57,11 +57,14 @@ typedef struct _collectable
    */
   COLLECTABLE_AVAILABILITY  available;
 
+  /* Function to call when collected */
+  void                      (*collection_fn)(struct _collectable*, void*);
+
 } COLLECTABLE;
 
 /* Named args macro to make initialisation code easier to read */
-#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc ) \
-                  x,y,xc,yc,COLLECTABLE_AVAILABLE
+#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc, fn ) \
+                   x,y,xc,yc,COLLECTABLE_AVAILABLE,fn
 
 /* Macro to fetch the x,y location for a collectable's screen location */
 #define COLLECTABLE_SCREEN_LOCATION(c) c.x,c.y

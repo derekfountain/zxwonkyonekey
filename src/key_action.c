@@ -513,7 +513,6 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
  *                                                                         
  *                                                                         
  */
-
 PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
@@ -590,12 +589,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
                                  RUNNER_CENTRE_Y(ypos), slowdown->collectable) )
         {
-	  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_NOT_AVAILABLE);
-
-          /* Design breakage - see comment above */
-          animate_slowdown_pill( slowdown );
-
-          slowdown->complete_timer = slowdown->duration_secs*50;
+          (*(slowdown->collectable.collection_fn))( &(slowdown->collectable), (void*)slowdown );
 
           *output_action = ACTIVATE_SLOWDOWN;
           break;
