@@ -108,7 +108,7 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
   {0}
 };
 
-SLOWDOWN_DEFINITION level0_slowdowns[] = {
+SLOWDOWN level0_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 184, "Sprite y", 176,
                             "Centre x", 188, "Centre y", 180,
                             slowdown_collected)}, SLOWDOWN_SECS(12) },
@@ -123,7 +123,7 @@ SLOWDOWN_DEFINITION level0_slowdowns[] = {
                             0)}},
 };
 
-SLOWDOWN_DEFINITION level1_slowdowns[] = {
+SLOWDOWN level1_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 180, "Sprite y", 128,
                             "Centre x", 184, "Centre y", 132,
                             slowdown_collected)}, SLOWDOWN_SECS(15)  },
@@ -338,7 +338,7 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
 
   if( level_data->slowdowns )
   {
-    SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
+    SLOWDOWN* slowdown = level_data->slowdowns;
 
     while( IS_VALID_COLLECTABLE(slowdown->collectable) )
     {
@@ -366,7 +366,7 @@ void teardown_level(LEVEL_DATA* level_data)
   /* Reclaim slowdown pill memory (SP1 structs, etc)*/
   if( level_data->slowdowns )
   {
-    SLOWDOWN_DEFINITION* slowdown = level_data->slowdowns;
+    SLOWDOWN* slowdown = level_data->slowdowns;
 
     while( IS_VALID_COLLECTABLE(slowdown->collectable) )
     {

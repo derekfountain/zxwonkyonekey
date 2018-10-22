@@ -44,7 +44,7 @@ typedef struct _slowdown_definition
 
   uint16_t           complete_timer; 
 
-} SLOWDOWN_DEFINITION;
+} SLOWDOWN;
 
 #define SLOWDOWN_SCREEN_LOCATION(slowdown) COLLECTABLE_SCREEN_LOCATION(slowdown->collectable)
 
@@ -54,9 +54,9 @@ typedef struct _slowdown_definition
  */
 #define IS_VALID_SLOWDOWN(slowdown) (IS_VALID_COLLECTABLE(slowdown->collectable))
 
-void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
-void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
-void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown );
+void create_slowdown_pill( SLOWDOWN* slowdown );
+void destroy_slowdown_pill( SLOWDOWN* slowdown );
+void animate_slowdown_pill( SLOWDOWN* slowdown );
 
 void slowdown_collected(COLLECTABLE* collectable, void* data);
 

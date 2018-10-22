@@ -137,7 +137,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
   if( interrupt_service_required_500ms )
   {
     GAME_STATE* game_state = (GAME_STATE*)data;
-    SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
+    SLOWDOWN* slowdown = game_state->current_level->slowdowns;
 
     if( slowdown != NULL )
     {

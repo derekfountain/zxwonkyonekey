@@ -71,7 +71,7 @@ typedef struct _level_data
 
   TILE_DEFINITION*       level_tiles;
   TELEPORTER_DEFINITION* teleporters;
-  SLOWDOWN_DEFINITION*   slowdowns;
+  SLOWDOWN*              slowdowns;
   DOOR_DEFINITION*       doors;
 
   uint16_t               max_score;

@@ -522,7 +522,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
   /* Skip everything if this level doesn't have slowdown pills */
   if( game_state->current_level->slowdowns )
   {
-    SLOWDOWN_DEFINITION* slowdown = game_state->current_level->slowdowns;
+    SLOWDOWN* slowdown = game_state->current_level->slowdowns;
 
     uint8_t xpos = get_runner_xpos();
     uint8_t ypos = get_runner_ypos();
@@ -562,7 +562,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 	     * So this loop checks the other pills in the level and only sets the
 	     * deactivation return value if none of them is counting down its timer.
 	     */
-	    SLOWDOWN_DEFINITION* check_slowdown = game_state->current_level->slowdowns;
+	    SLOWDOWN* check_slowdown = game_state->current_level->slowdowns;
 
 	    while( IS_VALID_SLOWDOWN(check_slowdown) )
 	    {

@@ -40,7 +40,7 @@ extern struct sp1_Rect full_screen;
  */
 #define SLOWDOWN_PILL_PLANE    (uint8_t)(1)
 
-void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
+void create_slowdown_pill( SLOWDOWN* slowdown )
 {
   slowdown->frame     = 0;
   slowdown->expanding = 1;
@@ -58,7 +58,7 @@ void create_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
                         SLOWDOWN_SCREEN_LOCATION(slowdown));
 }
 
-void destroy_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
+void destroy_slowdown_pill( SLOWDOWN* slowdown )
 {
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
@@ -76,7 +76,7 @@ static void invalidatePillSprite(unsigned int count, struct sp1_update *u)
   sp1_InvUpdateStruct(u);
 }
 
-void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
+void animate_slowdown_pill( SLOWDOWN* slowdown )
 {
   /*
    * Crude little state machine to pulse the slowdown pills.
@@ -149,7 +149,7 @@ void animate_slowdown_pill( SLOWDOWN_DEFINITION* slowdown )
  */
 void slowdown_collected(COLLECTABLE* collectable, void* data)
 {
-  SLOWDOWN_DEFINITION* slowdown = (SLOWDOWN_DEFINITION*)data;
+  SLOWDOWN* slowdown = (SLOWDOWN*)data;
   (void)collectable;
 
   SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_NOT_AVAILABLE);
