@@ -60,6 +60,9 @@ typedef struct _collectable
   /* Function to call when collected */
   void                      (*collection_fn)(struct _collectable*, void*);
 
+  /* Countdown to timer expiring in 1/50ths sec */
+  uint16_t                   timer_countdown;
+
 } COLLECTABLE;
 
 /* Named args macro to make initialisation code easier to read */
@@ -95,9 +98,16 @@ typedef struct _collectable
                                                (y == collectable.centre_y) )
 
 /*
- * Available is a simple flag in the structure.
+ * "Available" is a simple flag in the structure.
  */
 #define IS_COLLECTABLE_AVAILABLE(collectable) (collectable.available == COLLECTABLE_AVAILABLE)
 #define SET_COLLECTABLE_AVAILABLE(collectable,a) collectable.available=a
+
+/*
+ * Collectables typically start a countdown timer.
+ */
+#define START_COLLECTABLE_TIMER(collectable,secs) collectable.timer_countdown=(secs*50)
+#define DECREMENT_COLLECTABLE_TIMER(collectable) (--(collectable.timer_countdown))
+#define IS_COLLECTABLE_TIMER_EXPIRED(collectable) (collectable.timer_countdown==0)
 
 #endif

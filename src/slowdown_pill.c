@@ -162,7 +162,7 @@ void slowdown_collected(COLLECTABLE* collectable, void* data)
    */
   animate_slowdown_pill( slowdown );
 
-  slowdown->complete_timer = slowdown->duration_secs*50;
+  START_COLLECTABLE_TIMER(slowdown->collectable,slowdown->duration_secs);
 
   return;
 }

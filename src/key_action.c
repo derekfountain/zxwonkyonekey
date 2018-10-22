@@ -536,7 +536,9 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
        */
       if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
       {
-	if( --slowdown->complete_timer == 0 )
+	DECREMENT_COLLECTABLE_TIMER( slowdown->collectable );
+
+        if( IS_COLLECTABLE_TIMER_EXPIRED( slowdown->collectable ) )
 	{
 	  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_AVAILABLE);
 	  *output_action = DEACTIVATE_SLOWDOWN;
@@ -583,12 +585,16 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       else
       {
 	/*
-	 * Pill is available. If he's walked onto it mark it unavailable and start
-	 * its timer. Call the code which animates it.
+	 * Pill is available. If he's walked onto it call the hander.
 	 */
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
                                  RUNNER_CENTRE_Y(ypos), slowdown->collectable) )
         {
+          /*
+           * The handler currently returns void. This could be changed to
+           * return a flag to activate (or not) the slowdown. This is not
+           * currently required.
+           */
           (*(slowdown->collectable.collection_fn))( &(slowdown->collectable), (void*)slowdown );
 
           *output_action = ACTIVATE_SLOWDOWN;
