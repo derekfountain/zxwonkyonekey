@@ -91,6 +91,7 @@ void create_door( DOOR_DEFINITION* door )
 
 void destroy_door( DOOR_DEFINITION* door )
 {
+  (void)door;
 #if 0
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
@@ -111,6 +112,8 @@ static void invalidateDoorSprite(unsigned int count, struct sp1_update *u)
 
 void animate_door( DOOR_DEFINITION* door )
 {
+  (void)door;
+
 #if 0
   /*
    * Crude little state machine to pulse the slowdown pills.

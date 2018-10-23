@@ -20,12 +20,23 @@
 #include <stdint.h>
 #include <arch/zx/sp1.h>
 
+#include "utils.h"
 #include "slowdown_pill.h"
 
 /* These are in the assembly language file */
 extern uint8_t slowdown_pill_f1[];
 extern uint8_t slowdown_pill_f2[];
 extern uint8_t slowdown_pill_f3[];
+
+/*
+ * There can be more than one slowdown pill active. i.e. he consumes
+ * one pill and its timer starts, then he consumes another pill before
+ * the first one has expired. Don't deactivate the slowdown until both
+ * timers have completed. I just keep an active timer counter. When this
+ * goes back to zero there are no active timers and slowdown mode should
+ * be cancelled.
+ */
+uint8_t active_slowdowns = 0;
 
 /*
  * This is defined in main.c. Just share it for now.
@@ -58,8 +69,20 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
                         SLOWDOWN_SCREEN_LOCATION(slowdown));
 }
 
+/*
+ * Slowdown pill destructor. This reclaims the graphics structures.
+ * The levels are designed so slowdown mode is not possible when
+ * the runner gets to the finish, but I cancel the timer anyway,
+ * just in case.
+ */
 void destroy_slowdown_pill( SLOWDOWN* slowdown )
 {
+  /* If the timer is active, cancel it */
+  if( !COLLECTABLE_TIMER_EXPIRED(slowdown->collectable) ) {
+    CANCEL_COLLECTABLE_TIMER(slowdown->collectable);
+    active_slowdowns--;
+  }
+
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
   sp1_DeleteSpr(slowdown->sprite);
@@ -76,6 +99,10 @@ static void invalidatePillSprite(unsigned int count, struct sp1_update *u)
   sp1_InvUpdateStruct(u);
 }
 
+/*
+ * This is called every few hundred millisecs to "pulse" the pills
+ * on screen.
+ */
 void animate_slowdown_pill( SLOWDOWN* slowdown )
 {
   /*
@@ -163,7 +190,31 @@ void slowdown_collected(COLLECTABLE* collectable, void* data)
   animate_slowdown_pill( slowdown );
 
   START_COLLECTABLE_TIMER(slowdown->collectable,slowdown->duration_secs);
+  active_slowdowns++;
 
   return;
 }
 
+uint8_t slowdown_timeup(COLLECTABLE* collectable, void* data)
+{
+  SLOWDOWN* slowdown = (SLOWDOWN*)data;
+  (void)collectable;
+
+  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_AVAILABLE);
+
+  /*
+   * Update screen. This should really be done in the gameloop
+   * but that only updates every few hundred millisecs to animate
+   * the pulsing. I could create a new gameloop action but it
+   * seems harmless to do this update here, even if it does break
+   * the design a bit.
+   */
+  animate_slowdown_pill( slowdown );
+
+  /*
+   * If this was the last active slowdown, return true in order to
+   * deactivate slowdown mode. Otherwise there's still at least one
+   * more active slowdown, so return false to stay in slowdown mode.
+   */
+  return ( --active_slowdowns == 0 );
+}

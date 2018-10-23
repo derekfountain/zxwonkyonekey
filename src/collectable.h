@@ -46,7 +46,7 @@ typedef struct _collectable
    * I want to check on the centre of sprite. This location is x,y plus 3 pixels
    * (for the runner sprite) in both directions, but since it's used every frame I
    * store the values rather than do those additions every time. If different
-   * sprites ever need to collide with collectable this will need a rethink.
+   * sprites ever need to collide with collectables this will need a rethink.
    */
   uint8_t                   centre_x;
   uint8_t                   centre_y;
@@ -61,13 +61,16 @@ typedef struct _collectable
   void                      (*collection_fn)(struct _collectable*, void*);
 
   /* Countdown to timer expiring in 1/50ths sec */
-  uint16_t                   timer_countdown;
+  uint16_t                  timer_countdown;
+
+  /* Function to call when countdown timer expires */
+  uint8_t                   (*timer_fn)(struct _collectable*, void*);
 
 } COLLECTABLE;
 
 /* Named args macro to make initialisation code easier to read */
-#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc, fn ) \
-                   x,y,xc,yc,COLLECTABLE_AVAILABLE,fn
+#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc, cfn, tfn) \
+  x,y,xc,yc,COLLECTABLE_AVAILABLE,cfn,0,tfn
 
 /* Macro to fetch the x,y location for a collectable's screen location */
 #define COLLECTABLE_SCREEN_LOCATION(c) c.x,c.y
@@ -108,6 +111,7 @@ typedef struct _collectable
  */
 #define START_COLLECTABLE_TIMER(collectable,secs) collectable.timer_countdown=(secs*50)
 #define DECREMENT_COLLECTABLE_TIMER(collectable) (--(collectable.timer_countdown))
-#define IS_COLLECTABLE_TIMER_EXPIRED(collectable) (collectable.timer_countdown==0)
+#define CANCEL_COLLECTABLE_TIMER(collectable) (collectable.timer_countdown=0)
+#define COLLECTABLE_TIMER_EXPIRED(collectable) (collectable.timer_countdown==0)
 
 #endif

@@ -54,6 +54,8 @@ typedef enum _key_action_tracetype
   JUST_TELEPORTED,
   SKIP_DIR_CHG_TELEPORTER,
   TEST_FINISH,
+  CONSUMED_SLOWDOWN,
+  SLOWDOWN_EXPIRED,
 } KEY_ACTION_TRACETYPE;
 
 typedef struct _key_action_trace
@@ -538,47 +540,18 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       {
 	DECREMENT_COLLECTABLE_TIMER( slowdown->collectable );
 
-        if( IS_COLLECTABLE_TIMER_EXPIRED( slowdown->collectable ) )
+        if( COLLECTABLE_TIMER_EXPIRED( slowdown->collectable ) )
 	{
-	  SET_COLLECTABLE_AVAILABLE(slowdown->collectable,COLLECTABLE_AVAILABLE);
-	  *output_action = DEACTIVATE_SLOWDOWN;
+          KEY_ACTION_TRACE_CREATE( SLOWDOWN_EXPIRED, 0 );
 
           /*
-           * Update screen. This should really be done in the gameloop
-           * but that only updates every few hundred millisecs to animate
-           * the pulsing. I could create a new gameloop action but it
-           * seems harmless to do this update here, even if it does break
-           * the design a bit.
+           * The return value of the timeout function is taken to indicate
+           * whether the slowdown mode should be deactivated.
            */
-          animate_slowdown_pill( slowdown );
-
-	  {
-	    /*
-	     * There can be more than one slowdown pill active. i.e. the consumes
-	     * one pill and its timer starts, then he consumes another pill before
-	     * the first one has expired. The code gets here when the first pill
-	     * timer expires, but it can't deactivate the slowdown because the
-	     * second timer is still ticking down.
-	     * So this loop checks the other pills in the level and only sets the
-	     * deactivation return value if none of them is counting down its timer.
-	     */
-	    SLOWDOWN* check_slowdown = game_state->current_level->slowdowns;
-
-	    while( IS_VALID_SLOWDOWN(check_slowdown) )
-	    {
-	      /*
-	       * Pill availability is an 8 bit check, which is quicker than checking
-	       * the 16 bit timer value for non-zero. I think. :)
-	       */
-	      if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
-	      {
-		/* Pill not available, so its timer is ticking down. Don't deactivate slowdown */
-		*output_action = NO_ACTION;
-		break;
-	      }
-	      check_slowdown++;
-	    }
-          }
+          if( (*(slowdown->collectable.timer_fn))( &(slowdown->collectable), (void*)slowdown ) )
+            *output_action = DEACTIVATE_SLOWDOWN;
+          else
+            *output_action = NO_ACTION;
         }
 
       }
@@ -590,6 +563,8 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
                                  RUNNER_CENTRE_Y(ypos), slowdown->collectable) )
         {
+          KEY_ACTION_TRACE_CREATE( CONSUMED_SLOWDOWN, 0 );
+
           /*
            * The handler currently returns void. This could be changed to
            * return a flag to activate (or not) the slowdown. This is not

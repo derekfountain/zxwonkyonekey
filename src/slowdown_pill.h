@@ -29,8 +29,9 @@ typedef enum _slowdown_status
 } SLOWDOWN_STATUS;
 
 /*
- * Slowdown point, stored as an x,y pixel location. This structure also
- * contains the sprite and animation bits.
+ * Slowdown point, stored as a collectable, which in turns handles the
+ * x,y pixel location, timer, etc. This structure contains the sprite
+ * and animation bits.
  */
 typedef struct _slowdown_definition
 {
@@ -42,15 +43,13 @@ typedef struct _slowdown_definition
   uint8_t            frame;
   uint8_t            expanding;
 
-  uint16_t           complete_timer; 
-
 } SLOWDOWN;
 
 #define SLOWDOWN_SCREEN_LOCATION(slowdown) COLLECTABLE_SCREEN_LOCATION(slowdown->collectable)
 
 /*
- * Macro answers true if the slowdown pointed to is valid. At the moment
- * that's defined as the collectable being valid.
+ * Macro answers true if the slowdown pointed to is valid.
+ * That's defined as the collectable being valid.
  */
 #define IS_VALID_SLOWDOWN(slowdown) (IS_VALID_COLLECTABLE(slowdown->collectable))
 
@@ -59,5 +58,6 @@ void destroy_slowdown_pill( SLOWDOWN* slowdown );
 void animate_slowdown_pill( SLOWDOWN* slowdown );
 
 void slowdown_collected(COLLECTABLE* collectable, void* data);
+uint8_t slowdown_timeup(COLLECTABLE* collectable, void* data);
 
 #endif
