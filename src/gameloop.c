@@ -187,7 +187,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  * through, etc.
  */
 
-LOOP_ACTION game_actions[] =
+LOOP_ACTION game_actions[11] =
   {
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },

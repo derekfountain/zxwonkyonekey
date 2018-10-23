@@ -532,6 +532,10 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
     /* Loop over slowdown pills */
     while( IS_VALID_SLOWDOWN(slowdown) )
     {
+#if 0
+      /* This is going to need to pass a pointer, so the macros will need updating */
+      void handle_timed_collectable( slowdown->collectable );
+#endif
       /*
        * If the pill has been consumed and is active, reduce the
        * timer. If that's got to zero, reinstate the pill.
