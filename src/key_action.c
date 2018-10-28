@@ -532,19 +532,15 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
     /* Loop over slowdown pills */
     while( IS_VALID_SLOWDOWN(slowdown) )
     {
-#if 0
-      /* This is going to need to pass a pointer, so the macros will need updating */
-      void handle_timed_collectable( slowdown->collectable );
-#endif
       /*
        * If the pill has been consumed and is active, reduce the
        * timer. If that's got to zero, reinstate the pill.
        */
-      if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
+      if( !IS_COLLECTABLE_AVAILABLE(&(slowdown->collectable)) )
       {
-	DECREMENT_COLLECTABLE_TIMER( slowdown->collectable );
+	DECREMENT_COLLECTABLE_TIMER( &(slowdown->collectable) );
 
-        if( COLLECTABLE_TIMER_EXPIRED( slowdown->collectable ) )
+        if( COLLECTABLE_TIMER_EXPIRED( &(slowdown->collectable) ) )
 	{
           KEY_ACTION_TRACE_CREATE( SLOWDOWN_EXPIRED, 0 );
 
@@ -565,7 +561,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
 	 * Pill is available. If he's walked onto it call the hander.
 	 */
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
-                                 RUNNER_CENTRE_Y(ypos), slowdown->collectable) )
+                                 RUNNER_CENTRE_Y(ypos), &(slowdown->collectable)) )
         {
           KEY_ACTION_TRACE_CREATE( CONSUMED_SLOWDOWN, 0 );
 

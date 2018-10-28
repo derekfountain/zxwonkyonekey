@@ -95,23 +95,31 @@ typedef struct _collectable
 #define IS_VALID_COLLECTABLE(collectable) (collectable.x || collectable.y)
 
 /*
+ * TODO These take a pointer to the collectable, a change I made in an attempt at genericisation.
+ * I think this is unnecessary, so they can go back to structures, removing the need for a
+ * bunch of dereferencing. Check when the doors are done.
+ */
+
+/*
  * Collection point is the x,y pixel location of the collectable.
  */
-#define IS_COLLECTION_POINT(x,y,collectable) ( (x == collectable.centre_x) && \
-                                               (y == collectable.centre_y) )
+#define IS_COLLECTION_POINT(x,y,collectable) ( (x == ((COLLECTABLE*)collectable)->centre_x) && \
+                                               (y == ((COLLECTABLE*)collectable)->centre_y) )
 
 /*
  * "Available" is a simple flag in the structure.
  */
-#define IS_COLLECTABLE_AVAILABLE(collectable) (collectable.available == COLLECTABLE_AVAILABLE)
-#define SET_COLLECTABLE_AVAILABLE(collectable,a) collectable.available=a
+#define IS_COLLECTABLE_AVAILABLE(collectable) (((COLLECTABLE*)collectable)->available == COLLECTABLE_AVAILABLE)
+#define SET_COLLECTABLE_AVAILABLE(collectable,a) ((COLLECTABLE*)collectable)->available=a
 
 /*
  * Collectables typically start a countdown timer.
  */
-#define START_COLLECTABLE_TIMER(collectable,secs) collectable.timer_countdown=(secs*50)
-#define DECREMENT_COLLECTABLE_TIMER(collectable) (--(collectable.timer_countdown))
-#define CANCEL_COLLECTABLE_TIMER(collectable) (collectable.timer_countdown=0)
-#define COLLECTABLE_TIMER_EXPIRED(collectable) (collectable.timer_countdown==0)
+#define START_COLLECTABLE_TIMER(collectable,secs) ((COLLECTABLE*)collectable)->timer_countdown=(secs*50)
+#define DECREMENT_COLLECTABLE_TIMER(collectable) (--(((COLLECTABLE*)collectable)->timer_countdown))
+#define CANCEL_COLLECTABLE_TIMER(collectable) (((COLLECTABLE*)collectable)->timer_countdown=0)
+#define COLLECTABLE_TIMER_EXPIRED(collectable) (((COLLECTABLE*)collectable)->timer_countdown==0)
+
+uint8_t handle_timed_collectable( COLLECTABLE* collectable, void* data );
 
 #endif

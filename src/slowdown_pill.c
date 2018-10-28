@@ -78,8 +78,8 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
 void destroy_slowdown_pill( SLOWDOWN* slowdown )
 {
   /* If the timer is active, cancel it */
-  if( !COLLECTABLE_TIMER_EXPIRED(slowdown->collectable) ) {
-    CANCEL_COLLECTABLE_TIMER(slowdown->collectable);
+  if( !COLLECTABLE_TIMER_EXPIRED( &(slowdown->collectable) ) ) {
+    CANCEL_COLLECTABLE_TIMER( &(slowdown->collectable) );
     active_slowdowns--;
   }
 
@@ -112,7 +112,7 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
    */
   uint8_t* next_frame;
 
-  if( !IS_COLLECTABLE_AVAILABLE(slowdown->collectable) )
+  if( !IS_COLLECTABLE_AVAILABLE( &(slowdown->collectable) ) )
   {
     /* Move it off screen so it disappears */
     next_frame = (uint8_t*)slowdown_pill_f1;
