@@ -37,5 +37,6 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action );
 PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action );
 PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action );
 PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action );
+PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action );
 
 #endif

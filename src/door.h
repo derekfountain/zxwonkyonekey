@@ -71,6 +71,12 @@ over collectables, call their animation function if there is one?
 } DOOR_DEFINITION;
 
 
+/*
+ * Macro answers true if the slowdown pointed to is valid.
+ * That's defined as the collectable being valid.
+ */
+#define IS_VALID_DOOR(door) (IS_VALID_COLLECTABLE(door->collectable))
+
 void create_door( DOOR_DEFINITION* door );
 void destroy_door( DOOR_DEFINITION* door );
 

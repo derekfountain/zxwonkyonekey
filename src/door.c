@@ -177,3 +177,30 @@ void animate_door( DOOR_DEFINITION* door )
   sp1_IterateUpdateSpr(slowdown->sprite, invalidatePillSprite);
 #endif
 }
+
+/*
+ * Collectable collection handler, called when the the runner
+ * collects the door key. Set the key unavailable and
+ * update the screen accordingly, then start the timer to count
+ * down the time the door is open.
+ */
+void door_key_collected(COLLECTABLE* collectable, void* data)
+{
+  DOOR_DEFINITION* door = (DOOR_DEFINITION*)data;
+  (void)collectable;
+
+  SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_NOT_AVAILABLE);
+
+  /*
+   * Bit of a design breakage here. Updating screen data in a collectable
+   * handler. But it's simple and readable, and the option is to create
+   * a new gameloop action function to do it, which would be wasteful.
+   * Do it this way for now.
+   */
+  animate_door_key( door );
+fill in this lot...
+  START_DOOR_OPEN_TIMER(door->collectable,door->open_secs);
+
+  return;
+}
+

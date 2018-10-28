@@ -55,6 +55,7 @@ typedef enum _key_action_tracetype
   SKIP_DIR_CHG_TELEPORTER,
   TEST_FINISH,
   CONSUMED_SLOWDOWN,
+  OPENED_DOOR,
   SLOWDOWN_EXPIRED,
 } KEY_ACTION_TRACETYPE;
 
@@ -578,6 +579,88 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       }
 
       slowdown++;
+    }
+  }
+
+  return KEEP_PROCESSING;
+}
+
+
+
+
+/***
+ *       ____                     _____                 ___
+ *      / __ \                   |  __ \               |__ \
+ *     | |  | |_ __   ___ _ __   | |  | | ___   ___  _ __ ) |
+ *     | |  | | '_ \ / _ | '_ \  | |  | |/ _ \ / _ \| '__/ /
+ *     | |__| | |_) |  __| | | | | |__| | (_) | (_) | | |_|
+ *      \____/| .__/ \___|_| |_| |_____/ \___/ \___/|_| (_)
+ *            | |
+ *            |_|
+ */
+PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+
+  *output_action = NO_ACTION;
+
+  /* Skip everything if this level doesn't have doors */
+  if( game_state->current_level->doors )
+  {
+    DOOR_DEFINITION* door = game_state->current_level->doors;
+
+    uint8_t xpos = get_runner_xpos();
+    uint8_t ypos = get_runner_ypos();
+
+    /* Loop over doors */
+    while( IS_VALID_DOOR(door) )
+    {
+      /*
+       * If the door has been opened and is active, reduce the
+       * timer. If that's got to zero, reinstate the key.
+       */
+      if( !IS_COLLECTABLE_AVAILABLE(&(door->collectable)) )
+      {
+	DECREMENT_COLLECTABLE_TIMER( &(door->collectable) );
+
+        if( COLLECTABLE_TIMER_EXPIRED( &(door->collectable) ) )
+	{
+          KEY_ACTION_TRACE_CREATE( SLOWDOWN_EXPIRED, 0 );
+
+          /*
+           * The return value of the timeout function is taken to indicate
+           * whether the slowdown mode should be deactivated.
+           */
+          if( (*(door->collectable.timer_fn))( &(door->collectable), (void*)door ) )
+            *output_action = CLOSE_DOOR;
+          else
+            *output_action = NO_ACTION;
+        }
+
+      }
+      else
+      {
+	/*
+	 * Pill is available. If he's walked onto it call the hander.
+	 */
+        if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
+                                 RUNNER_CENTRE_Y(ypos), &(door->collectable)) )
+        {
+          KEY_ACTION_TRACE_CREATE( OPENED_DOOR, 0 );
+
+          /*
+           * The handler currently returns void. This could be changed to
+           * return a flag to activate (or not) the door. This is not
+           * currently required.
+           */
+          (*(door->collectable.collection_fn))( &(door->collectable), (void*)door );
+
+          *output_action = OPEN_DOOR;
+          break;
+        }
+      }
+
+      door++;
     }
   }
 
