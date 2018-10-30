@@ -607,7 +607,7 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
   /* Skip everything if this level doesn't have doors */
   if( game_state->current_level->doors )
   {
-    DOOR_DEFINITION* door = game_state->current_level->doors;
+    DOOR* door = game_state->current_level->doors;
 
     uint8_t xpos = get_runner_xpos();
     uint8_t ypos = get_runner_ypos();
@@ -663,6 +663,36 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
       door++;
     }
   }
+
+  return KEEP_PROCESSING;
+}
+
+
+
+
+/***
+ *      _____                       _   _   _                           _           _                ___
+ *     |  __ \                     | | | | | |                         | |         | |              |__ \
+ *     | |__) __ _ ___ ___  ___  __| | | |_| |__  _ __ ___  _   _  __ _| |__     __| | ___   ___  _ __ ) |
+ *     |  ___/ _` / __/ __|/ _ \/ _` | | __| '_ \| '__/ _ \| | | |/ _` | '_ \   / _` |/ _ \ / _ \| '__/ /
+ *     | |  | (_| \__ \__ |  __| (_| | | |_| | | | | | (_) | |_| | (_| | | | | | (_| | (_) | (_) | | |_|
+ *     |_|   \__,_|___|___/\___|\__,_|  \__|_| |_|_|  \___/ \__,_|\__, |_| |_|  \__,_|\___/ \___/|_| (_)
+ *                                                                 __/ |
+ *                                                                |___/
+ */
+PROCESSING_FLAG test_for_through_door( void* data, GAME_ACTION* output_action )
+{
+  /*
+   * When a door opens its sprite moves aside. Once it's fully open the attribute
+   * of the single cell the door occupies is set to the background which means
+   * the collision code won't see the door and the runner will be able the
+   * move through the doorway. Once that happens the door is set to stay
+   * permanently open.
+   * This code checks each door at each runner movement to see if the runner is
+   * passing through the doorway. If so, the door code is called to wedge the
+   * door open.
+   */
+  *output_action = NO_ACTION;
 
   return KEEP_PROCESSING;
 }

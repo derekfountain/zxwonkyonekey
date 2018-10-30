@@ -41,7 +41,7 @@ extern struct sp1_pss level_print_control;
 #define DOOR_PLANE    (uint8_t)(1)
 
 static uint8_t key_sp1_string[9] = "\x16" "yx" "\x10" "i" "\x11" "p" "t";
-void display_key( DOOR_DEFINITION* door, uint8_t visible )
+void display_key( DOOR* door, uint8_t visible )
 {
   /* Build and print the string to display the key */
   key_sp1_string[1] = door->collectable.y;
@@ -57,7 +57,7 @@ void display_key( DOOR_DEFINITION* door, uint8_t visible )
   sp1_PrintString(&level_print_control, key_sp1_string);
 }
 
-void create_door( DOOR_DEFINITION* door )
+void create_door( DOOR* door )
 {
   display_key( door, TRUE );
 
@@ -98,7 +98,7 @@ void create_door( DOOR_DEFINITION* door )
 #endif
 }
 
-void destroy_door( DOOR_DEFINITION* door )
+void destroy_door( DOOR* door )
 {
   (void)door;
 #if 0
@@ -119,7 +119,7 @@ static void invalidateDoorSprite(unsigned int count, struct sp1_update *u)
   sp1_InvUpdateStruct(u);
 }
 
-void animate_door( DOOR_DEFINITION* door )
+void animate_door( DOOR* door )
 {
   (void)door;
 
@@ -187,7 +187,7 @@ void animate_door( DOOR_DEFINITION* door )
 #endif
 }
 
-void animate_door_key( DOOR_DEFINITION* door )
+void animate_door_key( DOOR* door )
 {
   /* Call key display key using availabily as visibility */
   display_key( door, IS_COLLECTABLE_AVAILABLE( &(door->collectable) ) );
@@ -201,7 +201,7 @@ void animate_door_key( DOOR_DEFINITION* door )
  */
 void door_key_collected(COLLECTABLE* collectable, void* data)
 {
-  DOOR_DEFINITION* door = (DOOR_DEFINITION*)data;
+  DOOR* door = (DOOR*)data;
   (void)collectable;
 
   SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_NOT_AVAILABLE);
@@ -222,7 +222,7 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
 uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
 {
-  DOOR_DEFINITION* door = (DOOR_DEFINITION*)data;
+  DOOR* door = (DOOR*)data;
   (void)collectable;
 
   SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_AVAILABLE);
@@ -230,5 +230,17 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
   animate_door_key( door );
 
   return 0;
+}
+
+void door_passed_through( DOOR* door )
+{
+  /* Not sure if this is useful yet */
+  SET_COLLECTABLE_AVAILABLE( door->collectable, COLLECTABLE_DISARMED );
+
+  /*
+   * Cancel the timer with the door open and the key off screen.
+   * The door stays open.
+   */
+  CANCEL_COLLECTABLE_TIMER( door->collectable );
 }
 

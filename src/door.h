@@ -28,7 +28,7 @@
  * A door is made up of a key, which is a tile, and a door which moves
  * when the key is collected. The door is a sprite.
  */
-typedef struct _door_definition
+typedef struct _door
 {
   COLLECTABLE        collectable;
 
@@ -45,6 +45,10 @@ typedef struct _door_definition
    */
   uint8_t            key_tile_num;
 
+  /*
+   * Number of seconds the door stays open. The actual timer is in the collectable.
+   * It's initialised to this value
+   */
   uint8_t            open_secs;
 
   /*
@@ -59,26 +63,24 @@ over collectables, call their animation function if there is one?
 
   /*
    * TODO
-   * Active (or permanently open)
    * Cell x,y
    * "Under" range x-x,y
    * Door colour
-   * Timer
    * Animation timer
    * Animation door y position
    * 
    */
-} DOOR_DEFINITION;
+} DOOR;
 
 
 /*
- * Macro answers true if the slowdown pointed to is valid.
+ * Macro answers true if the door pointed to is valid.
  * That's defined as the collectable being valid.
  */
 #define IS_VALID_DOOR(door) (IS_VALID_COLLECTABLE(door->collectable))
 
-void create_door( DOOR_DEFINITION* door );
-void destroy_door( DOOR_DEFINITION* door );
+void create_door( DOOR* door );
+void destroy_door( DOOR* door );
 
 void door_key_collected(COLLECTABLE* collectable, void* data);
 uint8_t door_open_timeup(COLLECTABLE* collectable, void* data);

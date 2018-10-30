@@ -144,7 +144,7 @@ SLOWDOWN level1_slowdowns[] = {
                             0)}},
 };
 
-DOOR_DEFINITION level2_doors[] = {
+DOOR level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Key x cell",       5,  "Key y cell",       22,
                             "Centre x px", (5*8+4), "Centre y px", (22*8+4),
                             door_key_collected,
@@ -360,7 +360,7 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
 
   if( level_data->doors )
   {
-    DOOR_DEFINITION* door = level_data->doors;
+    DOOR* door = level_data->doors;
 
     while( IS_VALID_COLLECTABLE(door->collectable) )
     {
@@ -388,7 +388,7 @@ void teardown_level(LEVEL_DATA* level_data)
 
   if( level_data->doors )
   {
-    DOOR_DEFINITION* door = level_data->doors;
+    DOOR* door = level_data->doors;
 
     while( IS_VALID_COLLECTABLE(door->collectable) )
     {
