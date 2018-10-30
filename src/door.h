@@ -45,6 +45,8 @@ typedef struct _door_definition
    */
   uint8_t            key_tile_num;
 
+  uint8_t            open_secs;
+
   /*
 I used a non animated sprite for the key, which I need to make flicker using
 an attribute loop. The door needs to be a sprite (it's currently a UGD) so
@@ -79,6 +81,7 @@ void create_door( DOOR_DEFINITION* door );
 void destroy_door( DOOR_DEFINITION* door );
 
 void door_key_collected(COLLECTABLE* collectable, void* data);
+uint8_t door_open_timeup(COLLECTABLE* collectable, void* data);
 
 
 #endif

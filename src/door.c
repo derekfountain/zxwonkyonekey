@@ -215,8 +215,20 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
    */
   animate_door_key( door );
 
-  //  START_DOOR_OPEN_TIMER(door->collectable,door->open_secs);
+  START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
   return;
+}
+
+uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
+{
+  DOOR_DEFINITION* door = (DOOR_DEFINITION*)data;
+  (void)collectable;
+
+  SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_AVAILABLE);
+
+  animate_door_key( door );
+
+  return 0;
 }
 
