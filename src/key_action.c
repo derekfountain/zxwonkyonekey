@@ -641,7 +641,7 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
       else
       {
 	/*
-	 * Pill is available. If he's walked onto it call the hander.
+	 * Key is available. If he's walked onto it call the hander.
 	 */
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
                                  RUNNER_CENTRE_Y(ypos), &(door->collectable)) )

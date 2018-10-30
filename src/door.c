@@ -21,7 +21,7 @@
 #include <arch/zx/sp1.h>
 
 #include "door.h"
-
+#include "utils.h"
 /*
  * This is defined in main.c. Just share it for now.
  */
@@ -41,16 +41,25 @@ extern struct sp1_pss level_print_control;
 #define DOOR_PLANE    (uint8_t)(1)
 
 static uint8_t key_sp1_string[9] = "\x16" "yx" "\x10" "i" "\x11" "p" "t";
-void create_door( DOOR_DEFINITION* door )
+void display_key( DOOR_DEFINITION* door, uint8_t visible )
 {
   /* Build and print the string to display the key */
-  key_sp1_string[1] = door->key_y;
-  key_sp1_string[2] = door->key_x;
+  key_sp1_string[1] = door->collectable.y;
+  key_sp1_string[2] = door->collectable.x;
   key_sp1_string[4] = door->key_ink;
   key_sp1_string[6] = door->key_paper;
-  key_sp1_string[7] = door->key_tile_num;
+
+  if( visible )
+    key_sp1_string[7] = door->key_tile_num;
+  else
+    key_sp1_string[7] = 255; /* TODO Macro needed */
 
   sp1_PrintString(&level_print_control, key_sp1_string);
+}
+
+void create_door( DOOR_DEFINITION* door )
+{
+  display_key( door, TRUE );
 
   /*
    * Key is a tile, placed at its x,y cell. It's not a static thing like a jumper
@@ -178,6 +187,12 @@ void animate_door( DOOR_DEFINITION* door )
 #endif
 }
 
+void animate_door_key( DOOR_DEFINITION* door )
+{
+  /* Call key display key using availabily as visibility */
+  display_key( door, IS_COLLECTABLE_AVAILABLE( &(door->collectable) ) );
+}
+
 /*
  * Collectable collection handler, called when the the runner
  * collects the door key. Set the key unavailable and
@@ -192,14 +207,15 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
   SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_NOT_AVAILABLE);
 
   /*
-   * Bit of a design breakage here. Updating screen data in a collectable
-   * handler. But it's simple and readable, and the option is to create
-   * a new gameloop action function to do it, which would be wasteful.
-   * Do it this way for now.
+   * Remove key from screen.
+   * TODO. Was just looking at key_action.c where it does a
+   *             *output_action = OPEN_DOOR;
+   * Shouldn't this sort here be in the code called when the OPEN_DOOR
+   * value is returned from the handler?
    */
   animate_door_key( door );
-fill in this lot...
-  START_DOOR_OPEN_TIMER(door->collectable,door->open_secs);
+
+  //  START_DOOR_OPEN_TIMER(door->collectable,door->open_secs);
 
   return;
 }

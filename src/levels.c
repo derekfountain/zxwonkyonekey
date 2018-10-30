@@ -32,6 +32,7 @@
  * These are the UDGs, defined in assembler because
  * they're easier to see with binary representation.
  */
+extern uint8_t blank[8];
 extern uint8_t grassh[8];
 extern uint8_t jumper[8];
 extern uint8_t platform1[8];
@@ -77,6 +78,7 @@ TILE_DEFINITION level2_tiles[] = {
   {130, finish},
   {131, grassv},
   {132, door_key},
+  {255, blank},
   {0,   {0}   }
 };
 
@@ -143,14 +145,12 @@ SLOWDOWN level1_slowdowns[] = {
 };
 
 DOOR_DEFINITION level2_doors[] = {
-  { {INITIALISE_COLLECTABLE("Sprite x",  96, "Sprite y", 128,
-                            "Centre x", 100, "Centre y", 132,
-                            slowdown_collected,
+  { {INITIALISE_COLLECTABLE("Key x cell",       5,  "Key y cell",       22,
+                            "Centre x px", (5*8+4), "Centre y px", (22*8+4),
+                            door_key_collected,
                             slowdown_timeup)},
     NAMED_VALUES_1("Key ink",    0),
     NAMED_VALUES_1("Key paper",  7),
-    NAMED_VALUES_1("Key X",      5),
-    NAMED_VALUES_1("Key Y",     22),
     NAMED_VALUES_1("Key tile", 132) },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,

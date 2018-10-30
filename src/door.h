@@ -37,8 +37,6 @@ typedef struct _door_definition
    */
   uint8_t            key_ink;
   uint8_t            key_paper;
-  uint8_t            key_x;
-  uint8_t            key_y;
 
   /*
    * Keys are displayed using a single tile - a UDG in effect. Which UDG depends on
@@ -79,6 +77,8 @@ over collectables, call their animation function if there is one?
 
 void create_door( DOOR_DEFINITION* door );
 void destroy_door( DOOR_DEFINITION* door );
+
+void door_key_collected(COLLECTABLE* collectable, void* data);
 
 
 #endif

@@ -37,15 +37,18 @@ typedef enum _collectable_availability
 
 typedef struct _collectable
 {
-  /* x,y pixel position to place the sprite */
+  /*
+   * x,y position to place the sprite. Some collectables use this as a
+   * pixel, others use it as cell coordinates
+   */
   uint8_t                   x;
   uint8_t                   y;
 
   /*
    * The x,y position is the top left corner of the sprite. For collision purposes
-   * I want to check on the centre of sprite. This location is x,y plus 3 pixels
-   * (for the runner sprite) in both directions, but since it's used every frame I
-   * store the values rather than do those additions every time. If different
+   * I want to check on the centre of sprite. This location is x,y in pixels, plus
+   * 3 pixels (for the runner sprite) in both directions, but since it's used every
+   * frame I store the values rather than do those additions every time. If different
    * sprites ever need to collide with collectables this will need a rethink.
    */
   uint8_t                   centre_x;

@@ -26,6 +26,18 @@ SECTION rodata_user
 ;;                                                      
 ;;                                                      
 
+;; I can't use SPACE in the ROM because the tracing overwrites it.
+PUBLIC _blank
+._blank
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        
 PUBLIC _grassh
 ._grassh
         defb @01001010
