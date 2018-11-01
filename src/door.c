@@ -23,6 +23,7 @@
 
 #include "door.h"
 #include "utils.h"
+#include "game_state.h"
 
 /* This is in the assembly language file */
 extern uint8_t door_f1[];
@@ -45,6 +46,11 @@ extern struct sp1_pss level_print_control;
  */
 #define DOOR_PLANE    (uint8_t)(1)
 
+/*
+ * Key graphic is a static tile (a UDG). It's displayed as a tile via
+ * the SP1 print routine. It must be the same ink/paper colour as the
+ * runner otherwise he'll bounce off it.
+ */
 static uint8_t key_sp1_string[9] = "\x16" "yx" "\x10" "i" "\x11" "p" "t";
 void display_key( DOOR* door, uint8_t visible )
 {
@@ -62,6 +68,7 @@ void display_key( DOOR* door, uint8_t visible )
   sp1_PrintString(&level_print_control, key_sp1_string);
 }
 
+
 static uint8_t ink_param;
 static void initialise_colour(unsigned int count, struct sp1_cs *c)
 {
@@ -75,8 +82,8 @@ void create_door( DOOR* door )
 {
   display_key( door, TRUE );
 
-  door->moving_direction = DOOR_STATIONARY;
-  door->y_offset         = 0;
+  door->moving   = DOOR_STATIONARY;
+  door->y_offset = 0;
 
   /*
    * This code will need a timer, so I need to break that out and share it
@@ -104,11 +111,10 @@ void create_door( DOOR* door )
 void destroy_door( DOOR* door )
 {
   (void)door;
-#if 0
+
   /* Move sprite offscreen before calling delete function */
-  sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
-  sp1_DeleteSpr(slowdown->sprite);
-#endif
+  sp1_MoveSprPix(door->sprite, &full_screen, (void*)0, 255, 255);
+  sp1_DeleteSpr(door->sprite);
 }
 
 /*
@@ -124,7 +130,23 @@ static void invalidateDoorSprite(unsigned int count, struct sp1_update *u)
 
 void animate_door( DOOR* door )
 {
-  (void)door;
+  if( door->moving == DOOR_OPENING )
+  {
+    /* TODO Consider direction */
+    if( ++(door->y_offset) == 8 )
+      door->moving = DOOR_STATIONARY;
+
+  }
+  else if( door->moving == DOOR_CLOSING )
+  {
+    if( --(door->y_offset) == 0 )
+      door->moving = DOOR_STATIONARY;
+
+  }
+
+  sp1_MoveSprPix_callee(door->sprite, &full_screen,
+                        (void*)door_f1,
+                        DOOR_SCREEN_LOCATION_WITH_OFFSET(door));
 
 #if 0
   /*
@@ -192,7 +214,7 @@ void animate_door( DOOR* door )
 
 void animate_door_key( DOOR* door )
 {
-  /* Call key display key using availabily as visibility */
+  /* Call key display key using availability as visibility */
   display_key( door, IS_COLLECTABLE_AVAILABLE( &(door->collectable) ) );
 }
 
@@ -213,7 +235,7 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
   animate_door_key( door );
 
   /* Open the door */
-//  start_door_animation( DOOR_OPENING );
+  door->moving = DOOR_OPENING;
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
@@ -236,7 +258,7 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
   animate_door_key( door );
 
   /* Close the door */
-//  start_door_animation( DOOR_CLOSING );
+  door->moving = DOOR_CLOSING;
 
   return 0;
 }
@@ -252,4 +274,7 @@ void door_passed_through( DOOR* door )
    */
   CANCEL_COLLECTABLE_TIMER( door->collectable );
 }
+
+
+
 

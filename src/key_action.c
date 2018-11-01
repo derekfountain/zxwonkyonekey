@@ -24,6 +24,7 @@
 #include "action.h"
 #include "runner.h"
 #include "teleporter.h"
+#include "door.h"
 #include "game_state.h"
 #include "tracetable.h"
 #include "int.h"
@@ -697,3 +698,38 @@ PROCESSING_FLAG test_for_through_door( void* data, GAME_ACTION* output_action )
 
   return KEEP_PROCESSING;
 }
+
+
+
+/***
+ *                     _                 _             _                     ___
+ *         /\         (_)               | |           | |                   |__ \
+ *        /  \   _ __  _ _ __ ___   __ _| |_ ___    __| | ___   ___  _ __ ___  ) |
+ *       / /\ \ | '_ \| | '_ ` _ \ / _` | __/ _ \  / _` |/ _ \ / _ \| '__/ __|/ /
+ *      / ____ \| | | | | | | | | | (_| | ||  __/ | (_| | (_) | (_) | |  \__ |_|
+ *     /_/    \_|_| |_|_|_| |_| |_|\__,_|\__\___|  \__,_|\___/ \___/|_|  |___(_)
+ *
+ *
+ */
+PROCESSING_FLAG animate_doors( void* data, GAME_ACTION* output_action )
+{
+  GAME_STATE* game_state = (GAME_STATE*)data;
+
+  if( game_state->current_level->doors )
+  {
+    DOOR* door = game_state->current_level->doors;
+
+    while( IS_VALID_COLLECTABLE(door->collectable) )
+    {
+      if( DOOR_IS_MOVING( door ) )
+      {
+	animate_door( door );
+      }
+      door++;
+    }
+  }
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}
+

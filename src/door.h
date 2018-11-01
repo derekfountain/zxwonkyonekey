@@ -22,17 +22,30 @@
 
 #include <stdint.h>
 
+#include "action.h"
 #include "collectable.h"
 
 /*
  * Enum indicates which way a door is moving - opening or closing
  */
-typedef enum _door_direction
+typedef enum _door_moving
 {
   DOOR_STATIONARY,
   DOOR_OPENING,
   DOOR_CLOSING,
-} DOOR_DIRECTION;
+} DOOR_MOVING;
+
+/*
+ * Enum indicates the direction a door opens. Most are like a
+ * portcullis, opening upwards. Some are trapdoors, moving
+ * sideways.
+ */
+typedef enum _door_opening_direction
+{
+  OPENS_BOTTOM_TO_TOP,
+  OPENS_LEFT_TO_RIGHT,
+  OPENS_RIGHT_TO_LEFT,
+} DOOR_OPENING_DIRECTION;
 
 /*
  * A door is made up of a key, which is a tile, and a door which moves
@@ -65,25 +78,16 @@ typedef struct _door
    */
   uint8_t            open_secs;
 
+  /* Stuff below here isn't initialised at compile time */
   struct sp1_ss*     sprite;
-  DOOR_DIRECTION     moving_direction;
+  DOOR_MOVING        moving;
   uint8_t            y_offset;
 
-  /*
-I used a non animated sprite for the key, which I need to make flicker using
-an attribute loop. The door needs to be a sprite (it's currently a UGD) so
-it can be pixel positioned. It doesn't need animation, but Y coord is
-necessary. X coord too if I make them able to be trapdoors.
-
-OTOH there's common ground here. The pills pulse. The keys will flicker. Loop
-over collectables, call their animation function if there is one?
-   */
 
   /*
    * TODO
-   * Cell x,y
+   * Opens into cell x,y
    * "Under" range x-x,y
-   * Door colour
    * Animation timer
    * Animation door y position
    * 
@@ -97,13 +101,18 @@ over collectables, call their animation function if there is one?
  */
 #define IS_VALID_DOOR(door) (IS_VALID_COLLECTABLE(door->collectable))
 
-#define DOOR_SCREEN_LOCATION(door)  door->door_cell_x*8,door->door_cell_y*8
+#define DOOR_IS_MOVING(door) (door->moving!=DOOR_STATIONARY)
+
+#define DOOR_SCREEN_LOCATION(door)              door->door_cell_x*8,door->door_cell_y*8
+#define DOOR_SCREEN_LOCATION_WITH_OFFSET(door)  door->door_cell_x*8,(door->door_cell_y*8)-door->y_offset
 
 void create_door( DOOR* door );
 void destroy_door( DOOR* door );
+void animate_door( DOOR* door );
 
 void door_key_collected(COLLECTABLE* collectable, void* data);
 uint8_t door_open_timeup(COLLECTABLE* collectable, void* data);
+
 
 
 #endif
