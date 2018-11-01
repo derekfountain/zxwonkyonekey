@@ -682,6 +682,7 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
  */
 PROCESSING_FLAG test_for_through_door( void* data, GAME_ACTION* output_action )
 {
+  (void)data;
   /*
    * When a door opens its sprite moves aside. Once it's fully open the attribute
    * of the single cell the door occupies is set to the background which means

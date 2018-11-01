@@ -25,12 +25,26 @@
 #include "collectable.h"
 
 /*
+ * Enum indicates which way a door is moving - opening or closing
+ */
+typedef enum _door_direction
+{
+  DOOR_STATIONARY,
+  DOOR_OPENING,
+  DOOR_CLOSING,
+} DOOR_DIRECTION;
+
+/*
  * A door is made up of a key, which is a tile, and a door which moves
  * when the key is collected. The door is a sprite.
  */
 typedef struct _door
 {
   COLLECTABLE        collectable;
+
+  uint8_t            door_cell_x;
+  uint8_t            door_cell_y;
+  uint8_t            door_ink_colour;
 
   /*
    * Key is a tile, so this is SP1 cell information
@@ -50,6 +64,10 @@ typedef struct _door
    * It's initialised to this value
    */
   uint8_t            open_secs;
+
+  struct sp1_ss*     sprite;
+  DOOR_DIRECTION     moving_direction;
+  uint8_t            y_offset;
 
   /*
 I used a non animated sprite for the key, which I need to make flicker using
@@ -78,6 +96,8 @@ over collectables, call their animation function if there is one?
  * That's defined as the collectable being valid.
  */
 #define IS_VALID_DOOR(door) (IS_VALID_COLLECTABLE(door->collectable))
+
+#define DOOR_SCREEN_LOCATION(door)  door->door_cell_x*8,door->door_cell_y*8
 
 void create_door( DOOR* door );
 void destroy_door( DOOR* door );

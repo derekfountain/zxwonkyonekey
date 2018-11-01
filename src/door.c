@@ -18,10 +18,15 @@
  */
 
 #include <stdint.h>
+#include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
 #include "door.h"
 #include "utils.h"
+
+/* This is in the assembly language file */
+extern uint8_t door_f1[];
+
 /*
  * This is defined in main.c. Just share it for now.
  */
@@ -57,45 +62,43 @@ void display_key( DOOR* door, uint8_t visible )
   sp1_PrintString(&level_print_control, key_sp1_string);
 }
 
+static uint8_t ink_param;
+static void initialise_colour(unsigned int count, struct sp1_cs *c)
+{
+  (void)count;    /* Suppress compiler warning about unused parameter */
+
+  c->attr_mask = SP1_AMASK_INK;
+  c->attr      = ink_param;
+}
+
 void create_door( DOOR* door )
 {
   display_key( door, TRUE );
 
+  door->moving_direction = DOOR_STATIONARY;
+  door->y_offset         = 0;
+
   /*
-   * Key is a tile, placed at its x,y cell. It's not a static thing like a jumper
-   * so it's probably best handled here.
-   *
-   * The door is a sprite, placed at a certain location. It's not animated like
-   * a pulsing pill, but it will need to be repositioned based on a timer.
-   *
    * This code will need a timer, so I need to break that out and share it
    * with the teleporter code.
    *
-   * The key is a collectable, so maybe I need to add that to the gameloop function
-   * which detects pills. There's not going to be pills and keys in the same
-   * location so I can run both loops and break as soon as one of them returns
-   * a hit.
-   *
    * The door needs a 60ms timer. Check github issue, I worked it out.
-   *
-   * Door sprite is a sprite, I need to get that in the SP1 graphics defs.
    */
-#if 0
-  slowdown->frame     = 0;
-  slowdown->expanding = 1;
-  slowdown->sprite    = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, SLOWDOWN_PILL_PLANE);
-  sp1_AddColSpr(slowdown->sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, SLOWDOWN_PILL_PLANE);
+  door->sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, DOOR_PLANE);
+  sp1_AddColSpr(door->sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, DOOR_PLANE);
 
   /*
-   * Pill sprite is created using absolute graphic data address.
    * I use the _callee version specifically here because sp1_MoveSprPix()
-   * is itself a macro and putting the SLOWDOWN_SCREEN_LOCATION macro
+   * is itself a macro and putting the DOOR_SCREEN_LOCATION macro
    * in the arguments breaks the preprocessor.
    */
-  sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
-                        (void*)slowdown_pill_f1,
-                        SLOWDOWN_SCREEN_LOCATION(slowdown));
-#endif
+  sp1_MoveSprPix_callee(door->sprite, &full_screen,
+                        (void*)door_f1,
+                        DOOR_SCREEN_LOCATION(door));
+
+  /* Colour the cells the sprite occupies */
+  ink_param = door->door_ink_colour;
+  sp1_IterateSprChar(door->sprite, initialise_colour);
 }
 
 void destroy_door( DOOR* door )
@@ -206,20 +209,22 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
   SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_NOT_AVAILABLE);
 
-  /*
-   * Remove key from screen.
-   * TODO. Was just looking at key_action.c where it does a
-   *             *output_action = OPEN_DOOR;
-   * Shouldn't this sort here be in the code called when the OPEN_DOOR
-   * value is returned from the handler?
-   */
+  /* Remove key from screen */
   animate_door_key( door );
+
+  /* Open the door */
+//  start_door_animation( DOOR_OPENING );
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
   return;
 }
 
+/*
+ * Door open time up handler, called by the collectable timer timeout
+ * code when the user has collected the key and the door has been open
+ * for the allotted period. Close the door and reinstate the key.
+ */
 uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
 {
   DOOR* door = (DOOR*)data;
@@ -227,7 +232,11 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
 
   SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_AVAILABLE);
 
+  /* Redraw the key */
   animate_door_key( door );
+
+  /* Close the door */
+//  start_door_animation( DOOR_CLOSING );
 
   return 0;
 }
