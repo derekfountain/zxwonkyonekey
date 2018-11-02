@@ -137,7 +137,7 @@ void animate_door( DOOR* door )
       door->moving = DOOR_STATIONARY;
 
   }
-  else if( door->moving == DOOR_CLOSING )
+  else
   {
     if( --(door->y_offset) == 0 )
       door->moving = DOOR_STATIONARY;
@@ -147,69 +147,6 @@ void animate_door( DOOR* door )
   sp1_MoveSprPix_callee(door->sprite, &full_screen,
                         (void*)door_f1,
                         DOOR_SCREEN_LOCATION_WITH_OFFSET(door));
-
-#if 0
-  /*
-   * Crude little state machine to pulse the slowdown pills.
-   * I tried to do this with a table/data approach but it always
-   * came out bigger and more complicated. :)
-   */
-  uint8_t* next_frame;
-
-  if( slowdown->available == PILL_NOT_AVAILABLE )
-  {
-    /* Move it off screen so it disappears */
-    next_frame = (uint8_t*)slowdown_pill_f1;
-    sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
-  }
-  else
-  {
-    if( slowdown->expanding )
-    {
-      if( slowdown->frame == 0 )
-      {
-        slowdown->frame = 1;
-        next_frame = (uint8_t*)slowdown_pill_f2;
-      }
-      else if( slowdown->frame == 1 )
-      {
-        slowdown->frame = 2;
-        next_frame = (uint8_t*)slowdown_pill_f3;
-      }
-      else /* slowdown->frame == 2 */
-      {
-        slowdown->expanding = 0;
-        next_frame = (uint8_t*)slowdown_pill_f3;
-      }
-    }
-    else
-    {
-      if( slowdown->frame == 0 )
-      {
-        slowdown->expanding = 1;
-        next_frame = (uint8_t*)slowdown_pill_f1;
-      }
-      else if( slowdown->frame == 1 )
-      {
-        slowdown->frame = 0;
-        next_frame = (uint8_t*)slowdown_pill_f1;
-      }
-      else /* slowdown->frame == 2 */
-      {
-        slowdown->frame = 1;
-        next_frame = (uint8_t*)slowdown_pill_f2;
-      }
-    }
-
-    /* Set the correct graphic on the pill sprite */
-    sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
-                          next_frame,
-                          SLOWDOWN_SCREEN_LOCATION(slowdown));
-  }
-
-  /* Finally, invalidate the pill sprite so it redraws */
-  sp1_IterateUpdateSpr(slowdown->sprite, invalidatePillSprite);
-#endif
 }
 
 void animate_door_key( DOOR* door )
@@ -236,6 +173,7 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
   /* Open the door */
   door->moving = DOOR_OPENING;
+  door->animation_step = 0;
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
@@ -259,22 +197,41 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
 
   /* Close the door */
   door->moving = DOOR_CLOSING;
+  door->animation_step = 0;
 
   return 0;
 }
 
-void door_passed_through( DOOR* door )
+void check_door_passed_through( DOOR* door )
 {
-  /* Not sure if this is useful yet */
-  SET_COLLECTABLE_AVAILABLE( door->collectable, COLLECTABLE_DISARMED );
+  uint8_t xpos = get_runner_xpos();
+  uint8_t ypos = get_runner_ypos();
 
-  /*
-   * Cancel the timer with the door open and the key off screen.
-   * The door stays open.
-   */
-  CANCEL_COLLECTABLE_TIMER( door->collectable );
+  if( IS_DOOR_PASSTHROUGH_POINT( door, xpos, ypos ) )
+  {
+    /*
+     * Cancel the timer with the door open and the key off screen.
+     * The door stays open.
+     */
+    CANCEL_COLLECTABLE_TIMER( door->collectable );
+  }
 }
 
 
+void validate_door_cells( DOOR* first_door )
+{
+  DOOR* door = first_door;
 
-
+  while( IS_VALID_COLLECTABLE(door->collectable) )
+  {
+    /*
+     * There doesn't appear to be an SP1 interface to validate a
+     * single tile. Use a 1x1 rectangle instead.
+     */
+    struct sp1_Rect validate_cell = {door->door_protected_cell_y,
+                                     door->door_protected_cell_x, 1, 1};
+    sp1_Validate(&validate_cell);
+    
+    door++;
+  }
+}

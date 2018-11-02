@@ -187,7 +187,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  * through, etc.
  */
 
-LOOP_ACTION game_actions[14] =
+LOOP_ACTION game_actions[13] =
   {
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
@@ -196,7 +196,6 @@ LOOP_ACTION game_actions[14] =
     {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_slowdown_pill,     NORMAL_WHEN_SLOWDOWN    },
     {test_for_door_key,          NORMAL_WHEN_SLOWDOWN    },
-    {test_for_through_door,      NORMAL_WHEN_SLOWDOWN    },
     {test_for_falling,           NORMAL_WHEN_SLOWDOWN    },
     {test_for_start_jump,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_direction_change,  NORMAL_WHEN_SLOWDOWN    },
@@ -353,6 +352,11 @@ void gameloop( GAME_STATE* game_state )
 
         teleporter++;
       }
+    }
+
+    if( game_state->current_level->doors )
+    {
+      validate_door_cells( game_state->current_level->doors );
     }
 
     /* Halt to lock the game to 50fps, then update everything */

@@ -672,36 +672,6 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
 
 
 /***
- *      _____                       _   _   _                           _           _                ___
- *     |  __ \                     | | | | | |                         | |         | |              |__ \
- *     | |__) __ _ ___ ___  ___  __| | | |_| |__  _ __ ___  _   _  __ _| |__     __| | ___   ___  _ __ ) |
- *     |  ___/ _` / __/ __|/ _ \/ _` | | __| '_ \| '__/ _ \| | | |/ _` | '_ \   / _` |/ _ \ / _ \| '__/ /
- *     | |  | (_| \__ \__ |  __| (_| | | |_| | | | | | (_) | |_| | (_| | | | | | (_| | (_) | (_) | | |_|
- *     |_|   \__,_|___|___/\___|\__,_|  \__|_| |_|_|  \___/ \__,_|\__, |_| |_|  \__,_|\___/ \___/|_| (_)
- *                                                                 __/ |
- *                                                                |___/
- */
-PROCESSING_FLAG test_for_through_door( void* data, GAME_ACTION* output_action )
-{
-  (void)data;
-  /*
-   * When a door opens its sprite moves aside. Once it's fully open the attribute
-   * of the single cell the door occupies is set to the background which means
-   * the collision code won't see the door and the runner will be able the
-   * move through the doorway. Once that happens the door is set to stay
-   * permanently open.
-   * This code checks each door at each runner movement to see if the runner is
-   * passing through the doorway. If so, the door code is called to wedge the
-   * door open.
-   */
-  *output_action = NO_ACTION;
-
-  return KEEP_PROCESSING;
-}
-
-
-
-/***
  *                     _                 _             _                     ___
  *         /\         (_)               | |           | |                   |__ \
  *        /  \   _ __  _ _ __ ___   __ _| |_ ___    __| | ___   ___  _ __ ___  ) |
@@ -723,8 +693,40 @@ PROCESSING_FLAG animate_doors( void* data, GAME_ACTION* output_action )
     {
       if( DOOR_IS_MOVING( door ) )
       {
-	animate_door( door );
+        /*
+         * This function is called 50 times a second, but I don't want to
+         * animate the doors that fast. They just whizz away too quickly.
+         * So keep a step count with the door and only animate every
+         * few frames.
+         */
+        if( door->animation_step++ == 0 )
+        {
+          animate_door( door );
+        }
+        else
+        {
+          if( door->animation_step == 5 )
+            door->animation_step = 0;
+        }
       }
+      else
+      {
+        /*
+         * The door isn't moving, so check to see if it's open and he's reached it.
+         * When a door opens its sprite moves aside. Once it's fully open the attribute
+         * of the single cell the door occupies is set to the background which means
+         * the collision code won't see the door and the runner will be able the
+         * move through the doorway. Once that happens the door is set to stay
+         * permanently open.
+         * Check to see if he's reached this door. The function does what's necessary
+         * to wedge the door open if he's reached it.
+         */
+        if( DOOR_IS_OPEN(door) )
+        {
+          check_door_passed_through( door );
+        }
+      }
+
       door++;
     }
   }
