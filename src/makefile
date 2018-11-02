@@ -49,6 +49,8 @@ BE_STATICS=./zxwonkyonekey_statics.inc
 TAGS_GENERATOR=etags
 TAGS=TAGS
 
+MEM_FREE=./how_much_memory_left.sh
+
 EXEC=wonky.tap
 EXEC_OUTPUT=wonky
 SYM_OUTPUT=wonky.sym
@@ -119,7 +121,7 @@ HEADERS = action.h \
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
-all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS)
+all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS) report
 
 # Level maps are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
@@ -153,6 +155,10 @@ $(BE_STATICS): $(PREPROCESSED) $(SYM_OUTPUT)
 $(TAGS): $(EXEC)
 	$(TAGS_GENERATOR) *.h *.c
 
+# After everything, report the exec size
+.PHONY: report
+report: $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS)
+	$(MEM_FREE)
 
 .PHONY: clean_tmp
 clean_tmp:
