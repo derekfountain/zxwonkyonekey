@@ -77,7 +77,8 @@ TILE_DEFINITION level2_tiles[] = {
   {129, jumper},
   {130, finish},
   {131, grassv},
-  {132, door_key},
+  {132, teleporter},
+  {133, door_key},
   {255, blank},
   {0,   {0}   }
 };
@@ -85,27 +86,39 @@ TILE_DEFINITION level2_tiles[] = {
 TELEPORTER_DEFINITION level1_teleporters[] = {
   {  0*8,  1*8,  0,  1,
     22*8, 30*8, 22, 30,
-    NAMED_VALUES_1("Change direction", 0)
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
   },
   {  0*8, 10*8,  0, 10,
     22*8, 10*8, 22, 10,
-    NAMED_VALUES_1("Change direction", 1)
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
   },
   { 14*8, 20*8, 14, 20,
      3*8,  0*8,  3,  0,
-    NAMED_VALUES_1("Change direction", 0)
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
   },
   { 11*8, 28*8, 11, 28,
      6*8,  0*8,  6,  0,
-    NAMED_VALUES_1("Change direction", 1)
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
   },
   {  4*8,  8*8,  4,  8,
      2*8, 30*8,  2, 30,
-    NAMED_VALUES_1("Change direction", 0)
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
   },
   {  2*8, 23*8,  2, 23,
     16*8,  6*8,  16, 6,
-    NAMED_VALUES_1("Change direction", 0)
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
   },
   {0}
 };
@@ -149,22 +162,32 @@ DOOR level2_doors[] = {
                             "Centre x px", (5*8+4), "Centre y px", (22*8+4),
                             door_key_collected,
                             door_open_timeup)},
-    NAMED_VALUES_1("Door cell x",           27),
+    NAMED_VALUES_1("Door cell x",           22),
     NAMED_VALUES_1("Door cell y",           22),
-    NAMED_VALUES_1("Door protected cell x", 27),
+    NAMED_VALUES_1("Door protected cell x", 22),
     NAMED_VALUES_1("Door protected cell y", 21),
-    NAMED_VALUES_1("Door stays open x",     27*8+1),  /* Approach from left */
+    NAMED_VALUES_1("Door stays open x",     22*8+1),  /* Approach from left */
     NAMED_VALUES_1("Door stays open y",     22*8),
     NAMED_VALUES_1("Door ink",        INK_BLUE),
     NAMED_VALUES_1("Key ink",        INK_BLACK),
     NAMED_VALUES_1("Key paper",      INK_WHITE),
-    NAMED_VALUES_1("Key tile",             132),
-    NAMED_VALUES_1("Door open secs",        10),
+    NAMED_VALUES_1("Key tile",             133),
+    NAMED_VALUES_1("Door open secs",         2),
   },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}, 0 },
+};
+
+TELEPORTER_DEFINITION level2_teleporters[] = {
+  { 15*8, 13*8, 15, 13,
+    14*8, 22*8, 14, 22,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {0}
 };
 
 LEVEL_DATA level_data[] = {
@@ -241,24 +264,25 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level2_map,
     teardown_level,
-    START_POINT(0,135),
+    START_POINT(0,155),
+    /*START_POINT(48,120),*/
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
-                   "Solid",      INK_GREEN|PAPER_WHITE,
-                   "Jumper",     INK_RED|PAPER_GREEN,
-                   "Teleporter", INK_BLACK|PAPER_WHITE,
+                   "Solid",      INK_YELLOW|PAPER_WHITE,
+                   "Jumper",     INK_RED|PAPER_YELLOW,
+                   "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level2_tiles[0],
-    NULL,
+    &level2_teleporters[0],
     NULL,
     &level2_doors[0],
     MAX_POINTS(20000),
     MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X", 19,
-                     "Level score Y", 18,
-                     "Bonus score X", 19,
-                     "Bonus score Y", 19,
+    { NAMED_VALUES_5("Level score X",  0,
+                     "Level score Y",  0,
+                     "Bonus score X",  0,
+                     "Bonus score Y",  1,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 
@@ -332,21 +356,31 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
   {
     TELEPORTER_DEFINITION* teleporter = level_data->teleporters;
 
+    uint8_t print_string[9];
+
+    print_string[0] = '\x10';
+    print_string[2] = '\x11';
+
+    print_string[4] = '\x16';
+
+    print_string[8] = '\0';
+
     while( teleporter->end_1_x || teleporter->end_1_y )
     {
       /* TODO Pull this out into a teleporter.c file */
-      uint8_t print_string[5];
       
-      print_string[0] = '\x16';
-      print_string[1] = teleporter->end_1_y_cell;
-      print_string[2] = teleporter->end_1_x_cell;
-      print_string[3] = '\x84';
-      print_string[4] = '\0';
+      print_string[1] = teleporter->ink;
+      print_string[3] = teleporter->paper;
+
+      print_string[5] = teleporter->end_1_y_cell;
+      print_string[6] = teleporter->end_1_x_cell;
+      print_string[7] = '\x84'; /* FIXME Hardcoded teleporter UDG number */
 
       sp1_PrintString(&level_print_control, print_string);
 
-      print_string[1] = teleporter->end_2_y_cell;
-      print_string[2] = teleporter->end_2_x_cell;
+      /* Change the other end and print again */
+      print_string[5] = teleporter->end_2_y_cell;
+      print_string[6] = teleporter->end_2_x_cell;
 
       sp1_PrintString(&level_print_control, print_string);
     

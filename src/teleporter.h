@@ -48,6 +48,9 @@ typedef struct _teleporter_defintion
 
   uint8_t change_direction;
 
+  uint8_t ink;
+  uint8_t paper;
+
 } TELEPORTER_DEFINITION;
 
 #endif
