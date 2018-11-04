@@ -27,10 +27,10 @@ set ::JUMPER            "red"
 
 set ::SOLIDH_CHAR       {0x80}
 set ::SOLIDV_CHAR       {0x83}
-set ::SOLID_COLOUR      "0x10, 0x07, 0x11, 0x00 ; ink white, paper black"
+set ::SOLID_COLOUR      "0x10, 0x06, 0x11, 0x07 ; ink yellow, paper white"
 
 set ::JUMPER_CHAR       {0x81}
-set ::JUMPER_COLOUR     "0x10, 0x02, 0x11, 0x00 ; ink red, paper black"
+set ::JUMPER_COLOUR     "0x10, 0x02, 0x11, 0x06 ; ink red, paper yellow"
 
 set ::HIGHLIT_OUTLINE   "yellow"
 set ::UNHIGHLIT_OUTLINE "gray"
@@ -102,6 +102,8 @@ proc generateOutput {} {
 	}
     }
 
+    puts $h [format "        defb 0"]
+    
     close $h
 
 }
