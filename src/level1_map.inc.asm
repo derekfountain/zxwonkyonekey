@@ -304,3 +304,4 @@
         defb 0x81 ; jumper
         defb 0x16, 0x17, 0x07   ; AT 23,7
         defb 0x81 ; jumper
+        defb 0
