@@ -95,6 +95,7 @@ typedef struct _door
    * It's initialised to this value
    */
   uint8_t            open_secs;
+  uint8_t            start_open_secs;
 
   /* Stuff below here isn't initialised at compile time */
 

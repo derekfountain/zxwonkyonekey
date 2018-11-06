@@ -85,12 +85,6 @@ void create_door( DOOR* door )
   door->moving   = DOOR_STATIONARY;
   door->y_offset = 0;
 
-  /*
-   * This code will need a timer, so I need to break that out and share it
-   * with the teleporter code.
-   *
-   * The door needs a 60ms timer. Check github issue, I worked it out.
-   */
   door->sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, DOOR_PLANE);
   sp1_AddColSpr(door->sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, DOOR_PLANE);
 
@@ -106,6 +100,12 @@ void create_door( DOOR* door )
   /* Colour the cells the sprite occupies */
   ink_param = door->door_ink_colour;
   sp1_IterateSprChar(door->sprite, initialise_colour);
+
+  if( door->start_open_secs )
+  {
+    door_key_collected(&door->collectable, door);
+    START_COLLECTABLE_TIMER(door->collectable, door->start_open_secs);
+  }
 }
 
 void destroy_door( DOOR* door )
@@ -132,7 +132,7 @@ void animate_door( DOOR* door )
 {
   if( door->moving == DOOR_OPENING )
   {
-    /* TODO Consider direction */
+    /* TODO Consider direction door opens - trapdoors? */
     if( ++(door->y_offset) == 8 )
       door->moving = DOOR_STATIONARY;
 
