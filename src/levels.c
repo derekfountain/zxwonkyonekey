@@ -381,10 +381,10 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
 
     uint8_t print_string[9];
 
-    print_string[0] = '\x10';
-    print_string[2] = '\x11';
+    print_string[0] = '\x10'; /* Ink <n> */
+    print_string[2] = '\x11'; /* Paper <n> */
 
-    print_string[4] = '\x16';
+    print_string[4] = '\x16'; /* AT <x>,<y> */
 
     print_string[8] = '\0';
 

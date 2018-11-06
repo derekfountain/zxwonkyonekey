@@ -231,8 +231,6 @@ PUBLIC _level0_map
 
         defb 0x16, 0x04, 0x0A   ; AT 4,10, final hurdle
         defb 0x81               ; jumper
-
-
         
         ;; Place the finish point
 
@@ -274,13 +272,7 @@ INCLUDE "level1_map.inc.asm"
         
         defb 0x16, 0x10, 0x0    ; AT 16,0
         defb 0x82               ; finish
-	
-	;; prime colour for teleporters which get filled in by the C code in
-	;; print_level_from_sp1_string()
-	
-        defb 0x10, 0x04         ; ink green
-        defb 0x11, 0x03         ; paper blue
-	                
+		                
         defb 0x00
 PUBLIC _level1_map_end
 ._level1_map_end
@@ -304,6 +296,14 @@ PUBLIC _level2_map
 
 INCLUDE "level2_map.inc.asm"
 
+        ;; Place the finish point
+
+        defb 0x10, 0x06         ; ink yellow
+        defb 0x11, 0x01         ; paper blue
+        
+        defb 0x16, 0x16, 0x1E   ; AT 22,30
+        defb 0x82               ; finish
+        
 	defb 0x00
 	
 PUBLIC _level2_map_end
