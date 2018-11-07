@@ -157,6 +157,21 @@ SLOWDOWN level1_slowdowns[] = {
                             0)}},
 };
 
+SLOWDOWN level2_slowdowns[] = {
+  { {INITIALISE_COLLECTABLE("Sprite x", 14*8,   "Sprite y", 20*8,
+                            "Centre x", 14*8+4, "Centre y", 20*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(12)  },
+  { {INITIALISE_COLLECTABLE("Sprite x", 1*8,    "Sprite y", 11*8,
+                            "Centre x", 1*8+4,  "Centre y", 11*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(15)  },
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0,
+                            0,
+                            0)}},
+};
+
 DOOR level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Key x cell",       5,  "Key y cell",       22,
                             "Centre x px", (5*8+4), "Centre y px", (22*8+4),
@@ -325,7 +340,7 @@ LEVEL_DATA level_data[] = {
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level2_tiles[0],
     &level2_teleporters[0],
-    NULL,
+    level2_slowdowns,
     &level2_doors[0],
     MAX_POINTS(20000),
     MAX_BONUS(12000),

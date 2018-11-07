@@ -25,6 +25,18 @@
 #include "utils.h"
 #include "game_state.h"
 
+/*
+ * TODO Add tracing. I've got it into a state where the key is collected
+ * but it didn't seem to keep the door open. If I can recreate it I'll
+ * need the tracing. Check the wedge the door open action still works in
+ * slowdown mode.
+ * Another slowdown pill is reaquired on the lower right side of level2.
+ * Not sure how I can make it optional given the current layout.
+ * Probably need one more near the top of the right side of level2.
+ * Improve colour os level2 - that yellow on white looks horrible. Use a
+ * different pair of platform UDGs.
+ */
+
 /* This is in the assembly language file */
 extern uint8_t door_f1[];
 
