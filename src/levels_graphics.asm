@@ -96,13 +96,24 @@ PUBLIC _jumper
 PUBLIC _block_platform1
 ._block_platform1
         defb @01111110
-        defb @11111111
+        defb @10000001
 	defb @11111111
 	defb @01111110
-	defb @10000001
-	defb @10000001
-	defb @10000001
+	defb @11010101
+	defb @10101010
+	defb @11010101
 	defb @01111110
+        
+PUBLIC _block_platform2
+._block_platform2
+        defb @01111110
+        defb @10101011
+        defb @01111110
+        defb @11010101
+        defb @01111110
+        defb @10101011
+        defb @01111110
+        defb @11111111
         
 PUBLIC _finish
 ._finish

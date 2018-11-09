@@ -38,6 +38,7 @@ extern uint8_t jumper[8];
 extern uint8_t platform1[8];
 extern uint8_t platform1v[8];
 extern uint8_t block_platform1[8];
+extern uint8_t block_platform2[8];
 extern uint8_t finish[8];
 extern uint8_t grassv[8];
 extern uint8_t teleporter[8];
@@ -77,7 +78,7 @@ TILE_DEFINITION level2_tiles[] = {
   {128, block_platform1},
   {129, jumper},
   {130, finish},
-  {131, block_platform1},
+  {131, block_platform2},  /* TODO Could remove this */
   {132, teleporter},
   {133, door_key},
   {255, blank},
@@ -165,6 +166,14 @@ SLOWDOWN level2_slowdowns[] = {
                             slowdown_timeup)}, SLOWDOWN_SECS(12)  },
   { {INITIALISE_COLLECTABLE("Sprite x", 1*8,    "Sprite y", 11*8,
                             "Centre x", 1*8+4,  "Centre y", 11*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(15)  },
+  { {INITIALISE_COLLECTABLE("Sprite x", 30*8,   "Sprite y", 20*8,
+                            "Centre x", 30*8+4, "Centre y", 20*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(15)  },
+  { {INITIALISE_COLLECTABLE("Sprite x", 23*8,   "Sprite y",  9*8,
+                            "Centre x", 23*8+4, "Centre y",  9*8+4,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15)  },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
@@ -327,11 +336,11 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level2_map,
     teardown_level,
-    START_POINT(0,155),
+    /*START_POINT(0,155),*/
     /*START_POINT(48,120),*/
     /*START_POINT(8,16),*/
     /*START_POINT(24*8,21*8),*/
-    /*START_POINT(26*8,13*8),*/
+    START_POINT(26*8,13*8),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
