@@ -32,6 +32,7 @@
 #define __TRACETABLE_H
 
 #include <unistd.h>
+#include <string.h>
 
 #define TRACING_UNINITIALISED ((void*)0xFFFF)
 #define TRACING_INACTIVE      ((void*)0xFFFE)

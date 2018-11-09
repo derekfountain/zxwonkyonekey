@@ -23,19 +23,66 @@
 
 #include "door.h"
 #include "utils.h"
+#include "int.h"
+#include "tracetable.h"
 #include "game_state.h"
 
-/*
- * TODO Add tracing. I've got it into a state where the key is collected
- * but it didn't seem to keep the door open. If I can recreate it I'll
- * need the tracing. Check the wedge the door open action still works in
- * slowdown mode.
- * Another slowdown pill is reaquired on the lower right side of level2.
- * Not sure how I can make it optional given the current layout.
- * Probably need one more near the top of the right side of level2.
- * Improve colour os level2 - that yellow on white looks horrible. Use a
- * different pair of platform UDGs.
+/***
+ *      _______             _             
+ *     |__   __|           (_)            
+ *        | |_ __ __ _  ___ _ _ __   __ _ 
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/ 
+ *
+ * This defines the door's trace table.
  */
+
+typedef enum _door_tracetype
+{
+  DOOR_CREATED,
+  DOOR_DESTROYED,
+  DOOR_ANIMATED,
+  DOOR_KEY_COLLECTED,
+  DOOR_TIMEOUT,
+  DOOR_PASSED_THROUGH,
+} DOOR_TRACETYPE;
+
+typedef struct _door_trace
+{
+  uint16_t           ticker;
+  DOOR_TRACETYPE     tracetype;
+  DOOR*              door;
+  uint8_t            xpos;
+  uint8_t            ypos;
+} DOOR_TRACE;
+
+/* BE:PICKUPDEF */
+#define DOOR_TRACE_ENTRIES 120
+#define DOOR_TRACETABLE_SIZE ((size_t)sizeof(DOOR_TRACE)*DOOR_TRACE_ENTRIES)
+
+/* It's quicker to do this with a macro, as long as it's only used once or twice */
+#define DOOR_TRACE_CREATE(ttype,dptr,x,y) {     \
+    if( door_tracetable != TRACING_INACTIVE ) { \
+      DOOR_TRACE          dt;   \
+      dt.ticker           = GET_TICKER; \
+      dt.tracetype        = ttype; \
+      dt.xpos             = x; \
+      dt.ypos             = y; \
+      door_add_trace(&dt); \
+    } \
+}
+
+TRACE_FN( door, DOOR_TRACE, DOOR_TRACETABLE_SIZE )
+
+void init_door_trace(void)
+{
+  if( door_tracetable == TRACING_UNINITIALISED )
+    door_tracetable = door_next_trace = allocate_tracememory(DOOR_TRACETABLE_SIZE);
+}
+
 
 /* This is in the assembly language file */
 extern uint8_t door_f1[];
@@ -118,6 +165,8 @@ void create_door( DOOR* door )
     door_key_collected(&door->collectable, door);
     START_COLLECTABLE_TIMER(door->collectable, door->start_open_secs);
   }
+
+  DOOR_TRACE_CREATE(DOOR_CREATED,door,0,0);
 }
 
 void destroy_door( DOOR* door )
@@ -127,6 +176,8 @@ void destroy_door( DOOR* door )
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(door->sprite, &full_screen, (void*)0, 255, 255);
   sp1_DeleteSpr(door->sprite);
+
+  DOOR_TRACE_CREATE(DOOR_DESTROYED,door,0,0);
 }
 
 /*
@@ -159,6 +210,8 @@ void animate_door( DOOR* door )
   sp1_MoveSprPix_callee(door->sprite, &full_screen,
                         (void*)door_f1,
                         DOOR_SCREEN_LOCATION_WITH_OFFSET(door));
+
+  DOOR_TRACE_CREATE(DOOR_ANIMATED,door,0,0);
 }
 
 void animate_door_key( DOOR* door )
@@ -189,6 +242,8 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
+  DOOR_TRACE_CREATE(DOOR_KEY_COLLECTED,door,0,0);
+
   return;
 }
 
@@ -211,6 +266,8 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
   door->moving = DOOR_CLOSING;
   door->animation_step = 0;
 
+  DOOR_TRACE_CREATE(DOOR_TIMEOUT,door,0,0);
+
   return 0;
 }
 
@@ -226,7 +283,10 @@ void check_door_passed_through( DOOR* door )
      * The door stays open.
      */
     CANCEL_COLLECTABLE_TIMER( door->collectable );
+
+    DOOR_TRACE_CREATE(DOOR_PASSED_THROUGH,door,0,0);
   }
+  
 }
 
 

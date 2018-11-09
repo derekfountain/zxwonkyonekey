@@ -27,6 +27,11 @@ def COLLISION_TRACE_TABLE struct
   COLLISION_TRACE_ENTRIES COLLISION_TRACE open "collision trace table"
 }
 
+def DOOR_TRACE_TABLE struct
+{
+  DOOR_TRACE_ENTRIES DOOR_TRACE open "door trace table"
+}
+
 
 def main struct
 {
@@ -47,6 +52,9 @@ def main struct
 
   at _collision_tracetable
   n16 ptr COLLISION_TRACE_TABLE  null "collision"
+
+  at _door_tracetable
+  n16 ptr DOOR_TRACE_TABLE       null "door"
 
 
   at 0 NullDef suppress ""

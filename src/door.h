@@ -133,6 +133,8 @@ typedef struct _door
 #define DOOR_SCREEN_LOCATION(door)              door->door_cell_x*8,door->door_cell_y*8
 #define DOOR_SCREEN_LOCATION_WITH_OFFSET(door)  door->door_cell_x*8,(door->door_cell_y*8)-door->y_offset
 
+void init_door_trace(void);
+
 void create_door( DOOR* door );
 void destroy_door( DOOR* door );
 void animate_door( DOOR* door );
