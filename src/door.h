@@ -116,6 +116,14 @@ typedef struct _door
 
 
 /*
+ * Macro initialises the data for the door location. These values are set by the
+ * compiler so they don't need to be calculated by the Spectrum.
+ * Given the x,y cell coordinates, the protected cell is set to the one above it
+ * and the stays-open pixel location is it's left side.
+ */
+#define INITIALISE_DOOR_LOCATION(cellx,celly) cellx,celly,cellx,celly-1,(cellx*8)+1,celly*8
+
+/*
  * Macro answers true if the door pointed to is valid.
  * That's defined as the collectable being valid.
  */
