@@ -180,17 +180,6 @@ void destroy_door( DOOR* door )
   DOOR_TRACE_CREATE(DOOR_DESTROYED,door,0,0);
 }
 
-/*
- * Invalidator, called at screen update time to ensure the door
- * sprite tiles are invalidated and hence redrawn
- */
-static void invalidateDoorSprite(unsigned int count, struct sp1_update *u)
-{
-  (void)count;
-
-  sp1_InvUpdateStruct(u);
-}
-
 void animate_door( DOOR* door )
 {
   if( door->moving == DOOR_OPENING )

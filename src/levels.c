@@ -321,11 +321,7 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level2_map,
     teardown_level,
-    /*START_POINT(0,155),*/
-    /*START_POINT(48,120),*/
-    /*START_POINT(8,16),*/
-    /*START_POINT(24*8,21*8),*/
-    START_POINT(26*8,13*8),
+    START_POINT(0,155),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
