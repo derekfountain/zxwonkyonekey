@@ -125,7 +125,8 @@ all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) 
 
 # Level maps are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
-                level2_map.inc.asm
+                level2_map.inc.asm \
+                level3_map.inc.asm
 
 # Rule to build the executable
 $(EXEC) : $(OBJECTS)

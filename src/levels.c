@@ -51,6 +51,7 @@ extern uint8_t door_key[8];
 extern uint8_t level0_map[];
 extern uint8_t level1_map[];
 extern uint8_t level2_map[];
+extern uint8_t level3_map[];
 
 /*
  * Tables of tiles required for each level. "UDGs".
@@ -75,6 +76,17 @@ TILE_DEFINITION level1_tiles[] = {
 };
 
 TILE_DEFINITION level2_tiles[] = {
+  {128, block_platform1},
+  {129, jumper},
+  {130, finish},
+  {131, block_platform2},
+  {132, teleporter},
+  {133, door_key},
+  {255, blank},
+  {0,   {0}   }
+};
+
+TILE_DEFINITION level3_tiles[] = {
   {128, block_platform1},
   {129, jumper},
   {130, finish},
@@ -182,6 +194,13 @@ SLOWDOWN level2_slowdowns[] = {
                             0)}},
 };
 
+SLOWDOWN level3_slowdowns[] = {
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0,
+                            0,
+                            0)}},
+};
+
 DOOR level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Key x cell",       8,  "Key y cell",        4,
                             "Centre x px", (8*8+4), "Centre y px", (4*8+4),
@@ -225,6 +244,25 @@ DOOR level2_doors[] = {
                             0)}, 0 },
 };
 
+DOOR level3_doors[] = {
+  { {INITIALISE_COLLECTABLE("Key x cell",       30,  "Key y cell",        22,
+                            "Centre x px", (30*8+4), "Centre y px", (22*8+4),
+                            door_key_collected,
+                            door_open_timeup)},
+    INITIALISE_DOOR_LOCATION(4,0),
+    NAMED_VALUES_1("Door ink",       INK_GREEN),
+    NAMED_VALUES_1("Key ink",        INK_BLACK),
+    NAMED_VALUES_1("Key paper",      INK_WHITE),
+    NAMED_VALUES_1("Key tile",             133),
+    NAMED_VALUES_1("Door open secs",         6),
+    NAMED_VALUES_1("Start open secs",        3),
+  },
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0,
+                            0,
+                            0)}, 0 },
+};
+
 TELEPORTER_DEFINITION level2_teleporters[] = {
   { 15*8, 13*8, 15, 13,
     14*8, 22*8, 14, 22,
@@ -240,6 +278,16 @@ TELEPORTER_DEFINITION level2_teleporters[] = {
   },
   {  13*8, 24*8,  13, 24,
      9*8,  30*8,  9,  30,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {0}
+};
+
+TELEPORTER_DEFINITION level3_teleporters[] = {
+  {  0*8,  7*8,  0,  7,
+    22*8, 27*8, 22, 27,
     NAMED_VALUES_1("Change direction", 0),
     INK_GREEN,
     INK_MAGENTA,
@@ -339,6 +387,37 @@ LEVEL_DATA level_data[] = {
                      "Level score Y",  0,
                      "Bonus score X",  0,
                      "Bonus score Y",  1,
+		     "Scores att",    INK_BLUE|PAPER_WHITE) }
+  },
+
+  /***
+   *      _                _   ____
+   *     | |   _____ _____| | |__ /
+   *     | |__/ -_\ V / -_| |  |_ \
+   *     |____\___|\_/\___|_| |___/
+   *
+   */
+  { print_level_from_sp1_string,
+    level3_map,
+    teardown_level,
+    START_POINT(0,16),
+    LEVEL_BORDER(INK_BLACK),
+    START_FACING(RIGHT),
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
+                   "Solid",      INK_RED|PAPER_WHITE,
+                   "Jumper",     INK_YELLOW|PAPER_RED,
+                   "Teleporter", INK_GREEN|PAPER_MAGENTA,
+                   "Finish",     INK_YELLOW|PAPER_BLUE),
+    level3_tiles,
+    level3_teleporters,
+    level3_slowdowns,
+    level3_doors,
+    MAX_POINTS(20000),
+    MAX_BONUS(12000),
+    { NAMED_VALUES_5("Level score X",  6,
+                     "Level score Y",  6,
+                     "Bonus score X",  6,
+                     "Bonus score Y",  7,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 

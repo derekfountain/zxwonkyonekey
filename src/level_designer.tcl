@@ -30,7 +30,7 @@ set ::SOLIDV_CHAR       {0x83}
 set ::SOLID_COLOUR      "0x10, 0x06, 0x11, 0x07 ; ink yellow, paper white"
 
 set ::JUMPER_CHAR       {0x81}
-set ::JUMPER_COLOUR     "0x10, 0x02, 0x11, 0x06 ; ink red, paper yellow"
+set ::JUMPER_COLOUR     "0x10, 0x06, 0x11, 0x02 ; ink yellow, paper red"
 
 set ::HIGHLIT_OUTLINE   "yellow"
 set ::UNHIGHLIT_OUTLINE "gray"

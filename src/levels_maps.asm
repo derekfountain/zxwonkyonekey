@@ -308,3 +308,35 @@ INCLUDE "level2_map.inc.asm"
 	
 PUBLIC _level2_map_end
 ._level2_map_end
+
+
+
+
+
+;;    _                    _   ____
+;;   | |                  | | |___ \
+;;   | |     _____   _____| |   __) |
+;;   | |    / _ \ \ / / _ | |  |__ <
+;;   | |___|  __/\ V |  __| |  ___) |
+;;   |______\___| \_/ \___|_| |____/
+;;
+;; Level designer
+
+
+PUBLIC _level3_map
+._level3_map
+
+INCLUDE "level3_map.inc.asm"
+
+        ;; Place the finish point
+
+        defb 0x10, 0x06         ; ink yellow
+        defb 0x11, 0x01         ; paper blue
+
+        defb 0x16, 0x00, 0x01   ; AT 1,1
+        defb 0x82               ; finish
+
+	defb 0x00
+
+PUBLIC _level3_map_end
+._level3_map_end
