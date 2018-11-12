@@ -1,4 +1,22 @@
-SECTION rodata_user
+;; Wonky One Key, a ZX Spectrum game featuring a single control key
+;; Copyright (C) 2018 Derek Fountain
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 2
+;; of the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+SECTION LEVEL_DATA
+ORG 25000
 
 ;;  In the SP1 print string routine, embedded paper colours are
 ;;  set using 3 bit colour values, i.e. the same as INK.
@@ -333,7 +351,7 @@ INCLUDE "level3_map.inc.asm"
         defb 0x10, 0x06         ; ink yellow
         defb 0x11, 0x01         ; paper blue
 
-        defb 0x16, 0x00, 0x01   ; AT 1,1
+        defb 0x16, 0x01, 0x01   ; AT 1,1
         defb 0x82               ; finish
 
 	defb 0x00

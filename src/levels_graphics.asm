@@ -15,7 +15,11 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
         
-SECTION rodata_user
+;; I'm putting this in the LEVEL_DATA section, which is below the
+;; main code in contended memory. I'm not sure how much SP1 references
+;; this data; I might need to move this back up into DATA
+
+SECTION LEVEL_DATA
 
 ;;    _                    _   _    _ _____   _____     
 ;;   | |                  | | | |  | |  __ \ / ____|    

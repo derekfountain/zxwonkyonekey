@@ -17,6 +17,7 @@
 
 CC=zcc
 AS=zcc
+APPMAKE=appmake
 TARGET=+zx
 VERBOSITY=-vn
 CRT=31
@@ -60,18 +61,19 @@ OBJECTS = gameloop.o \
           key_action.o \
           main.o \
           int.o \
-	  runner.o \
-	  collectable.o \
-	  door.o \
-	  slowdown_pill.o \
-	  runner_sprite.o \
+          runner.o \
+          collectable.o \
+          door.o \
+          slowdown_pill.o \
+          runner_sprite.o \
           tracetable.o \
-	  local_assert.o \
-	  collision.o \
-	  levels_graphics.o \
-	  levels_maps.o \
-	  scoring.o \
-	  small_utoa.o
+          local_assert.o \
+          collision.o \
+          levels_graphics.o \
+          levels_maps.o \
+          scoring.o \
+          small_utoa.o \
+          initialisation.o
 
 # Objects built from C files (as opposed to ASMs)
 C_OBJECTS = gameloop.o \
@@ -79,14 +81,14 @@ C_OBJECTS = gameloop.o \
             key_action.o \
             main.o \
             int.o \
-	    runner.o \
-	  collectable.o \
-	  door.o \
+            runner.o \
+            collectable.o \
+            door.o \
             slowdown_pill.o \
             tracetable.o \
-	    local_assert.o \
-	    collision.o \
-	    scoring.o
+            local_assert.o \
+            collision.o \
+            scoring.o
 
 # A .cpre is the output of the C preprocessor
 PREPROCESSED = $(C_OBJECTS:.o=.cpre)
@@ -95,21 +97,22 @@ PREPROCESSED = $(C_OBJECTS:.o=.cpre)
 # BE structures file creation so order is important. Forward references
 # in the structures need to be avoided.
 HEADERS = action.h \
-	  collision.h \
-	  collectable.h \
-	  slowdown_pill.h \
-	  scoring.h \
-	  gameloop.h \
-	  game_state.h \
-	  int.h \
-	  teleporter.h \
-	  door.h \
-	  key_action.h \
-	  levels.h \
-	  local_assert.h \
-	  runner.h \
-	  tracetable.h \
-	  utils.h
+          collision.h \
+          collectable.h \
+          slowdown_pill.h \
+          scoring.h \
+          gameloop.h \
+          game_state.h \
+          int.h \
+          teleporter.h \
+          door.h \
+          key_action.h \
+          levels.h \
+          local_assert.h \
+          runner.h \
+          tracetable.h \
+          utils.h
+
 
 # Run the preprocessor on *.c files to get *.cpre files
 %.cpre: %.c $(PRAGMA_FILE) $(HEADERS)
@@ -128,9 +131,17 @@ levels_maps.o : level1_map.inc.asm \
                 level2_map.inc.asm \
                 level3_map.inc.asm
 
-# Rule to build the executable
+# Rule to build the executable. zcc's -create-app can't quite manage this
+# because I've got a data block in low memory below the ORG point of the
+# main code. So I use appmake to glue the pieces together. The glue line
+# uses the map file to create a wonky__.bin, which is all the pieces
+# (init ASM, data ASM and compiled code) glued together (with my initial
+# between them as an eye catcher). The second call takes that file, places
+# it at the ORiGin in a TAP file with on-tape blocks named "wonky".
 $(EXEC) : $(OBJECTS)
-	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT) -create-app
+	$(CC) $(LDFLAGS) -startup=$(CRT) $(OBJECTS) -o $(EXEC_OUTPUT)
+	$(APPMAKE) +glue -b wonky --filler 0xDF --clean
+	$(APPMAKE) +zx -b wonky__.bin --org 24950 --blockname wonky -o $(EXEC)
 
 # Build the symbols table after the executable
 $(SYM_OUTPUT): $(EXEC)

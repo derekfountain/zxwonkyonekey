@@ -335,4 +335,3 @@ PUBLIC _runner_left_f8
 	defb @00000000
 	defb @00000000
 	defb @00000000
-	

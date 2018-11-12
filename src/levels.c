@@ -249,7 +249,7 @@ DOOR level3_doors[] = {
                             "Centre x px", (30*8+4), "Centre y px", (22*8+4),
                             door_key_collected,
                             door_open_timeup)},
-    INITIALISE_DOOR_LOCATION(4,0),
+    INITIALISE_DOOR_LOCATION(4,1),
     NAMED_VALUES_1("Door ink",       INK_GREEN),
     NAMED_VALUES_1("Key ink",        INK_BLACK),
     NAMED_VALUES_1("Key paper",      INK_WHITE),
@@ -286,7 +286,7 @@ TELEPORTER_DEFINITION level2_teleporters[] = {
 };
 
 TELEPORTER_DEFINITION level3_teleporters[] = {
-  {  0*8,  7*8,  0,  7,
+  {  1*8,  7*8,  1,  7,
     22*8, 27*8, 22, 27,
     NAMED_VALUES_1("Change direction", 0),
     INK_GREEN,
@@ -400,7 +400,7 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level3_map,
     teardown_level,
-    START_POINT(0,16),
+    START_POINT(8,16),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
