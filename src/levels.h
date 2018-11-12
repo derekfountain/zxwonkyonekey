@@ -79,7 +79,7 @@ typedef struct _level_data
   SCORE_SCREEN_DATA      score_screen_data;
 } LEVEL_DATA;
 
-#define NUM_LEVELS 4
+#define NUM_LEVELS 5
 
 #define START_POINT(x,y) x,y
 #define LEVEL_BORDER(b) b

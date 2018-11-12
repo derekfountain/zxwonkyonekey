@@ -126,10 +126,11 @@ HEADERS = action.h \
 
 all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS) report
 
-# Level maps are in files built with the level designer
+# Level maps, except the first, are in files built with the level designer
 levels_maps.o : level1_map.inc.asm \
                 level2_map.inc.asm \
-                level3_map.inc.asm
+                level3_map.inc.asm \
+                level4_map.inc.asm
 
 # Rule to build the executable. zcc's -create-app can't quite manage this
 # because I've got a data block in low memory below the ORG point of the

@@ -52,6 +52,7 @@ extern uint8_t level0_map[];
 extern uint8_t level1_map[];
 extern uint8_t level2_map[];
 extern uint8_t level3_map[];
+extern uint8_t level4_map[];
 
 /*
  * Tables of tiles required for each level. "UDGs".
@@ -399,6 +400,37 @@ LEVEL_DATA level_data[] = {
    */
   { print_level_from_sp1_string,
     level3_map,
+    teardown_level,
+    START_POINT(8,16),
+    LEVEL_BORDER(INK_BLACK),
+    START_FACING(RIGHT),
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
+                   "Solid",      INK_RED|PAPER_WHITE,
+                   "Jumper",     INK_YELLOW|PAPER_RED,
+                   "Teleporter", INK_GREEN|PAPER_MAGENTA,
+                   "Finish",     INK_YELLOW|PAPER_BLUE),
+    level3_tiles,
+    level3_teleporters,
+    level3_slowdowns,
+    level3_doors,
+    MAX_POINTS(20000),
+    MAX_BONUS(12000),
+    { NAMED_VALUES_5("Level score X",  6,
+                     "Level score Y",  6,
+                     "Bonus score X",  6,
+                     "Bonus score Y",  7,
+		     "Scores att",    INK_BLUE|PAPER_WHITE) }
+  },
+
+  /***
+   *      _                _   _ _
+   *     | |   _____ _____| | | | |
+   *     | |__/ -_\ V / -_| | |_  _|
+   *     |____\___|\_/\___|_|   |_|
+   *
+   */
+  { print_level_from_sp1_string,
+    level4_map,
     teardown_level,
     START_POINT(8,16),
     LEVEL_BORDER(INK_BLACK),
