@@ -54,6 +54,18 @@ extern uint8_t level2_map[];
 extern uint8_t level3_map[];
 extern uint8_t level4_map[];
 
+
+/***
+ *      _______ _ _
+ *     |__   __(_| |
+ *        | |   _| | ___ ___
+ *        | |  | | |/ _ / __|
+ *        | |  | | |  __\__ \
+ *        |_|  |_|_|\___|___/
+ *
+ *
+ */
+
 /*
  * Tables of tiles required for each level. "UDGs".
  * Tile number 0 is end of list; assumes I'll never
@@ -98,6 +110,29 @@ TILE_DEFINITION level3_tiles[] = {
   {0,   {0}   }
 };
 
+TILE_DEFINITION level4_tiles[] = {
+  {128, block_platform1},
+  {129, jumper},
+  {130, finish},
+  {131, block_platform2},
+  {132, teleporter},
+  {133, door_key},
+  {255, blank},
+  {0,   {0}   }
+};
+
+
+/***
+ *      _______   _                       _
+ *     |__   __| | |                     | |
+ *        | | ___| | ___ _ __   ___  _ __| |_ ___ _ __ ___
+ *        | |/ _ | |/ _ | '_ \ / _ \| '__| __/ _ | '__/ __|
+ *        | |  __| |  __| |_) | (_) | |  | ||  __| |  \__ \
+ *        |_|\___|_|\___| .__/ \___/|_|   \__\___|_|  |___/
+ *                      | |
+ *                      |_|
+ */
+
 TELEPORTER_DEFINITION level1_teleporters[] = {
   {  0*8,  1*8,  0,  1,
     22*8, 30*8, 22, 30,
@@ -137,6 +172,53 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
   },
   {0}
 };
+
+TELEPORTER_DEFINITION level2_teleporters[] = {
+  { 15*8, 13*8, 15, 13,
+    14*8, 22*8, 14, 22,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {  9*8, 14*8,  9, 14,
+     4*8,  1*8,  4,  1,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {  13*8, 24*8,  13, 24,
+     9*8,  30*8,  9,  30,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {0}
+};
+
+TELEPORTER_DEFINITION level3_teleporters[] = {
+  {  1*8,  7*8,  1,  7,
+    22*8, 27*8, 22, 27,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {0}
+};
+
+TELEPORTER_DEFINITION level4_teleporters[] = {
+  {0}
+};
+
+/***
+ *       _____ _                  _
+ *      / ____| |                | |
+ *     | (___ | | _____      ____| | _____      ___ __  ___
+ *      \___ \| |/ _ \ \ /\ / / _` |/ _ \ \ /\ / | '_ \/ __|
+ *      ____) | | (_) \ V  V | (_| | (_) \ V  V /| | | \__ \
+ *     |_____/|_|\___/ \_/\_/ \__,_|\___/ \_/\_/ |_| |_|___/
+ *
+ *
+ */
 
 SLOWDOWN level0_slowdowns[] = {
   { {INITIALISE_COLLECTABLE("Sprite x", 184, "Sprite y", 176,
@@ -202,6 +284,25 @@ SLOWDOWN level3_slowdowns[] = {
                             0)}},
 };
 
+SLOWDOWN level4_slowdowns[] = {
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0,
+                            0,
+                            0)}},
+};
+
+
+/***
+ *      _____
+ *     |  __ \
+ *     | |  | | ___   ___  _ __ ___
+ *     | |  | |/ _ \ / _ \| '__/ __|
+ *     | |__| | (_) | (_) | |  \__ \
+ *     |_____/ \___/ \___/|_|  |___/
+ *
+ *
+ */
+
 DOOR level2_doors[] = {
   { {INITIALISE_COLLECTABLE("Key x cell",       8,  "Key y cell",        4,
                             "Centre x px", (8*8+4), "Centre y px", (4*8+4),
@@ -264,37 +365,25 @@ DOOR level3_doors[] = {
                             0)}, 0 },
 };
 
-TELEPORTER_DEFINITION level2_teleporters[] = {
-  { 15*8, 13*8, 15, 13,
-    14*8, 22*8, 14, 22,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
-  },
-  {  9*8, 14*8,  9, 14,
-     4*8,  1*8,  4,  1,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
-  },
-  {  13*8, 24*8,  13, 24,
-     9*8,  30*8,  9,  30,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
-  },
-  {0}
+DOOR level4_doors[] = {
+  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+                            "Centre x",   0, "Centre y",   0,
+                            0,
+                            0)}, 0 },
 };
 
-TELEPORTER_DEFINITION level3_teleporters[] = {
-  {  1*8,  7*8,  1,  7,
-    22*8, 27*8, 22, 27,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
-  },
-  {0}
-};
+
+
+/***
+ *      _                    _
+ *     | |                  | |
+ *     | |     _____   _____| |___
+ *     | |    / _ \ \ / / _ | / __|
+ *     | |___|  __/\ V |  __| \__ \
+ *     |______\___| \_/ \___|_|___/
+ *
+ *
+ */
 
 LEVEL_DATA level_data[] = {
 
@@ -440,10 +529,10 @@ LEVEL_DATA level_data[] = {
                    "Jumper",     INK_YELLOW|PAPER_RED,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
-    level3_tiles,
-    level3_teleporters,
-    level3_slowdowns,
-    level3_doors,
+    level4_tiles,
+    level4_teleporters,
+    level4_slowdowns,
+    level4_doors,
     MAX_POINTS(20000),
     MAX_BONUS(12000),
     { NAMED_VALUES_5("Level score X",  6,
