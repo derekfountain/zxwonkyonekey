@@ -196,8 +196,22 @@ TELEPORTER_DEFINITION level2_teleporters[] = {
 };
 
 TELEPORTER_DEFINITION level3_teleporters[] = {
+  /* TODO Final one, need work */
   {  1*8,  7*8,  1,  7,
     22*8, 27*8, 22, 27,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Bottom left up to top left */
+  {  4*8,  1*8,  4,  1,
+    22*8,  1*8, 22,  1,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  { 14*8,  7*8, 14,  7,
+     6*8, 16*8,  6, 16,
     NAMED_VALUES_1("Change direction", 0),
     INK_GREEN,
     INK_MAGENTA,
@@ -278,6 +292,10 @@ SLOWDOWN level2_slowdowns[] = {
 };
 
 SLOWDOWN level3_slowdowns[] = {
+  { {INITIALISE_COLLECTABLE("Sprite x", 16*8,   "Sprite y",  4*8,
+                            "Centre x", 16*8+4, "Centre y",  4*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(5)  },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
@@ -504,10 +522,10 @@ LEVEL_DATA level_data[] = {
     level3_doors,
     MAX_POINTS(20000),
     MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X",  6,
-                     "Level score Y",  6,
-                     "Bonus score X",  6,
-                     "Bonus score Y",  7,
+    { NAMED_VALUES_5("Level score X", 21,
+                     "Level score Y",  0,
+                     "Bonus score X", 21,
+                     "Bonus score Y",  1,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 
