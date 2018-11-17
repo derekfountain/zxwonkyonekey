@@ -37,6 +37,7 @@
 #include "teleporter.h"
 #include "collision.h"
 #include "scoring.h"
+#include "sound.h"
 
 
 /***
@@ -187,21 +188,44 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  * through, etc.
  */
 
-LOOP_ACTION game_actions[13] =
+#include <sound.h>
+
+extern void play_mm_note(void);
+extern void play_original_mm_note(void);
+static unsigned char counter = 0;
+PROCESSING_FLAG beep( void* data, GAME_ACTION* output_action )
+{
+  (void)data;
+  if( ++counter == 4 ) {
+    //play_original_mm_note();
+    play_next_note();
+    counter=0;
+  }
+//  bit_synth(1000,261,0,0,0);
+//  bit_beep(10,261);
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+
+}
+
+LOOP_ACTION game_actions[] =
   {
+      {beep, NORMAL_WHEN_SLOWDOWN},
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
     {test_for_finish,            NORMAL_WHEN_SLOWDOWN    },
     {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_slowdown_pill,     NORMAL_WHEN_SLOWDOWN    },
+   //   {beep, NORMAL_WHEN_SLOWDOWN},
     {test_for_door_key,          NORMAL_WHEN_SLOWDOWN    },
     {test_for_falling,           NORMAL_WHEN_SLOWDOWN    },
     {test_for_start_jump,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_direction_change,  NORMAL_WHEN_SLOWDOWN    },
     {act_on_collision,           NORMAL_WHEN_SLOWDOWN    },
+    //  {beep, NORMAL_WHEN_SLOWDOWN},
     {adjust_for_jump,            SLOW_WHEN_SLOWDOWN      },
-    {move_sideways,              SLOW_WHEN_SLOWDOWN      },
+   {move_sideways,              SLOW_WHEN_SLOWDOWN      },
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
@@ -282,6 +306,8 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case JUMP:
+//  bit_beepfx(BEEPFX_JUMP_1);
+//  bit_fx(BFX_SQUEAK_2);
           start_runner_jumping();
           break;
 
@@ -361,6 +387,9 @@ void gameloop( GAME_STATE* game_state )
 
     /* Halt to lock the game to 50fps, then update everything */
     intrinsic_halt();
+//    intrinsic_halt();
+//    intrinsic_halt();
+//    intrinsic_halt();
 
     sp1_UpdateNow();
   }

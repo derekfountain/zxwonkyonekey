@@ -45,9 +45,14 @@ void game_over( void )
   while(1);
 }
 
+#include <sound.h>
 int main()
 {
   uint8_t current_level_num;
+
+//  bit_beep(1000,261);
+//  bit_beepfx(BEEPFX_JUMP_1);
+  bit_beep(5,261);
 
   if( is_rom_writable() ) {
     /* Flicker the border if ROM is being used for trace */
@@ -75,7 +80,7 @@ int main()
 
   create_runner( RIGHT );
 
-  current_level_num = 3;
+  current_level_num = 0;
   while( 1 ) {
     
     /* Get the level data and call it's draw function to draw it */
