@@ -36,8 +36,21 @@ typedef enum _collectable_availability
   COLLECTABLE_AVAILABLE,
 } COLLECTABLE_AVAILABILITY;
 
+/*
+ * Collectable types. i.e. clients of this code. This breaks any abstraction
+ * really, but it adds the benefit of being able to see the type of the
+ * collectable in a BW trace. :)
+ */
+typedef enum _collectable_type
+{
+  SLOWDOWN_PILL,
+  DOOR_KEY,
+} COLLECTABLE_TYPE;
+
 typedef struct _collectable
 {
+  COLLECTABLE_TYPE          type;
+
   /*
    * x,y position to place the sprite. Some collectables use this as a
    * pixel, others use it as cell coordinates
@@ -73,8 +86,8 @@ typedef struct _collectable
 } COLLECTABLE;
 
 /* Named args macro to make initialisation code easier to read */
-#define INITIALISE_COLLECTABLE( xtag, x, ytag, y, xctag, xc, xytag, yc, cfn, tfn) \
-  x,y,xc,yc,COLLECTABLE_AVAILABLE,cfn,0,tfn
+#define INITIALISE_COLLECTABLE( type, xtag, x, ytag, y, xctag, xc, xytag, yc, cfn, tfn) \
+  type,x,y,xc,yc,COLLECTABLE_AVAILABLE,cfn,0,tfn
 
 /* Macro to fetch the x,y location for a collectable's screen location */
 #define COLLECTABLE_SCREEN_LOCATION(c) c.x,c.y
@@ -119,11 +132,34 @@ typedef struct _collectable
 /*
  * Collectables typically start a countdown timer.
  */
-#define START_COLLECTABLE_TIMER(collectable,secs) ((COLLECTABLE*)collectable)->timer_countdown=(secs*50)
+#define START_COLLECTABLE_TIMER(collectable,secs) (((COLLECTABLE*)collectable)->timer_countdown=((secs)*50))
 #define DECREMENT_COLLECTABLE_TIMER(collectable) (--(((COLLECTABLE*)collectable)->timer_countdown))
 #define CANCEL_COLLECTABLE_TIMER(collectable) (((COLLECTABLE*)collectable)->timer_countdown=0)
 #define COLLECTABLE_TIMER_EXPIRED(collectable) (((COLLECTABLE*)collectable)->timer_countdown==0)
 
 uint8_t handle_timed_collectable( COLLECTABLE* collectable, void* data );
+
+
+typedef enum _collectable_tracetype
+{
+  COLLECTABLE_CREATED,
+  COLLECTABLE_TO_BE_DESTROYED,
+  COLLECTABLE_ANIMATE,
+  COLLECTABLE_COLLECTED,
+  COLLECTABLE_TIMEOUT,
+} COLLECTABLE_TRACETYPE;
+
+typedef struct _collectable_trace
+{
+  uint16_t              ticker;
+  COLLECTABLE_TRACETYPE tracetype;
+  COLLECTABLE*          collectable;
+  uint8_t               xpos;
+  uint8_t               ypos;
+} COLLECTABLE_TRACE;
+
+
+void init_collectable_trace(void);
+void COLLECTABLE_TRACE_CREATE(COLLECTABLE_TRACETYPE ttype, COLLECTABLE* cptr, uint8_t x, uint8_t y);
 
 #endif

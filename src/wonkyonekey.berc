@@ -32,6 +32,11 @@ def DOOR_TRACE_TABLE struct
   DOOR_TRACE_ENTRIES DOOR_TRACE open "door trace table"
 }
 
+def COLLECTABLE_TRACE_TABLE struct
+{
+  COLLECTABLE_TRACE_ENTRIES COLLECTABLE_TRACE open "collectable trace table"
+}
+
 
 def main struct
 {
@@ -52,6 +57,9 @@ def main struct
 
   at _collision_tracetable
   n16 ptr COLLISION_TRACE_TABLE  null "collision"
+
+  at _collectable_tracetable
+  n16 ptr COLLECTABLE_TRACE_TABLE null "collectable"
 
   at _door_tracetable
   n16 ptr DOOR_TRACE_TABLE       null "door"

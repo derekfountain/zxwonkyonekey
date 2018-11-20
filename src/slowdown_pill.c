@@ -67,6 +67,9 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
   sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
                         (void*)slowdown_pill_f1,
                         SLOWDOWN_SCREEN_LOCATION(slowdown));
+
+  slowdown->collectable.timer_countdown = -1;
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(slowdown->collectable), 0, 0 );
 }
 
 /*
@@ -77,6 +80,8 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
  */
 void destroy_slowdown_pill( SLOWDOWN* slowdown )
 {
+  COLLECTABLE_TRACE_CREATE(COLLECTABLE_TO_BE_DESTROYED, &(slowdown->collectable), 0, 0 );
+
   /* If the timer is active, cancel it */
   if( !COLLECTABLE_TIMER_EXPIRED( &(slowdown->collectable) ) ) {
     CANCEL_COLLECTABLE_TIMER( &(slowdown->collectable) );
@@ -117,6 +122,8 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
     /* Move it off screen so it disappears */
     next_frame = (uint8_t*)slowdown_pill_f1;
     sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
+
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), 255, 255 );
   }
   else
   {
@@ -161,6 +168,8 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
     sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
                           next_frame,
                           SLOWDOWN_SCREEN_LOCATION(slowdown));
+
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), 0, 0 );
   }
 
   /* Finally, invalidate the pill sprite so it redraws */
@@ -192,6 +201,8 @@ void slowdown_collected(COLLECTABLE* collectable, void* data)
   START_COLLECTABLE_TIMER(slowdown->collectable,slowdown->duration_secs);
   active_slowdowns++;
 
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(slowdown->collectable), 0, 0 );
+
   return;
 }
 
@@ -210,6 +221,8 @@ uint8_t slowdown_timeup(COLLECTABLE* collectable, void* data)
    * the design a bit.
    */
   animate_slowdown_pill( slowdown );
+
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(slowdown->collectable), 0, 0 );
 
   /*
    * If this was the last active slowdown, return true in order to

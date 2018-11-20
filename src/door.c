@@ -69,6 +69,7 @@ typedef struct _door_trace
       DOOR_TRACE          dt;   \
       dt.ticker           = GET_TICKER; \
       dt.tracetype        = ttype; \
+      dt.door             = dptr; \
       dt.xpos             = x; \
       dt.ypos             = y; \
       door_add_trace(&dt); \
