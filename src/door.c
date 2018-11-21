@@ -161,18 +161,20 @@ void create_door( DOOR* door )
   ink_param = door->door_ink_colour;
   sp1_IterateSprChar(door->sprite, initialise_colour);
 
+  DOOR_TRACE_CREATE(DOOR_CREATED,door,0,0);
+
   if( door->start_open_secs )
   {
     door_key_collected(&door->collectable, door);
     START_COLLECTABLE_TIMER(door->collectable, door->start_open_secs);
   }
 
-  DOOR_TRACE_CREATE(DOOR_CREATED,door,0,0);
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(door->collectable), 0, 0 );
 }
 
 void destroy_door( DOOR* door )
 {
-  (void)door;
+  COLLECTABLE_TRACE_CREATE(COLLECTABLE_TO_BE_DESTROYED, &(door->collectable), 0, 0 );
 
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(door->sprite, &full_screen, (void*)0, 255, 255);
@@ -232,6 +234,7 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(door->collectable), 0, 0 );
   DOOR_TRACE_CREATE(DOOR_KEY_COLLECTED,door,0,0);
 
   return;
@@ -256,6 +259,7 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
   door->moving = DOOR_CLOSING;
   door->animation_step = 0;
 
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), 0, 0 );
   DOOR_TRACE_CREATE(DOOR_TIMEOUT,door,0,0);
 
   return 0;
@@ -273,6 +277,7 @@ void check_door_passed_through( DOOR* door )
      * The door stays open.
      */
     CANCEL_COLLECTABLE_TIMER( door->collectable );
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), 0, 0 );
 
     DOOR_TRACE_CREATE(DOOR_PASSED_THROUGH,door,0,0);
   }
