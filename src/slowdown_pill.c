@@ -68,7 +68,6 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
                         (void*)slowdown_pill_f1,
                         SLOWDOWN_SCREEN_LOCATION(slowdown));
 
-  slowdown->collectable.timer_countdown = -1;
   COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(slowdown->collectable), 0, 0 );
 }
 

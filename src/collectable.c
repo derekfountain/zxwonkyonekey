@@ -49,10 +49,12 @@ void COLLECTABLE_TRACE_CREATE(COLLECTABLE_TRACETYPE ttype, COLLECTABLE* cptr, ui
     COLLECTABLE_TRACE     ct;           
     ct.ticker           = GET_TICKER;   
     ct.tracetype        = ttype;        
-    ct.collectable      = cptr;         
-    ct.xpos             = cptr->timer_countdown/256;            
-    ct.ypos             = cptr->timer_countdown%256;            
-    collectable_add_trace(&ct);         
+    ct.collectable      = cptr;                   /* Copy of the pointer, not what's pointed at */
+    ct.available        = cptr->available;        /* Grab a copy of these 2 values at */
+    ct.timer_countdown  = cptr->timer_countdown;  /* the point the trace is collected */
+    ct.xpos             = x;
+    ct.ypos             = y;
+    collectable_add_trace(&ct);
   }
 }
 

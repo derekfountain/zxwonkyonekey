@@ -151,11 +151,24 @@ typedef enum _collectable_tracetype
 
 typedef struct _collectable_trace
 {
-  uint16_t              ticker;
-  COLLECTABLE_TRACETYPE tracetype;
-  COLLECTABLE*          collectable;
-  uint8_t               xpos;
-  uint8_t               ypos;
+  uint16_t                 ticker;
+  COLLECTABLE_TRACETYPE    tracetype;
+
+  /*
+   * I take a copy of the pointer to the collectable, but I don't copy the
+   * entire structure. Following the pointer in BE always leads to the instance
+   * of the collectable structure as it was at the point the statesave was
+   * taken. Most of it is static so taking a full copy of it would be a waste
+   * of tracing memory. Instead, I take a copy of the availability and countdown
+   * members, because those are the values which change and will be on interest
+   * at trace time.
+   */
+  COLLECTABLE*             collectable;
+  COLLECTABLE_AVAILABILITY available;
+  uint16_t                 timer_countdown;
+
+  uint8_t                  xpos;
+  uint8_t                  ypos;
 } COLLECTABLE_TRACE;
 
 
