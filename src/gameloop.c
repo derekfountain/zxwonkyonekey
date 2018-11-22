@@ -302,7 +302,7 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case MOVE_LEFT:
-          MOVE_RUNNER_YPOS(-1);
+          MOVE_RUNNER_XPOS(-1);
           break;
 
         case FINISH:
