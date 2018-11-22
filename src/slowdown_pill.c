@@ -21,7 +21,64 @@
 #include <arch/zx/sp1.h>
 
 #include "utils.h"
+#include "int.h"
+#include "tracetable.h"
+#include "runner.h"
 #include "slowdown_pill.h"
+
+/***
+ *      _______             _
+ *     |__   __|           (_)
+ *        | |_ __ __ _  ___ _ _ __   __ _
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/
+ *
+ * This defines the slowdown pill's trace table.
+ */
+
+typedef enum _slowdown_tracetype
+{
+  SLOWDOWN_CREATED,
+  SLOWDOWN_DESTROYED,
+  SLOWDOWN_ANIMATED,
+  SLOWDOWN_COLLECTED,
+  SLOWDOWN_TIMEOUT,
+} SLOWDOWN_TRACETYPE;
+
+typedef struct _slowdown_trace
+{
+  uint16_t           ticker;
+  SLOWDOWN_TRACETYPE tracetype;
+  SLOWDOWN*          slowdown;
+} SLOWDOWN_TRACE;
+
+/* BE:PICKUPDEF */
+#define SLOWDOWN_TRACE_ENTRIES 120
+#define SLOWDOWN_TRACETABLE_SIZE ((size_t)sizeof(SLOWDOWN_TRACE)*SLOWDOWN_TRACE_ENTRIES)
+
+/* It's quicker to do this with a macro, as long as it's only used once or twice */
+#define SLOWDOWN_TRACE_CREATE(ttype,sptr) {     \
+    if( slowdown_tracetable != TRACING_INACTIVE ) { \
+      SLOWDOWN_TRACE        st;   \
+      st.ticker           = GET_TICKER; \
+      st.tracetype        = ttype; \
+      st.slowdown         = sptr; \
+      slowdown_add_trace(&st); \
+    } \
+}
+
+TRACE_FN( slowdown, SLOWDOWN_TRACE, SLOWDOWN_TRACETABLE_SIZE )
+
+void init_slowdown_trace(void)
+{
+  if( slowdown_tracetable == TRACING_UNINITIALISED )
+    slowdown_tracetable = slowdown_next_trace = allocate_tracememory(SLOWDOWN_TRACETABLE_SIZE);
+}
+
+
 
 /* These are in the assembly language file */
 extern uint8_t slowdown_pill_f1[];
@@ -58,6 +115,8 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
   slowdown->sprite    = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, SLOWDOWN_PILL_PLANE);
   sp1_AddColSpr(slowdown->sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, SLOWDOWN_PILL_PLANE);
 
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_CREATED,slowdown);
+
   /*
    * Pill sprite is created using absolute graphic data address.
    * I use the _callee version specifically here because sp1_MoveSprPix()
@@ -90,6 +149,8 @@ void destroy_slowdown_pill( SLOWDOWN* slowdown )
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
   sp1_DeleteSpr(slowdown->sprite);
+
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_DESTROYED,slowdown);
 }
 
 /*
@@ -122,7 +183,7 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
     next_frame = (uint8_t*)slowdown_pill_f1;
     sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
 
-    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), 255, 255 );
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_UNANIMATE, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
   }
   else
   {
@@ -168,7 +229,9 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
                           next_frame,
                           SLOWDOWN_SCREEN_LOCATION(slowdown));
 
-    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), 0, 0 );
+    SLOWDOWN_TRACE_CREATE(SLOWDOWN_ANIMATED,slowdown);
+
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
   }
 
   /* Finally, invalidate the pill sprite so it redraws */
@@ -200,7 +263,8 @@ void slowdown_collected(COLLECTABLE* collectable, void* data)
   START_COLLECTABLE_TIMER(slowdown->collectable,slowdown->duration_secs);
   active_slowdowns++;
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(slowdown->collectable), 0, 0 );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_COLLECTED,slowdown);
 
   return;
 }
@@ -221,7 +285,8 @@ uint8_t slowdown_timeup(COLLECTABLE* collectable, void* data)
    */
   animate_slowdown_pill( slowdown );
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(slowdown->collectable), 0, 0 );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_TIMEOUT,slowdown);
 
   /*
    * If this was the last active slowdown, return true in order to

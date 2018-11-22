@@ -53,6 +53,8 @@ typedef struct _slowdown_definition
  */
 #define IS_VALID_SLOWDOWN(slowdown) (IS_VALID_COLLECTABLE(slowdown->collectable))
 
+void init_slowdown_trace(void);
+
 void create_slowdown_pill( SLOWDOWN* slowdown );
 void destroy_slowdown_pill( SLOWDOWN* slowdown );
 void animate_slowdown_pill( SLOWDOWN* slowdown );

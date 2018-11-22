@@ -63,6 +63,7 @@ int main()
     init_key_action_trace();
     init_collision_trace();
     init_runner_trace();
+    init_slowdown_trace();
     init_door_trace();
     init_collectable_trace();
   }

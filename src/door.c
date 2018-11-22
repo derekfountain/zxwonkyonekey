@@ -55,8 +55,6 @@ typedef struct _door_trace
   uint16_t           ticker;
   DOOR_TRACETYPE     tracetype;
   DOOR*              door;
-  uint8_t            xpos;
-  uint8_t            ypos;
 } DOOR_TRACE;
 
 /* BE:PICKUPDEF */
@@ -64,14 +62,12 @@ typedef struct _door_trace
 #define DOOR_TRACETABLE_SIZE ((size_t)sizeof(DOOR_TRACE)*DOOR_TRACE_ENTRIES)
 
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
-#define DOOR_TRACE_CREATE(ttype,dptr,x,y) {     \
+#define DOOR_TRACE_CREATE(ttype,dptr) {     \
     if( door_tracetable != TRACING_INACTIVE ) { \
       DOOR_TRACE          dt;   \
       dt.ticker           = GET_TICKER; \
       dt.tracetype        = ttype; \
       dt.door             = dptr; \
-      dt.xpos             = x; \
-      dt.ypos             = y; \
       door_add_trace(&dt); \
     } \
 }
@@ -161,7 +157,7 @@ void create_door( DOOR* door )
   ink_param = door->door_ink_colour;
   sp1_IterateSprChar(door->sprite, initialise_colour);
 
-  DOOR_TRACE_CREATE(DOOR_CREATED,door,0,0);
+  DOOR_TRACE_CREATE(DOOR_CREATED,door);
 
   if( door->start_open_secs )
   {
@@ -169,18 +165,18 @@ void create_door( DOOR* door )
     START_COLLECTABLE_TIMER(door->collectable, door->start_open_secs);
   }
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(door->collectable), 0, 0 );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
 }
 
 void destroy_door( DOOR* door )
 {
-  COLLECTABLE_TRACE_CREATE(COLLECTABLE_TO_BE_DESTROYED, &(door->collectable), 0, 0 );
+  COLLECTABLE_TRACE_CREATE(COLLECTABLE_TO_BE_DESTROYED, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
 
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(door->sprite, &full_screen, (void*)0, 255, 255);
   sp1_DeleteSpr(door->sprite);
 
-  DOOR_TRACE_CREATE(DOOR_DESTROYED,door,0,0);
+  DOOR_TRACE_CREATE(DOOR_DESTROYED,door);
 }
 
 void animate_door( DOOR* door )
@@ -203,7 +199,7 @@ void animate_door( DOOR* door )
                         (void*)door_f1,
                         DOOR_SCREEN_LOCATION_WITH_OFFSET(door));
 
-  DOOR_TRACE_CREATE(DOOR_ANIMATED,door,0,0);
+  DOOR_TRACE_CREATE(DOOR_ANIMATED,door);
 }
 
 void animate_door_key( DOOR* door )
@@ -234,8 +230,8 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(door->collectable), 0, 0 );
-  DOOR_TRACE_CREATE(DOOR_KEY_COLLECTED,door,0,0);
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+  DOOR_TRACE_CREATE(DOOR_KEY_COLLECTED,door);
 
   return;
 }
@@ -259,8 +255,8 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
   door->moving = DOOR_CLOSING;
   door->animation_step = 0;
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), 0, 0 );
-  DOOR_TRACE_CREATE(DOOR_TIMEOUT,door,0,0);
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+  DOOR_TRACE_CREATE(DOOR_TIMEOUT,door);
 
   return 0;
 }
@@ -277,9 +273,9 @@ void check_door_passed_through( DOOR* door )
      * The door stays open.
      */
     CANCEL_COLLECTABLE_TIMER( door->collectable );
-    COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), 0, 0 );
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
 
-    DOOR_TRACE_CREATE(DOOR_PASSED_THROUGH,door,0,0);
+    DOOR_TRACE_CREATE(DOOR_PASSED_THROUGH,door);
   }
   
 }
