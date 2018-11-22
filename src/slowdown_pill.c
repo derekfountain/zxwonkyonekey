@@ -183,7 +183,7 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
     next_frame = (uint8_t*)slowdown_pill_f1;
     sp1_MoveSprPix(slowdown->sprite, &full_screen, next_frame, 255, 255);
 
-    COLLECTABLE_TRACE_CREATE( COLLECTABLE_UNANIMATE, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_UNANIMATE, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   }
   else
   {
@@ -231,7 +231,7 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
 
     SLOWDOWN_TRACE_CREATE(SLOWDOWN_ANIMATED,slowdown);
 
-    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   }
 
   /* Finally, invalidate the pill sprite so it redraws */
@@ -263,7 +263,7 @@ void slowdown_collected(COLLECTABLE* collectable, void* data)
   START_COLLECTABLE_TIMER(slowdown->collectable,slowdown->duration_secs);
   active_slowdowns++;
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   SLOWDOWN_TRACE_CREATE(SLOWDOWN_COLLECTED,slowdown);
 
   return;
@@ -285,7 +285,7 @@ uint8_t slowdown_timeup(COLLECTABLE* collectable, void* data)
    */
   animate_slowdown_pill( slowdown );
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(slowdown->collectable), get_runner_xpos(), get_runner_ypos() );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   SLOWDOWN_TRACE_CREATE(SLOWDOWN_TIMEOUT,slowdown);
 
   /*

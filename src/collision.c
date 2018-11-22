@@ -349,9 +349,9 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
 {
   REACTION    reaction;
 
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
-  DIRECTION   facing = get_runner_facing();
+  uint8_t     xpos = GET_RUNNER_XPOS;
+  uint8_t     ypos = GET_RUNNER_YPOS;
+  DIRECTION   facing = GET_RUNNER_FACING;
   DIRECTION   jump_status = get_runner_jump_status();
 
   GAME_STATE* game_state = (GAME_STATE*)data;

@@ -165,12 +165,12 @@ void create_door( DOOR* door )
     START_COLLECTABLE_TIMER(door->collectable, door->start_open_secs);
   }
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(door->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
 }
 
 void destroy_door( DOOR* door )
 {
-  COLLECTABLE_TRACE_CREATE(COLLECTABLE_TO_BE_DESTROYED, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+  COLLECTABLE_TRACE_CREATE(COLLECTABLE_TO_BE_DESTROYED, &(door->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
 
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(door->sprite, &full_screen, (void*)0, 255, 255);
@@ -230,7 +230,7 @@ void door_key_collected(COLLECTABLE* collectable, void* data)
 
   START_COLLECTABLE_TIMER(door->collectable, door->open_secs);
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(door->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   DOOR_TRACE_CREATE(DOOR_KEY_COLLECTED,door);
 
   return;
@@ -255,7 +255,7 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
   door->moving = DOOR_CLOSING;
   door->animation_step = 0;
 
-  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+  COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   DOOR_TRACE_CREATE(DOOR_TIMEOUT,door);
 
   return 0;
@@ -263,8 +263,8 @@ uint8_t door_open_timeup(COLLECTABLE* collectable, void* data)
 
 void check_door_passed_through( DOOR* door )
 {
-  uint8_t xpos = get_runner_xpos();
-  uint8_t ypos = get_runner_ypos();
+  uint8_t xpos = GET_RUNNER_XPOS;
+  uint8_t ypos = GET_RUNNER_YPOS;
 
   if( IS_DOOR_PASSTHROUGH_POINT( door, xpos, ypos ) )
   {
@@ -273,7 +273,7 @@ void check_door_passed_through( DOOR* door )
      * The door stays open.
      */
     CANCEL_COLLECTABLE_TIMER( door->collectable );
-    COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), get_runner_xpos(), get_runner_ypos() );
+    COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(door->collectable), xpos, ypos );
 
     DOOR_TRACE_CREATE(DOOR_PASSED_THROUGH,door);
   }

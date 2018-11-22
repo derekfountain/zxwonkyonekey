@@ -135,8 +135,8 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address = NULL;
 
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
+  uint8_t     xpos = GET_RUNNER_XPOS;
+  uint8_t     ypos = GET_RUNNER_YPOS;
 
   /* If the user pressed the button, turn him */
   if( game_state->key_pressed && ! game_state->key_processed ) {
@@ -208,14 +208,14 @@ PROCESSING_FLAG test_for_start_jump( void* data, GAME_ACTION* output_action )
   uint8_t     on_jump_block = 0;
   uint8_t     jumper_attribute;
 
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
+  uint8_t     xpos = GET_RUNNER_XPOS;
+  uint8_t     ypos = GET_RUNNER_YPOS;
 
   /*
    * Are we already jumping? If so, no action. Don't process any keypress so
    * it can still turn him around in midair.
    */
-  if( RUNNER_JUMPING( get_runner_jump_offset() ) ) {
+  if( RUNNER_JUMPING( GET_RUNNER_JUMP_OFFSET ) ) {
     *output_action = NO_ACTION;
     return KEEP_PROCESSING;
   }
@@ -299,11 +299,11 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
   uint8_t*    attr_address = NULL;
   uint8_t     background_attribute;
 
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
+  uint8_t     xpos = GET_RUNNER_XPOS;
+  uint8_t     ypos = GET_RUNNER_YPOS;
 
   /* Are we in the middle of a jump? If so, no action */
-  if( RUNNER_JUMPING( get_runner_jump_offset() ) ) {
+  if( RUNNER_JUMPING( GET_RUNNER_JUMP_OFFSET ) ) {
     *output_action = NO_ACTION;
     return KEEP_PROCESSING;
   }
@@ -323,7 +323,7 @@ PROCESSING_FLAG test_for_falling( void* data, GAME_ACTION* output_action )
     return KEEP_PROCESSING;
   }
 
-  if( get_runner_facing() == RIGHT ) {
+  if( GET_RUNNER_FACING == RIGHT ) {
 
     /*
      * If he's facing right and hasn't rotated onto the cell to his right (in front of him)
@@ -389,11 +389,11 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t*    attr_address;
 
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
+  uint8_t     xpos = GET_RUNNER_XPOS;
+  uint8_t     ypos = GET_RUNNER_YPOS;
 
   /* Are we in the middle of a jump? If so, no action */
-  if( RUNNER_JUMPING( get_runner_jump_offset() ) ) {
+  if( RUNNER_JUMPING( GET_RUNNER_JUMP_OFFSET ) ) {
     *output_action = NO_ACTION;
     return KEEP_PROCESSING;
   }
@@ -407,7 +407,7 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   if( MODULO8( xpos ) == 0 ) {
 
     /* Pick up the attributes of the char cell he's facing and about to move into */
-    if( get_runner_facing() == RIGHT )
+    if( GET_RUNNER_FACING == RIGHT )
       attr_address = zx_pxy2aaddr( xpos+8, ypos );
     else
       attr_address = zx_pxy2aaddr( xpos-8, ypos );
@@ -441,8 +441,8 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
   GAME_STATE* game_state = (GAME_STATE*)data;
   LEVEL_DATA* level_data = game_state->current_level;
 
-  uint8_t     xpos = get_runner_xpos();
-  uint8_t     ypos = get_runner_ypos();
+  uint8_t     xpos = GET_RUNNER_XPOS;
+  uint8_t     ypos = GET_RUNNER_YPOS;
 
   TELEPORTER_DEFINITION* teleporter = level_data->teleporters;
 
@@ -470,8 +470,8 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
     if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
 
-      set_runner_xpos( teleporter->end_2_x );
-      set_runner_ypos( teleporter->end_2_y );
+      SET_RUNNER_XPOS( teleporter->end_2_x );
+      SET_RUNNER_YPOS( teleporter->end_2_y );
       just_teleported = 1;
       
       if( teleporter->change_direction ) {
@@ -484,8 +484,8 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
     } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
 
-      set_runner_xpos( teleporter->end_1_x );
-      set_runner_ypos( teleporter->end_1_y );
+      SET_RUNNER_XPOS( teleporter->end_1_x );
+      SET_RUNNER_YPOS( teleporter->end_1_y );
       just_teleported = 1;
 
       if( teleporter->change_direction ) {
@@ -528,8 +528,8 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
   {
     SLOWDOWN* slowdown = game_state->current_level->slowdowns;
 
-    uint8_t xpos = get_runner_xpos();
-    uint8_t ypos = get_runner_ypos();
+    uint8_t xpos = GET_RUNNER_XPOS;
+    uint8_t ypos = GET_RUNNER_YPOS;
 
     /* Loop over slowdown pills */
     while( IS_VALID_SLOWDOWN(slowdown) )
@@ -610,8 +610,8 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
   {
     DOOR* door = game_state->current_level->doors;
 
-    uint8_t xpos = get_runner_xpos();
-    uint8_t ypos = get_runner_ypos();
+    uint8_t xpos = GET_RUNNER_XPOS;
+    uint8_t ypos = GET_RUNNER_YPOS;
 
     /* Loop over doors */
     while( IS_VALID_DOOR(door) )

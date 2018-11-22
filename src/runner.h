@@ -99,22 +99,33 @@ typedef struct _runner
 RUNNER* create_runner( DIRECTION initial_direction );
 
 /*
- * Runner screen movement getters and setters.
+ * Expose runner structure to enable getter and setter macros.
  */
-uint8_t         get_runner_xpos( void );
-uint8_t         get_runner_ypos( void );
-void            set_runner_xpos( uint8_t pos );
-void            set_runner_ypos( uint8_t pos );
-void            move_runner_xpos( int8_t delta );
-void            move_runner_ypos( int8_t delta );
-void            set_runner_facing( DIRECTION d );
-DIRECTION       get_runner_facing( void );
-void            set_runner_colour( uint8_t );
-uint8_t         get_runner_jump_offset( void );
-JUMP_STATUS     get_runner_jump_status(void);
-SLOWDOWN_STATUS get_runner_slowdown( void );
-void            set_runner_slowdown( SLOWDOWN_STATUS );
+extern RUNNER runner;
 
+/*
+ * These macros are faster and smaller than getter/setter funcs, but require
+ * exposing the runner structure. It's worth it, the CALLs are expensive given
+ * how often these are needed in the codebase. These save about 250 bytes over
+ * using getter and setter functions.
+ */
+#define         GET_RUNNER_XPOS                ((uint8_t)(runner.xpos))
+#define         GET_RUNNER_YPOS                ((uint8_t)(runner.ypos))
+#define         GET_RUNNER_FACING              ((DIRECTION)(runner.facing))
+#define         GET_RUNNER_JUMP_OFFSET         ((uint8_t)(runner.jump_offset))
+#define         GET_RUNNER_SLOWDOWN            ((SLOWDOWN_STATUS)(runner.slowdown))
+
+#define         SET_RUNNER_XPOS(new_pos)       (runner.xpos = (uint8_t)new_pos)
+#define         SET_RUNNER_YPOS(new_pos)       (runner.ypos = (uint8_t)new_pos)
+#define         SET_RUNNER_FACING(new_facing)  (runner.facing = (DIRECTION)new_facing)
+#define         SET_RUNNER_SLOWDOWN(new_sd)    (runner.slowdown = (SLOWDOWN_STATUS)new_sd)
+
+#define         MOVE_RUNNER_XPOS(delta)        (runner.xpos += (int8_t)delta)
+#define         MOVE_RUNNER_YPOS(delta)        (runner.ypos += (int8_t)delta)
+
+/* These need to stay as functions */
+void            set_runner_colour( uint8_t );
+JUMP_STATUS     get_runner_jump_status(void);
 
 /*
  * Initialise trace table for runner
@@ -148,11 +159,6 @@ void start_runner_jumping( void );
  * Stop the jumping sequence.
  */
 void stop_runner_jumping( void );
-
-/*
- * Start the runner dead sequence.
- */
-void runner_dead(void);
 
 /*
  * An action function to move the runner sideways.
