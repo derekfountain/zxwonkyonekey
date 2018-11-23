@@ -196,13 +196,6 @@ TELEPORTER_DEFINITION level2_teleporters[] = {
 };
 
 TELEPORTER_DEFINITION level3_teleporters[] = {
-  /* TODO Final one, need work */
-  {  1*8,  7*8,  1,  7,
-    22*8, 27*8, 22, 27,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
-  },
   /* Bottom left up to top left */
   {  4*8,  1*8,  4,  1,
     22*8,  1*8, 22,  1,
@@ -210,8 +203,43 @@ TELEPORTER_DEFINITION level3_teleporters[] = {
     INK_GREEN,
     INK_MAGENTA,
   },
+  /* Third platform up to central puzzle start */
   { 14*8,  7*8, 14,  7,
      6*8, 16*8,  6, 16,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Lower left decoy */
+  { 10*8,  7*8, 10,  7,
+    10*8, 25*8, 10, 25,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Upper left decoy */
+  { 8*8,  7*8, 8,  7,
+    12*8, 25*8, 12, 25,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Upper right passage */
+  { 8*8, 25*8, 8, 25,
+    2*8, 30*8, 2, 30,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {  9*8, 30*8,  9, 30,
+    22*8, 27*8, 22, 27,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Final one */
+  {  1*8,  7*8,  1,  7,
+    19*8,  7*8, 19,  7,
     NAMED_VALUES_1("Change direction", 0),
     INK_GREEN,
     INK_MAGENTA,
@@ -394,7 +422,7 @@ DOOR level3_doors[] = {
     NAMED_VALUES_1("Key ink",        INK_BLACK),
     NAMED_VALUES_1("Key paper",      INK_WHITE),
     NAMED_VALUES_1("Key tile",             133),
-    NAMED_VALUES_1("Door open secs",         6),
+    NAMED_VALUES_1("Door open secs",        12),
     NAMED_VALUES_1("Start open secs",        3),
   },
   { {INITIALISE_COLLECTABLE(DOOR_KEY,
