@@ -18,6 +18,48 @@
  */
 
 #include <stdint.h>
+
+#include "int.h"
+#include "tracetable.h"
 #include "collectable.h"
 
-/* NOP, for now */
+/***
+ *      _______             _             
+ *     |__   __|           (_)            
+ *        | |_ __ __ _  ___ _ _ __   __ _ 
+ *        | | '__/ _` |/ __| | '_ \ / _` |
+ *        | | | | (_| | (__| | | | | (_| |
+ *        |_|_|  \__,_|\___|_|_| |_|\__, |
+ *                                   __/ |
+ *                                  |___/ 
+ *
+ * This defines the collectable's trace table.
+ */
+
+/* BE:PICKUPDEF */
+#define COLLECTABLE_TRACE_ENTRIES 120
+#define COLLECTABLE_TRACETABLE_SIZE ((size_t)sizeof(COLLECTABLE_TRACE)*COLLECTABLE_TRACE_ENTRIES)
+
+TRACE_FN( collectable, COLLECTABLE_TRACE, COLLECTABLE_TRACETABLE_SIZE )
+
+void COLLECTABLE_TRACE_CREATE(COLLECTABLE_TRACETYPE ttype, COLLECTABLE* cptr, uint8_t x, uint8_t y)
+{
+  if( collectable_tracetable != TRACING_INACTIVE )
+  {
+    COLLECTABLE_TRACE     ct;           
+    ct.ticker           = GET_TICKER;   
+    ct.tracetype        = ttype;        
+    ct.collectable      = cptr;                   /* Copy of the pointer, not what's pointed at */
+    ct.available        = cptr->available;        /* Grab a copy of these 2 values at */
+    ct.timer_countdown  = cptr->timer_countdown;  /* the point the trace is collected */
+    ct.xpos             = x;
+    ct.ypos             = y;
+    collectable_add_trace(&ct);
+  }
+}
+
+void init_collectable_trace(void)
+{
+  if( collectable_tracetable == TRACING_UNINITIALISED )
+    collectable_tracetable = collectable_next_trace = allocate_tracememory(COLLECTABLE_TRACETABLE_SIZE);
+}

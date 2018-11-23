@@ -111,8 +111,7 @@ void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t y
 }
 
 /*
- * Runner has access to full screen for now. It'll be faster
- * when I can reduce this window size.
+ * Runner has access to full screen.
  */
 const struct sp1_Rect runner_screen = {0, 0, 32, 24};
 
@@ -202,55 +201,6 @@ RUNNER* create_runner( DIRECTION initial_direction )
   return &runner;
 }
 
-uint8_t get_runner_xpos( void )
-{
-  return runner.xpos;
-}
-
-uint8_t get_runner_ypos( void )
-{
-  return runner.ypos;
-}
-
-void set_runner_xpos( uint8_t pos )
-{
-  runner.xpos = pos;
-}
-
-void set_runner_ypos( uint8_t pos )
-{
-  runner.ypos = pos;
-}
-
-void move_runner_xpos( int8_t delta )
-{
-  runner.xpos += delta;
-}
-
-void move_runner_ypos( int8_t delta )
-{
-  runner.ypos += delta;
-}
-
-void set_runner_facing( DIRECTION dir )
-{
-  runner.facing = dir;
-}
-
-DIRECTION get_runner_facing( void )
-{
-  return runner.facing;
-}
-
-SLOWDOWN_STATUS get_runner_slowdown( void )
-{
-  return runner.slowdown;
-}
-
-void set_runner_slowdown( SLOWDOWN_STATUS s )
-{
-  runner.slowdown = s;
-}
 
 static uint8_t required_colour;
 static void initialiseColour(unsigned int count, struct sp1_cs *c)
@@ -265,11 +215,6 @@ void set_runner_colour( uint8_t new_att )
 {
   required_colour = new_att;
   sp1_IterateSprChar(runner.sprite, initialiseColour);
-}
-
-uint8_t get_runner_jump_offset( void )
-{
-  return runner.jump_offset;
 }
 
 JUMP_STATUS get_runner_jump_status( void )
@@ -412,13 +357,6 @@ void stop_runner_jumping(void)
   runner.jump_offset = NO_JUMP;
 
   RUNNER_TRACE_CREATE(JUMP_STOP, runner.xpos, runner.ypos, 0, runner.slowdown);
-}
-
-
-void runner_dead(void)
-{
-  zx_border(INK_RED);
-  while(1);
 }
 
 

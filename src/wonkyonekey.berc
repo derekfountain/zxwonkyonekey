@@ -27,9 +27,19 @@ def COLLISION_TRACE_TABLE struct
   COLLISION_TRACE_ENTRIES COLLISION_TRACE open "collision trace table"
 }
 
+def SLOWDOWN_TRACE_TABLE struct
+{
+  SLOWDOWN_TRACE_ENTRIES SLOWDOWN_TRACE open "slowdown pill trace table"
+}
+
 def DOOR_TRACE_TABLE struct
 {
   DOOR_TRACE_ENTRIES DOOR_TRACE open "door trace table"
+}
+
+def COLLECTABLE_TRACE_TABLE struct
+{
+  COLLECTABLE_TRACE_ENTRIES COLLECTABLE_TRACE open "collectable trace table"
 }
 
 
@@ -42,19 +52,25 @@ def main struct
   at 0 NullDef suppress ""
 
   at _gameloop_tracetable
-  n16 ptr GAMELOOP_TRACE_TABLE   null "gameloop"
+  n16 ptr GAMELOOP_TRACE_TABLE    null "gameloop"
 
   at _runner_tracetable
-  n16 ptr RUNNER_TRACE_TABLE     null "runner"
+  n16 ptr RUNNER_TRACE_TABLE      null "runner"
 
   at _key_action_tracetable
-  n16 ptr KEY_ACTION_TRACE_TABLE null "key action"
+  n16 ptr KEY_ACTION_TRACE_TABLE  null "key action"
 
   at _collision_tracetable
-  n16 ptr COLLISION_TRACE_TABLE  null "collision"
+  n16 ptr COLLISION_TRACE_TABLE   null "collision"
 
+  at _collectable_tracetable
+  n16 ptr COLLECTABLE_TRACE_TABLE null "collectable"
+
+  at _slowdown_tracetable
+  n16 ptr SLOWDOWN_TRACE_TABLE    null "slowdown"
+  
   at _door_tracetable
-  n16 ptr DOOR_TRACE_TABLE       null "door"
+  n16 ptr DOOR_TRACE_TABLE        null "door"
 
 
   at 0 NullDef suppress ""
