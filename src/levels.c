@@ -39,6 +39,8 @@ extern uint8_t platform1[8];
 extern uint8_t platform1v[8];
 extern uint8_t block_platform1[8];
 extern uint8_t block_platform2[8];
+extern uint8_t block_platform3[8];
+extern uint8_t block_platform4[8];
 extern uint8_t finish[8];
 extern uint8_t grassv[8];
 extern uint8_t teleporter[8];
@@ -101,10 +103,9 @@ TILE_DEFINITION level2_tiles[] = {
 
 // Must improve this, and colours
 TILE_DEFINITION level3_tiles[] = {
-  {128, block_platform1},
+  {128, block_platform4},
   {129, jumper},
   {130, finish},
-  {131, block_platform2},
   {132, teleporter},
   {133, door_key},
   {255, blank},
@@ -568,7 +569,7 @@ LEVEL_DATA level_data[] = {
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_RED,
-                   "Solid",      INK_CYAN|PAPER_BLACK,
+                   "Solid",      INK_CYAN|PAPER_RED,
                    "Jumper",     INK_CYAN|PAPER_BLUE,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
