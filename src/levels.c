@@ -99,6 +99,7 @@ TILE_DEFINITION level2_tiles[] = {
   {0,   {0}   }
 };
 
+// Must improve this, and colours
 TILE_DEFINITION level3_tiles[] = {
   {128, block_platform1},
   {129, jumper},
@@ -338,6 +339,11 @@ SLOWDOWN level3_slowdowns[] = {
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(5)  },
   { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+			    "Sprite x", 16*8,   "Sprite y", 22*8,
+                            "Centre x", 16*8+4, "Centre y", 22*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(7)  },
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
 			    "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
@@ -418,9 +424,9 @@ DOOR level3_doors[] = {
                             door_key_collected,
                             door_open_timeup)},
     INITIALISE_DOOR_LOCATION(4,1),
-    NAMED_VALUES_1("Door ink",       INK_GREEN),
+    NAMED_VALUES_1("Door ink",       INK_WHITE),
     NAMED_VALUES_1("Key ink",        INK_BLACK),
-    NAMED_VALUES_1("Key paper",      INK_WHITE),
+    NAMED_VALUES_1("Key paper",      INK_RED),
     NAMED_VALUES_1("Key tile",             133),
     NAMED_VALUES_1("Door open secs",        12),
     NAMED_VALUES_1("Start open secs",        3),
@@ -561,9 +567,9 @@ LEVEL_DATA level_data[] = {
     START_POINT(8,16),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
-    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
-                   "Solid",      INK_RED|PAPER_WHITE,
-                   "Jumper",     INK_YELLOW|PAPER_RED,
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_RED,
+                   "Solid",      INK_CYAN|PAPER_BLACK,
+                   "Jumper",     INK_CYAN|PAPER_BLUE,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     level3_tiles,
