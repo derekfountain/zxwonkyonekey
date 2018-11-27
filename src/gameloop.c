@@ -58,6 +58,7 @@ typedef enum _gameloop_tracetype
   ENTER,
   KEY_STATE,
   ACTION,
+  BEEP,
   INT_100MS,
   INT_500MS,
   EXIT,
@@ -192,14 +193,21 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
 
 extern void play_mm_note(void);
 extern void play_original_mm_note(void);
-static unsigned char counter = 0;
 PROCESSING_FLAG beep( void* data, GAME_ACTION* output_action )
 {
-  (void)data;
-  if( ++counter == 4 ) {
-    //play_original_mm_note();
-    play_next_note();
-    counter=0;
+  GAME_STATE* game_state = (GAME_STATE*)data;
+
+  if( (GET_TICKER & 0x0003) == 0x003 ) {
+	GAMELOOP_TRACE_CREATE(BEEP, game_state->key_pressed,
+			              game_state->key_processed,
+                                      get_runner_xpos(),
+                                      get_runner_ypos(),
+                                      get_runner_slowdown(),
+                                      NO_ACTION,
+                                      0);
+
+    play_original_mm_note();
+    //play_next_note();
   }
 //  bit_synth(1000,261,0,0,0);
 //  bit_beep(10,261);
