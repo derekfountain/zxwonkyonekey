@@ -20,15 +20,23 @@
 #include <stdint.h>
 
 static uint8_t music_notes[] = {
+
+  128,128,114,114,102,102,96,96,86,86,102,102,86,86,86,86,81,81,96,96,81,81,81,81,86,86,102,102,86,86,86,86,
+  128,128,114,114,102,102,96,96,86,86,102,102,86,86,86,86,81,81,96,96,81,81,81,81,86,86,86,86,86,86,86,86,
+  128,128,114,114,102,102,96,96,86,86,102,102,86,86,86,86,81,81,96,96,81,81,81,81,86,86,102,102,86,86,86,86,
+  128,128,114,114,102,102,96,96,86,86,102,102,86,86,64,64,86,86,102,102,128,128,102,102,86,86,86,86,86,86,86,86,
+
+  /*
     128,114,102,96,86,102,86,86,81,96,81,81,86,102,86,86,
     128,114,102,96,86,102,86,86,81,96,81,81,86,86,86,86,
     128,114,102,96,86,102,86,86,81,96,81,81,86,102,86,86,
     128,114,102,96,86,102,86,64,86,102,128,102,86,86,86,86,
+  */
 };
 
-#define MUSIC_NUM_NOTES sizeof(music_notes)
+#define MUSIC_NUM_NOTES (sizeof(music_notes)/sizeof(music_notes[0]))
 
-static uint8_t music_current_note_index = 0;
+static uint16_t music_current_note_index = 0;
 
 extern void play_mm_note( uint8_t* pitch );
 
@@ -38,5 +46,6 @@ void play_next_note( void )
   play_mm_note( &current_note );
 
   if( music_current_note_index == MUSIC_NUM_NOTES )
-    music_current_note_index = 0;
+    while(1);
+  //    music_current_note_index = 0;
 }

@@ -206,8 +206,8 @@ PROCESSING_FLAG beep( void* data, GAME_ACTION* output_action )
                                       NO_ACTION,
                                       0);
 
-    play_original_mm_note();
-    //play_next_note();
+        //play_original_mm_note();
+        play_next_note();
   }
 //  bit_synth(1000,261,0,0,0);
 //  bit_beep(10,261);

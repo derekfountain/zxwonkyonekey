@@ -61,6 +61,10 @@ _play_original_mm_note:
  	INC A
  	LD (note_index),A
 
+        ;; Clear top and bottom bits of index value.
+        ;; Rotate right to divide by 2 (LSB goes into top bit, so top bit stays 0)
+        ;; Each note is played twice.
+        
  	AND 126 	;Point HL at the appropriate entry in the tune data table at 34188
  	RRCA
  	LD E,A
