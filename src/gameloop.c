@@ -189,36 +189,10 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  * through, etc.
  */
 
-#include <sound.h>
-
-extern void play_mm_note(void);
-extern void play_original_mm_note(void);
-PROCESSING_FLAG beep( void* data, GAME_ACTION* output_action )
-{
-  GAME_STATE* game_state = (GAME_STATE*)data;
-
-  if( (GET_TICKER & 0x0003) == 0x003 ) {
-	GAMELOOP_TRACE_CREATE(BEEP, game_state->key_pressed,
-			              game_state->key_processed,
-                                      get_runner_xpos(),
-                                      get_runner_ypos(),
-                                      get_runner_slowdown(),
-                                      NO_ACTION,
-                                      0);
-
-        //play_original_mm_note();
-        play_next_note();
-  }
-//  bit_synth(1000,261,0,0,0);
-//  bit_beep(10,261);
-  *output_action = NO_ACTION;
-  return KEEP_PROCESSING;
-
-}
 
 LOOP_ACTION game_actions[] =
   {
-      {beep, NORMAL_WHEN_SLOWDOWN},
+      {play_bg_music_note, NORMAL_WHEN_SLOWDOWN},
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },

@@ -75,7 +75,7 @@ OBJECTS = gameloop.o \
           small_utoa.o \
           initialisation.o \
           sound.o \
-          mm_music.o
+          background_music.o
 
 # Objects built from C files (as opposed to ASMs)
 C_OBJECTS = gameloop.o \
