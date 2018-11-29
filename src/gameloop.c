@@ -146,8 +146,8 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
       /* Loop over any slowdown pills on screen and animate their graphic frames */
       while( IS_VALID_SLOWDOWN(slowdown) )
       {
-	animate_slowdown_pill( slowdown );
-	slowdown++;
+        animate_slowdown_pill( slowdown );
+        slowdown++;
       }
     }
       
@@ -192,22 +192,20 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
 
 LOOP_ACTION game_actions[] =
   {
-      {play_bg_music_note, NORMAL_WHEN_SLOWDOWN},
+    {play_bg_music_note,         NORMAL_WHEN_SLOWDOWN    },
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
     {test_for_finish,            NORMAL_WHEN_SLOWDOWN    },
     {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_slowdown_pill,     NORMAL_WHEN_SLOWDOWN    },
-   //   {beep, NORMAL_WHEN_SLOWDOWN},
     {test_for_door_key,          NORMAL_WHEN_SLOWDOWN    },
     {test_for_falling,           NORMAL_WHEN_SLOWDOWN    },
     {test_for_start_jump,        NORMAL_WHEN_SLOWDOWN    },
     {test_for_direction_change,  NORMAL_WHEN_SLOWDOWN    },
     {act_on_collision,           NORMAL_WHEN_SLOWDOWN    },
-    //  {beep, NORMAL_WHEN_SLOWDOWN},
     {adjust_for_jump,            SLOW_WHEN_SLOWDOWN      },
-   {move_sideways,              SLOW_WHEN_SLOWDOWN      },
+    {move_sideways,              SLOW_WHEN_SLOWDOWN      },
   };
 #define NUM_GAME_ACTIONS (sizeof(game_actions) / sizeof(LOOP_ACTION))
 
@@ -245,36 +243,41 @@ void gameloop( GAME_STATE* game_state )
       break;
     }
 
+    if( in_key_pressed( IN_KEY_SCANCODE_m ) ) {
+      while( in_key_pressed( IN_KEY_SCANCODE_m ) );
+      toggle_music();
+    }
+
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
       PROCESSING_FLAG flag;
       GAME_ACTION     required_action;
 
       if( (GET_RUNNER_SLOWDOWN == SLOWDOWN_ACTIVE) && (game_actions[i].slowdown_flag == SLOW_WHEN_SLOWDOWN) && (GET_TICKER & 1) )
       {
-	/*
-	 * Runner has eaten a slowdown pill, the action function needs to respect the slowdown,
-	 * and the ticker cycle is one of the every other ones we skip. Don't run the action.
-	 */
-	flag = KEEP_PROCESSING;
-	required_action = SKIP_CYCLE;
+        /*
+         * Runner has eaten a slowdown pill, the action function needs to respect the slowdown,
+         * and the ticker cycle is one of the every other ones we skip. Don't run the action.
+         */
+        flag = KEEP_PROCESSING;
+        required_action = SKIP_CYCLE;
       }
       else
       {
-	flag = (game_actions[i].test_action)(game_state, &required_action);
+        flag = (game_actions[i].test_action)(game_state, &required_action);
       }
 
       if( required_action != NO_ACTION ) {
-	GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
-			              game_state->key_processed,
-                                      GET_RUNNER_XPOS,
-                                      GET_RUNNER_YPOS,
-                                      GET_RUNNER_SLOWDOWN,
-                                      required_action,
-                                      flag);
+        GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
+                              game_state->key_processed,
+                              GET_RUNNER_XPOS,
+                              GET_RUNNER_YPOS,
+                              GET_RUNNER_SLOWDOWN,
+                              required_action,
+                              flag);
       }
 
       switch( required_action )
-        {
+      {
         case TOGGLE_DIRECTION:
           toggle_runner_direction();
           break;
@@ -288,8 +291,6 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case JUMP:
-//  bit_beepfx(BEEPFX_JUMP_1);
-//  bit_fx(BFX_SQUEAK_2);
           start_runner_jumping();
           break;
 
@@ -322,7 +323,7 @@ void gameloop( GAME_STATE* game_state )
         }
 
       if( flag == STOP_PROCESSING )
-	break;
+        break;
     }
 
     draw_runner();
@@ -369,9 +370,6 @@ void gameloop( GAME_STATE* game_state )
 
     /* Halt to lock the game to 50fps, then update everything */
     intrinsic_halt();
-//    intrinsic_halt();
-//    intrinsic_halt();
-//    intrinsic_halt();
 
     sp1_UpdateNow();
   }

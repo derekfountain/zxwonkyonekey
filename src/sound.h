@@ -20,6 +20,7 @@
 #ifndef __SOUND_H
 #define __SOUND_H
 
+void toggle_music( void );
 PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action );
 
 #endif

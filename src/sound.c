@@ -76,11 +76,18 @@ static uint8_t music_notes[] = {
 };
 #define MUSIC_NUM_NOTES (sizeof(music_notes)/sizeof(music_notes[0]))
 
+static uint8_t  music_on = 0;
+
 /* Keep a track of which note is playing */
 static uint16_t music_current_note_index = 0;
 
 /* This is the low level speaker waggler, in ASM */
 extern void play_note_raw( uint8_t* pitch );
+
+void toggle_music( void )
+{
+  music_on = !music_on;
+}
 
 PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
 {
@@ -92,7 +99,7 @@ PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
    * needs to complete in 11ms to ensure a frame isn't dropped. This currently
    * isn't a problem.
    */
-  if( (GET_TICKER & 0x0003) == 0x003 )
+  if( music_on && ((GET_TICKER & 0x0003) == 0x003) )
   {
     play_note_raw( &(music_notes[music_current_note_index++]) );
 
