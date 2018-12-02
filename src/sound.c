@@ -35,7 +35,7 @@ ORG 0xCC00
 
 notes:
  	DEFB 128,114,102,96,86,102,86,86,81,96,81,81,86,102,86,86
- 	;      F   G   A  B  C   A  CCCC #B ?G  ?BBB  C   A  CCCC
+ 	;      F   G   A  B  C   A  CCCC  D  B  D  D  C   A  CCCC
  	DEFB 128,114,102,96,86,102,86,86,81,96,81,81,86,86,86,86
  	DEFB 128,114,102,96,86,102,86,86,81,96,81,81,86,102,86,86
  	DEFB 128,114,102,96,86,102,86,64,86,102,128,102,86,86,86,86
@@ -67,16 +67,79 @@ notes:
 
 #endif
 
+#if 0
+#define _EL   144,144    /* Guess */
+
+#define _B     96, 96
+#define _LF    255, 255
+
+#define _UpC   43, 43
+#define _UpD   40, 40
+#define _UpE   36, 36
+#endif
+
+
+#define _C     86, 86
+#define _D     81, 81
+#define _E     72, 72    /* Guess */
+#define _ESh   72
+#define _F     64, 64
+#define _G     57, 57
+#define _GSh   57
+#define _A     51, 51
+#define _B     48, 48
+
+#define _UpC   43, 43
+#define _UpD   40, 40
+#define _UpE   36, 36
+
+#if 0
+static uint8_t music_notes_ithofmk[] = {
+  /* Each note lasts 8.8ms and each one is repeated, so in fact each note lasts 17.6ms */
+  _F,_G,_A,_B,_C,_A,_C,_C,_D,_B,_D,_D,_C,_A,_C,_C,
+  _F,_G,_A,_B,_C,_A,_C,_C,_D,_B,_D,_D,_C,_C,_C,_C,
+  _F,_G,_A,_B,_C,_A,_C,_C,_D,_B,_D,_D,_C,_A,_C,_C,
+  _F,_G,_A,_B,_C,_A,_C,_LF,_C,_A,_F,_A,_C,_C,_C,_C,
+};
+static uint8_t music_notes_lb1[] = {
+  /* Each note lasts 8.8ms and each one is repeated, so in fact each note lasts 17.6ms */
+  _G,_A,_G,_EL,   _G,_A,_G,_EL,              /* Lit-tle box-es, on the hill-side */
+  _G,_G,_C,_C,                               /* lit-tle box-es */
+  _C,_D,                                     /* made of */
+  _E,_D, _C,_C,                              /* tic-ky tac-ky */
+  _C,_A,_G,_G,                               /* Lit-tle box-es */
+  _G,_A,_F,_F,                               /* lit-tle box-es */
+  _F,_G,_EL,_EL,                             /* lit-tle box-es */
+   _EL,_G,_LF                                /* all the same */
+};
+#endif
+
 static uint8_t music_notes[] = {
   /* Each note lasts 8.8ms and each one is repeated, so in fact each note lasts 17.6ms */
-  128,128,114,114,102,102,96,96,86,86,102,102,86,86,86,86,81,81,96,96,81,81,81,81,86,86,102,102,86,86,86,86,
-  128,128,114,114,102,102,96,96,86,86,102,102,86,86,86,86,81,81,96,96,81,81,81,81,86,86,86,86,86,86,86,86,
-  128,128,114,114,102,102,96,96,86,86,102,102,86,86,86,86,81,81,96,96,81,81,81,81,86,86,102,102,86,86,86,86,
-  128,128,114,114,102,102,96,96,86,86,102,102,86,86,64,64,86,86,102,102,128,128,102,102,86,86,86,86,86,86,86,86,
+  /* From https://noobnotes.net/little-boxes-malvina-reynolds/ */
+#if 0
+/* The original from the website */
+  _G, _A, _E, _C,  _G, _A, _E, _C,                         /* Little boxes on the hillside */
+  _G, _A, _UpC, _UpC, _UpC, _UpD, _UpE, _UpD, _UpC, _UpC,  /* Little boxes made of ticky-tacky */
+  _UpC, _A, _G, _G, _G, _A, _F, _F,                        /* Little boxes on the hillside */
+  _F, _G, _E, _E, _E, _F, _D,                              /* Little boxes all the same. */
+
+  _G, _A, _E, _C, _G, _A, _E, _C,                          /* There's a pink one and a green one */
+  _G, _A, _UpC, _UpC, _UpC, _UpD, _UpE, _UpD, _UpC,        /* And a blue one and a yellow one */
+  _UpC, _A, _G, _G, _G, _A, _F, _F, _F, _F,                /* And they're all made out of ticky-tacky */
+  _F, _G, _E, _E, _E, _D, _C,                              /* And they all look just the same. */
+#else
+
+  _G, _A, _G, _F, _E, _F, _G,  _G,
+  _D, _E, _F, _F, _E, _F, _G,
+  _G, _A, _G, _F, _E, _F, _G, _G,
+  _D, _D, _G, _G, _E, _C, _C
+#endif
 };
 #define MUSIC_NUM_NOTES (sizeof(music_notes)/sizeof(music_notes[0]))
 
 static uint8_t  music_on = 0;
+static uint8_t pace = 0;
 
 /* Keep a track of which note is playing */
 static uint16_t music_current_note_index = 0;
@@ -101,7 +164,12 @@ PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
    */
   if( music_on && ((GET_TICKER & 0x0003) == 0x003) )
   {
-    play_note_raw( &(music_notes[music_current_note_index++]) );
+    play_note_raw( &(music_notes[music_current_note_index]) );
+
+    if( pace++ == 0 ) {
+      music_current_note_index++;
+      pace=0;
+    }
 
     if( music_current_note_index == MUSIC_NUM_NOTES )
       music_current_note_index = 0;
