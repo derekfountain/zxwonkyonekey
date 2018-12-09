@@ -206,6 +206,12 @@ TELEPORTER_DEFINITION level3_teleporters[] = {
 };
 
 TELEPORTER_DEFINITION level4_teleporters[] = {
+  {  1*8,  1*8,  1,  1,
+    20*8, 31*8, 20, 31,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
   {0}
 };
 
@@ -366,6 +372,18 @@ DOOR level3_doors[] = {
 };
 
 DOOR level4_doors[] = {
+  { {INITIALISE_COLLECTABLE("Key x cell",        6,  "Key y cell",         1,
+                            "Centre x px",  (6*8+4), "Centre y px",  (1*8+4),
+                            door_key_collected,
+                            door_open_timeup)},
+    INITIALISE_DOOR_LOCATION(9,22),
+    NAMED_VALUES_1("Door ink",       INK_GREEN),
+    NAMED_VALUES_1("Key ink",        INK_BLACK),
+    NAMED_VALUES_1("Key paper",      INK_WHITE),
+    NAMED_VALUES_1("Key tile",             133),
+    NAMED_VALUES_1("Door open secs",         6),
+    NAMED_VALUES_1("Start open secs",        0),
+  },
   { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
@@ -521,7 +539,7 @@ LEVEL_DATA level_data[] = {
   { print_level_from_sp1_string,
     level4_map,
     teardown_level,
-    START_POINT(8,16),
+    START_POINT(8,0),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
@@ -535,10 +553,10 @@ LEVEL_DATA level_data[] = {
     level4_doors,
     MAX_POINTS(20000),
     MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X",  6,
-                     "Level score Y",  6,
-                     "Bonus score X",  6,
-                     "Bonus score Y",  7,
+    { NAMED_VALUES_5("Level score X", 20,
+                     "Level score Y", 21,
+                     "Bonus score X", 20,
+                     "Bonus score Y", 22,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 

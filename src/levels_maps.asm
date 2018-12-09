@@ -383,7 +383,7 @@ INCLUDE "level4_map.inc.asm"
         defb 0x10, 0x06         ; ink yellow
         defb 0x11, 0x01         ; paper blue
 
-        defb 0x16, 0x01, 0x01   ; AT 1,1
+        defb 0x16, 22, 16       ; AT middle bottom
         defb 0x82               ; finish
 
 	defb 0x00
