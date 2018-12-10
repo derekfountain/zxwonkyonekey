@@ -37,6 +37,7 @@
 #include "teleporter.h"
 #include "collision.h"
 #include "scoring.h"
+#include "sound.h"
 
 
 /***
@@ -57,6 +58,7 @@ typedef enum _gameloop_tracetype
   ENTER,
   KEY_STATE,
   ACTION,
+  BEEP,
   INT_100MS,
   INT_500MS,
   EXIT,
@@ -114,9 +116,9 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
     GAMELOOP_TRACE_CREATE(INT_100MS,
                           game_state->key_pressed,
                           game_state->key_processed,
-                          get_runner_xpos(),
-                          get_runner_ypos(),
-                          get_runner_slowdown(),
+                          GET_RUNNER_XPOS,
+                          GET_RUNNER_YPOS,
+                          GET_RUNNER_SLOWDOWN,
                           0, 0);
 
     decrement_level_score( 1 );
@@ -144,17 +146,17 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
       /* Loop over any slowdown pills on screen and animate their graphic frames */
       while( IS_VALID_SLOWDOWN(slowdown) )
       {
-	animate_slowdown_pill( slowdown );
-	slowdown++;
+        animate_slowdown_pill( slowdown );
+        slowdown++;
       }
     }
       
     GAMELOOP_TRACE_CREATE(INT_500MS,
                           game_state->key_pressed,
                           game_state->key_processed,
-                          get_runner_xpos(),
-                          get_runner_ypos(),
-                          get_runner_slowdown(),
+                          GET_RUNNER_XPOS,
+                          GET_RUNNER_YPOS,
+                          GET_RUNNER_SLOWDOWN,
                           0, 0);
 
     /*
@@ -187,8 +189,10 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  * through, etc.
  */
 
-LOOP_ACTION game_actions[13] =
+
+LOOP_ACTION game_actions[] =
   {
+    {play_bg_music_note,         NORMAL_WHEN_SLOWDOWN    },
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
@@ -239,46 +243,51 @@ void gameloop( GAME_STATE* game_state )
       break;
     }
 
+    if( in_key_pressed( IN_KEY_SCANCODE_m ) ) {
+      while( in_key_pressed( IN_KEY_SCANCODE_m ) );
+      toggle_music();
+    }
+
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
       PROCESSING_FLAG flag;
       GAME_ACTION     required_action;
 
-      if( (get_runner_slowdown() == SLOWDOWN_ACTIVE) && (game_actions[i].slowdown_flag == SLOW_WHEN_SLOWDOWN) && (GET_TICKER & 1) )
+      if( (GET_RUNNER_SLOWDOWN == SLOWDOWN_ACTIVE) && (game_actions[i].slowdown_flag == SLOW_WHEN_SLOWDOWN) && (GET_TICKER & 1) )
       {
-	/*
-	 * Runner has eaten a slowdown pill, the action function needs to respect the slowdown,
-	 * and the ticker cycle is one of the every other ones we skip. Don't run the action.
-	 */
-	flag = KEEP_PROCESSING;
-	required_action = SKIP_CYCLE;
+        /*
+         * Runner has eaten a slowdown pill, the action function needs to respect the slowdown,
+         * and the ticker cycle is one of the every other ones we skip. Don't run the action.
+         */
+        flag = KEEP_PROCESSING;
+        required_action = SKIP_CYCLE;
       }
       else
       {
-	flag = (game_actions[i].test_action)(game_state, &required_action);
+        flag = (game_actions[i].test_action)(game_state, &required_action);
       }
 
       if( required_action != NO_ACTION ) {
-	GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
-			              game_state->key_processed,
-                                      get_runner_xpos(),
-                                      get_runner_ypos(),
-                                      get_runner_slowdown(),
-                                      required_action,
-                                      flag);
+        GAMELOOP_TRACE_CREATE(ACTION, game_state->key_pressed,
+                              game_state->key_processed,
+                              GET_RUNNER_XPOS,
+                              GET_RUNNER_YPOS,
+                              GET_RUNNER_SLOWDOWN,
+                              required_action,
+                              flag);
       }
 
       switch( required_action )
-        {
+      {
         case TOGGLE_DIRECTION:
           toggle_runner_direction();
           break;
 
         case ACTIVATE_SLOWDOWN:
-          set_runner_slowdown( SLOWDOWN_ACTIVE );
+          SET_RUNNER_SLOWDOWN( SLOWDOWN_ACTIVE );
           break;
 
         case DEACTIVATE_SLOWDOWN:
-          set_runner_slowdown( SLOWDOWN_INACTIVE );
+          SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
           break;
 
         case JUMP:
@@ -290,19 +299,19 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case MOVE_DOWN:
-          move_runner_ypos(1);
+          MOVE_RUNNER_YPOS(1);
           break;
 
         case MOVE_UP:
-          move_runner_ypos(-1);
+          MOVE_RUNNER_YPOS(-1);
           break;
 
         case MOVE_RIGHT:
-          move_runner_xpos(1);
+          MOVE_RUNNER_XPOS(1);
           break;
 
         case MOVE_LEFT:
-          move_runner_xpos(-1);
+          MOVE_RUNNER_XPOS(-1);
           break;
 
         case FINISH:
@@ -314,7 +323,7 @@ void gameloop( GAME_STATE* game_state )
         }
 
       if( flag == STOP_PROCESSING )
-	break;
+        break;
     }
 
     draw_runner();

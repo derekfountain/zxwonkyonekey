@@ -39,6 +39,8 @@ extern uint8_t platform1[8];
 extern uint8_t platform1v[8];
 extern uint8_t block_platform1[8];
 extern uint8_t block_platform2[8];
+extern uint8_t block_platform3[8];
+extern uint8_t block_platform4[8];
 extern uint8_t finish[8];
 extern uint8_t grassv[8];
 extern uint8_t teleporter[8];
@@ -99,11 +101,11 @@ TILE_DEFINITION level2_tiles[] = {
   {0,   {0}   }
 };
 
+// Must improve this, and colours
 TILE_DEFINITION level3_tiles[] = {
-  {128, block_platform1},
+  {128, block_platform4},
   {129, jumper},
   {130, finish},
-  {131, block_platform2},
   {132, teleporter},
   {133, door_key},
   {255, blank},
@@ -196,8 +198,50 @@ TELEPORTER_DEFINITION level2_teleporters[] = {
 };
 
 TELEPORTER_DEFINITION level3_teleporters[] = {
-  {  1*8,  7*8,  1,  7,
+  /* Bottom left up to top left */
+  {  4*8,  1*8,  4,  1,
+    22*8,  1*8, 22,  1,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Third platform up to central puzzle start */
+  { 14*8,  7*8, 14,  7,
+     6*8, 16*8,  6, 16,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Lower left decoy */
+  { 10*8,  7*8, 10,  7,
+    10*8, 25*8, 10, 25,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Upper left decoy */
+  { 8*8,  7*8, 8,  7,
+    12*8, 25*8, 12, 25,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Upper right passage */
+  { 8*8, 25*8, 8, 25,
+    2*8, 30*8, 2, 30,
+    NAMED_VALUES_1("Change direction", 1),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  {  9*8, 30*8,  9, 30,
     22*8, 27*8, 22, 27,
+    NAMED_VALUES_1("Change direction", 0),
+    INK_GREEN,
+    INK_MAGENTA,
+  },
+  /* Final one */
+  {  1*8,  7*8,  1,  7,
+    19*8,  7*8, 19,  7,
     NAMED_VALUES_1("Change direction", 0),
     INK_GREEN,
     INK_MAGENTA,
@@ -227,71 +271,95 @@ TELEPORTER_DEFINITION level4_teleporters[] = {
  */
 
 SLOWDOWN level0_slowdowns[] = {
-  { {INITIALISE_COLLECTABLE("Sprite x", 184, "Sprite y", 176,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 184, "Sprite y", 176,
                             "Centre x", 188, "Centre y", 180,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(12) },
-  { {INITIALISE_COLLECTABLE("Sprite x",  24, "Sprite y",  64,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x",  24, "Sprite y",  64,
                             "Centre x",  28, "Centre y",  68,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15) },
-  { {INITIALISE_COLLECTABLE("Sprite x", 208, "Sprite y", 104,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 208, "Sprite y", 104,
                             "Centre x", 210, "Centre y", 108,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15) },
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}},
 };
 
 SLOWDOWN level1_slowdowns[] = {
-  { {INITIALISE_COLLECTABLE("Sprite x", 180, "Sprite y", 128,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 180, "Sprite y", 128,
                             "Centre x", 184, "Centre y", 132,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15)  },
-  { {INITIALISE_COLLECTABLE("Sprite x", 240, "Sprite y", 88,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 240, "Sprite y", 88,
                             "Centre x", 244, "Centre y", 92,
                             slowdown_collected,
                             slowdown_timeup)},  SLOWDOWN_SECS(12)  },
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}},
 };
 
 SLOWDOWN level2_slowdowns[] = {
-  { {INITIALISE_COLLECTABLE("Sprite x", 14*8,   "Sprite y", 20*8,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 14*8,   "Sprite y", 20*8,
                             "Centre x", 14*8+4, "Centre y", 20*8+4,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(12)  },
-  { {INITIALISE_COLLECTABLE("Sprite x", 1*8,    "Sprite y", 11*8,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 1*8,    "Sprite y", 11*8,
                             "Centre x", 1*8+4,  "Centre y", 11*8+4,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15)  },
-  { {INITIALISE_COLLECTABLE("Sprite x", 30*8,   "Sprite y", 20*8,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 30*8,   "Sprite y", 20*8,
                             "Centre x", 30*8+4, "Centre y", 20*8+4,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15)  },
-  { {INITIALISE_COLLECTABLE("Sprite x", 23*8,   "Sprite y",  9*8,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x", 23*8,   "Sprite y",  9*8,
                             "Centre x", 23*8+4, "Centre y",  9*8+4,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15)  },
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}},
 };
 
 SLOWDOWN level3_slowdowns[] = {
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+			    "Sprite x", 16*8,   "Sprite y",  4*8,
+                            "Centre x", 16*8+4, "Centre y",  4*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(5)  },
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+			    "Sprite x", 16*8,   "Sprite y", 22*8,
+                            "Centre x", 16*8+4, "Centre y", 22*8+4,
+                            slowdown_collected,
+                            slowdown_timeup)}, SLOWDOWN_SECS(7)  },
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+			    "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}},
 };
 
 SLOWDOWN level4_slowdowns[] = {
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}},
@@ -310,7 +378,8 @@ SLOWDOWN level4_slowdowns[] = {
  */
 
 DOOR level2_doors[] = {
-  { {INITIALISE_COLLECTABLE("Key x cell",       8,  "Key y cell",        4,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Key x cell",       8,  "Key y cell",        4,
                             "Centre x px", (8*8+4), "Centre y px", (4*8+4),
                             door_key_collected,
                             door_open_timeup)},
@@ -322,7 +391,8 @@ DOOR level2_doors[] = {
     NAMED_VALUES_1("Door open secs",        10),
     NAMED_VALUES_1("Start open secs",        2),
   },
-  { {INITIALISE_COLLECTABLE("Key x cell",       5,  "Key y cell",       22,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Key x cell",       5,  "Key y cell",       22,
                             "Centre x px", (5*8+4), "Centre y px", (22*8+4),
                             door_key_collected,
                             door_open_timeup)},
@@ -334,7 +404,8 @@ DOOR level2_doors[] = {
     NAMED_VALUES_1("Door open secs",         5),
     NAMED_VALUES_1("Start open secs",        3),
   },
-  { {INITIALISE_COLLECTABLE("Key x cell",       30,  "Key y cell",        4,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Key x cell",       30,  "Key y cell",        4,
                             "Centre x px", (30*8+4), "Centre y px", (4*8+4),
                             door_key_collected,
                             door_open_timeup)},
@@ -346,33 +417,37 @@ DOOR level2_doors[] = {
     NAMED_VALUES_1("Door open secs",         6),
     NAMED_VALUES_1("Start open secs",        4),
   },
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}, 0 },
 };
 
 DOOR level3_doors[] = {
-  { {INITIALISE_COLLECTABLE("Key x cell",       30,  "Key y cell",        22,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Key x cell",       30,  "Key y cell",        22,
                             "Centre x px", (30*8+4), "Centre y px", (22*8+4),
                             door_key_collected,
                             door_open_timeup)},
     INITIALISE_DOOR_LOCATION(4,1),
-    NAMED_VALUES_1("Door ink",       INK_GREEN),
+    NAMED_VALUES_1("Door ink",       INK_WHITE),
     NAMED_VALUES_1("Key ink",        INK_BLACK),
-    NAMED_VALUES_1("Key paper",      INK_WHITE),
+    NAMED_VALUES_1("Key paper",      INK_RED),
     NAMED_VALUES_1("Key tile",             133),
-    NAMED_VALUES_1("Door open secs",         6),
+    NAMED_VALUES_1("Door open secs",        12),
     NAMED_VALUES_1("Start open secs",        3),
   },
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}, 0 },
 };
 
 DOOR level4_doors[] = {
-  { {INITIALISE_COLLECTABLE("Key x cell",        6,  "Key y cell",         1,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Key x cell",        6,  "Key y cell",         1,
                             "Centre x px",  (6*8+4), "Centre y px",  (1*8+4),
                             door_key_collected,
                             door_open_timeup)},
@@ -384,7 +459,8 @@ DOOR level4_doors[] = {
     NAMED_VALUES_1("Door open secs",         6),
     NAMED_VALUES_1("Start open secs",        0),
   },
-  { {INITIALISE_COLLECTABLE("Sprite x",   0, "Sprite y",   0,
+  { {INITIALISE_COLLECTABLE(DOOR_KEY,
+                            "Sprite x",   0, "Sprite y",   0,
                             "Centre x",   0, "Centre y",   0,
                             0,
                             0)}, 0 },
@@ -511,9 +587,9 @@ LEVEL_DATA level_data[] = {
     START_POINT(8,16),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
-    NAMED_VALUES_5("Background", INK_BLACK|PAPER_WHITE,
-                   "Solid",      INK_RED|PAPER_WHITE,
-                   "Jumper",     INK_YELLOW|PAPER_RED,
+    NAMED_VALUES_5("Background", INK_BLACK|PAPER_RED,
+                   "Solid",      INK_CYAN|PAPER_RED,
+                   "Jumper",     INK_CYAN|PAPER_BLUE,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     level3_tiles,
@@ -522,10 +598,10 @@ LEVEL_DATA level_data[] = {
     level3_doors,
     MAX_POINTS(20000),
     MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X",  6,
-                     "Level score Y",  6,
-                     "Bonus score X",  6,
-                     "Bonus score Y",  7,
+    { NAMED_VALUES_5("Level score X", 21,
+                     "Level score Y",  0,
+                     "Bonus score X", 21,
+                     "Bonus score Y",  1,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 

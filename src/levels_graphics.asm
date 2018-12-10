@@ -45,13 +45,13 @@ PUBLIC _blank
 PUBLIC _grassh
 ._grassh
         defb @01001010
-	defb @01101110
-	defb @11001110
-	defb @11011110
-	defb @11111111
-	defb @11111111
-	defb @11111111
-	defb @11111111
+	   	defb @01101110
+        defb @11001110
+    	defb @11011110
+        defb @11111111
+        defb @11111111
+        defb @11111111
+        defb @11111111
 
 PUBLIC _grassv
 ._grassv
@@ -118,7 +118,29 @@ PUBLIC _block_platform2
         defb @10101011
         defb @01111110
         defb @11111111
+
+PUBLIC _block_platform3
+._block_platform3
+        defb @11111111
+        defb @11011011
+        defb @10100101
+        defb @00100100
+        defb @01010010
+        defb @00100000
+        defb @00001000
+        defb @00000000
         
+PUBLIC _block_platform4
+._block_platform4
+        defb @11111111
+        defb @11111111
+        defb @11011101
+        defb @01101010
+        defb @11010101
+        defb @11010011
+        defb @01011010
+        defb @00101100
+
 PUBLIC _finish
 ._finish
         defb @11111111

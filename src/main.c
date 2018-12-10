@@ -45,9 +45,14 @@ void game_over( void )
   while(1);
 }
 
+#include <sound.h>
 int main()
 {
   uint8_t current_level_num;
+
+//  bit_beep(1000,261);
+//  bit_beepfx(BEEPFX_JUMP_1);
+  bit_beep(5,261);
 
   if( is_rom_writable() ) {
     /* Flicker the border if ROM is being used for trace */
@@ -63,7 +68,9 @@ int main()
     init_key_action_trace();
     init_collision_trace();
     init_runner_trace();
+    init_slowdown_trace();
     init_door_trace();
+    init_collectable_trace();
   }
 
   setup_int();
@@ -92,11 +99,11 @@ int main()
 
     /* Runner at start point */
     zx_border( game_state.current_level->border_colour );
-    set_runner_facing( game_state.current_level->start_facing );
-    set_runner_xpos( game_state.current_level->start_x );
-    set_runner_ypos( game_state.current_level->start_y );
+    SET_RUNNER_FACING( game_state.current_level->start_facing );
+    SET_RUNNER_XPOS( game_state.current_level->start_x );
+    SET_RUNNER_YPOS( game_state.current_level->start_y );
     set_runner_colour( game_state.current_level->background_att );
-    set_runner_slowdown( SLOWDOWN_INACTIVE );
+    SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
 
     set_level_score( game_state.current_level->max_score );
     set_level_bonus( game_state.current_level->max_bonus );
