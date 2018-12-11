@@ -137,6 +137,8 @@ int8_t cascade_pattern[6][2] = { {-2, +1},
                                  {+4, +3},
                                };
 
+
+uint8_t array_index;
 uint8_t pre_calc_path[100][2];
 
 void winner_fireworks(void)
@@ -146,7 +148,6 @@ void winner_fireworks(void)
   srand( ticker );
   while(1)
   {
-    uint8_t array_index = 0;
 
     uint8_t height = (rand()%18)+6;
     uint8_t xpos   = (rand()%27)+5;
@@ -203,15 +204,49 @@ void winner_fireworks(void)
     }
 
     {
-      uint8_t display_index;
-      for( display_index=0; display_index<array_index; display_index++ )
+    uint8_t display_index = 0;
+    uint8_t remove_index  = 255;
+    while(1)
+    {
+      if( display_index != 255 )
       {
-        uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
-                                      pre_calc_path[display_index][1] );
-        *addr = PAPER_GREEN;
+        if( display_index < array_index )
+        {
+          uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
+                                        pre_calc_path[display_index][1] );
+          *addr = PAPER_GREEN;
+          
+          display_index++;
+        }
+        else
+        {
+          display_index = 255;
+        }
       }
+
+      if( display_index == 4 )
+        remove_index = 0;
+
+      if( remove_index != 255 )
+      {
+        if( remove_index < array_index )
+        {
+          uint8_t* addr = zx_cxy2aaddr( pre_calc_path[remove_index][0],
+                                        pre_calc_path[remove_index][1] );
+          *addr = PAPER_WHITE;
+
+          remove_index++;
+        }
+        else
+        {
+          remove_index = 255;
+          display_index = 0;
+        }
+      }
+
+      intrinsic_halt();
+    }
     }
 
-    while(1);
   }
 }
