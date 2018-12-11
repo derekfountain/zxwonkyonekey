@@ -207,7 +207,8 @@ void winner_fireworks(void)
     uint8_t display_index = 0;
     uint8_t remove_index  = 255;
     uint8_t colour = (uint8_t)rand();
-    while(1)
+    uint8_t repeat = 0;
+    while( repeat++ < array_index+4 )
     {
       if( display_index != 255 )
       {
