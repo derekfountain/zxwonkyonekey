@@ -33,6 +33,7 @@
 #include "tracetable.h"
 #include "gameloop.h"
 #include "collision.h"
+#include "winner.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -40,9 +41,8 @@ GAME_STATE game_state;
 
 void game_over( void )
 {
-  /* TODO... */
-  zx_border( INK_GREEN );
-  while(1);
+  winner_banner();
+  winner_fireworks();
 }
 
 #include <sound.h>

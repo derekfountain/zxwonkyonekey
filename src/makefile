@@ -75,7 +75,8 @@ OBJECTS = gameloop.o \
           small_utoa.o \
           initialisation.o \
           sound.o \
-          background_music.o
+          background_music.o \
+          winner.o
 
 # Objects built from C files (as opposed to ASMs)
 C_OBJECTS = gameloop.o \
@@ -91,7 +92,8 @@ C_OBJECTS = gameloop.o \
             local_assert.o \
             collision.o \
             scoring.o \
-            sound.o
+            sound.o \
+            winner.o
 
 # A .cpre is the output of the C preprocessor
 PREPROCESSED = $(C_OBJECTS:.o=.cpre)
@@ -114,7 +116,8 @@ HEADERS = action.h \
           local_assert.h \
           runner.h \
           tracetable.h \
-          utils.h
+          utils.h \
+          winner.h
 
 
 # Run the preprocessor on *.c files to get *.cpre files
