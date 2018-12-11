@@ -21,6 +21,9 @@
 #include <string.h>
 #include <arch/zx.h>
 #include <intrinsic.h>
+#include <stdlib.h>
+
+#include "int.h"
 
 /*
  * Off-screen buffer to put the display into. This is blitted into the screen, replacing
@@ -30,6 +33,8 @@ static uint8_t  off_screen_buffer[32*8];
 
 void winner_banner(void)
 {
+#if 0
+/* Not enough memory for this as well as the fireworks */
   uint8_t* buffer_address;
   uint8_t  i;
 
@@ -107,11 +112,106 @@ void winner_banner(void)
 
     intrinsic_halt();
   }
-
+#endif
   return;
 }
 
+
+int8_t arch_pattern_l[4][2] = { {-1,  0},
+                                {-2, -1},
+                                {-3, -1},
+                                {-4,  0},
+                              };
+
+int8_t arch_pattern_r[4][2] = { {+1,  0},
+                                {+2, -1},
+                                {+3, -1},
+                                {+4,  0},
+                              };
+
+int8_t cascade_pattern[6][2] = { {-2, +1},
+                                 { 0, +1},
+                                 {+2, +1},
+                                 {-4, +3},
+                                 { 0, +3},
+                                 {+4, +3},
+                               };
+
+uint8_t pre_calc_path[100][2];
+
 void winner_fireworks(void)
 {
-  while(1);
+  zx_cls(PAPER_WHITE);
+
+  srand( ticker );
+  while(1)
+  {
+    uint8_t array_index = 0;
+
+    uint8_t height = (rand()%18)+6;
+    uint8_t xpos   = (rand()%27)+5;
+
+    uint8_t direction = (rand()&0x01);
+
+    uint8_t y = 24;
+
+    /* Build the stem */
+    {
+      uint8_t i = 0;
+      for( i=0; i<height; i++ )
+      {
+        pre_calc_path[array_index][0] = xpos;
+        pre_calc_path[array_index][1] = y;
+        array_index++;
+        y--;
+      }
+    }    
+
+    /* Add the arch */
+    {
+      int8_t*  arch_pattern;
+      uint8_t  arch_index;
+      if( direction == 0 )
+        arch_pattern = (int8_t*)&arch_pattern_l[0];
+      else
+        arch_pattern = (int8_t*)&arch_pattern_r[0];
+
+      for( arch_index=0; arch_index<4; arch_index++ )
+      {
+        pre_calc_path[array_index][0] = xpos+(*(arch_pattern+(2*arch_index)));
+        pre_calc_path[array_index][1] = y   +(*(arch_pattern+(2*arch_index)+1));
+        array_index++;
+      }
+    }
+
+    /* Add cascade */
+    y++;
+    if( direction == 0 ) 
+      xpos -= 4;
+    else
+      xpos += 4;
+
+    {
+      uint8_t  cascade_index;
+      for( cascade_index=0; cascade_index<6; cascade_index++ )
+      {
+        pre_calc_path[array_index][0] = xpos+cascade_pattern[cascade_index][0];
+        pre_calc_path[array_index][1] = y   +cascade_pattern[cascade_index][1];
+        array_index++;
+      }
+      
+    }
+
+    {
+      uint8_t display_index;
+      for( display_index=0; display_index<array_index; display_index++ )
+      {
+        uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
+                                      pre_calc_path[display_index][1] );
+        *addr = PAPER_GREEN;
+      }
+    }
+
+    while(1);
+  }
 }
