@@ -143,7 +143,7 @@ uint8_t pre_calc_path[100][2];
 
 void winner_fireworks(void)
 {
-  zx_cls(PAPER_WHITE);
+  zx_cls(PAPER_BLACK);
 
   srand( ticker );
   while(1)
@@ -206,6 +206,7 @@ void winner_fireworks(void)
     {
     uint8_t display_index = 0;
     uint8_t remove_index  = 255;
+    uint8_t colour = (uint8_t)rand();
     while(1)
     {
       if( display_index != 255 )
@@ -214,7 +215,7 @@ void winner_fireworks(void)
         {
           uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
                                         pre_calc_path[display_index][1] );
-          *addr = PAPER_GREEN;
+          *addr = colour;
           
           display_index++;
         }
@@ -233,7 +234,7 @@ void winner_fireworks(void)
         {
           uint8_t* addr = zx_cxy2aaddr( pre_calc_path[remove_index][0],
                                         pre_calc_path[remove_index][1] );
-          *addr = PAPER_WHITE;
+          *addr = PAPER_BLACK;
 
           remove_index++;
         }
@@ -241,7 +242,7 @@ void winner_fireworks(void)
         {
           remove_index = 255;
           display_index = 0;
-        }
+          colour = (uint8_t)rand();        }
       }
 
       intrinsic_halt();
