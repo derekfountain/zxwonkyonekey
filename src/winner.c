@@ -140,6 +140,7 @@ int8_t cascade_pattern[6][2] = { {-2, +1},
 
 uint8_t array_index;
 uint8_t pre_calc_path[100][2];
+#include <input.h>
 
 void winner_fireworks(void)
 {
@@ -148,9 +149,11 @@ void winner_fireworks(void)
   srand( ticker );
   while(1)
   {
+#define CASCADE_WIDTH  8
+#define CASCADE_HEIGHT 5
 
-    uint8_t height = (rand()%18)+6;
-    uint8_t xpos   = (rand()%27)+5;
+    uint8_t height = (rand()%(24-CASCADE_HEIGHT))+CASCADE_HEIGHT;
+    uint8_t xpos   = (rand()%(32-CASCADE_WIDTH))+CASCADE_WIDTH;
 
     uint8_t direction = (rand()&0x01);
 
@@ -203,6 +206,7 @@ void winner_fireworks(void)
       
     }
 
+    if(0)
     {
     uint8_t display_index = 0;
     uint8_t remove_index  = 255;
@@ -248,6 +252,23 @@ void winner_fireworks(void)
 
       intrinsic_halt();
     }
+    }
+
+
+
+
+
+
+    {
+        uint8_t display_index;
+        for(display_index=0; display_index<array_index; display_index++) {
+          uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
+                                        pre_calc_path[display_index][1] );
+          *addr = PAPER_BLUE;
+        }
+        while( !in_key_pressed( IN_KEY_SCANCODE_q ) );
+        while( in_key_pressed( IN_KEY_SCANCODE_q ) );
+        zx_cls(PAPER_BLACK);
     }
 
   }
