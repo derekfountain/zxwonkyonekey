@@ -28,12 +28,20 @@
 /*
  * Off-screen buffer to put the display into. This is blitted into the screen, replacing
  * whatever the user's program happens to have put there. A "merge" would be friendlier. :)
+ * Defined in ASM so it can be stored in lower memory.
  */
-static uint8_t  off_screen_buffer[32*8];
+extern uint8_t off_screen_buffer[32*8];
+
+/* These are in ASM, so they can be forced into lower memory */
+extern uint8_t arch_pattern_l[4][2];
+extern uint8_t arch_pattern_r[4][2];
+extern int8_t  cascade_pattern[6][2];
+
+extern uint8_t ticker_string[];
 
 void winner_banner(void)
 {
-#if 0
+#if 1
 /* Not enough memory for this as well as the fireworks */
   uint8_t* buffer_address;
   uint8_t  i;
@@ -45,7 +53,6 @@ void winner_banner(void)
   uint8_t  bit;
 
   uint8_t* current_char_ptr;
-  uint8_t  ticker_string[] = "You are a winner!  A not very convincing firework display follows!     ";
 
   zx_cls(PAPER_WHITE);
 
@@ -117,45 +124,46 @@ void winner_banner(void)
 }
 
 
-int8_t arch_pattern_l[4][2] = { {-1,  0},
-                                {-2, -1},
-                                {-3, -1},
-                                {-4,  0},
-                              };
+/*
+ * Infinite fireworks display to end the game. It's not exactly brilliant
+ * but it rounds things off.
+ * A firework animation is pre-calculated. There's a stem which goes straight
+ * up, then an arch either left or right, then a cascade of colour as it
+ * "explodes". Yeah, well, kinda. :)
+ * The firework is plotted in the attribute space, arranged so it won't spill
+ * outside of the screen limits. The patterns are defined in the tables of
+ * offsets above. When the graphic has been pre-calculated in memory it's
+ * drawn on screen by setting the attributes of the colour squares in the
+ * display. Each firework cell is drawn, with an erase following behind. The
+ * effect is supposed to look like a firework rising, exploding, then fading.
+ * It sort of works. :)
+ */
+#define CASCADE_WIDTH  8
+#define CASCADE_HEIGHT 5
+#define MAX_PAIRS_PER_FIREWORK ( (24-CASCADE_HEIGHT) + 4 + 6 )
 
-int8_t arch_pattern_r[4][2] = { {+1,  0},
-                                {+2, -1},
-                                {+3, -1},
-                                {+4,  0},
-                              };
-
-int8_t cascade_pattern[6][2] = { {-2, +1},
-                                 { 0, +1},
-                                 {+2, +1},
-                                 {-4, +3},
-                                 { 0, +3},
-                                 {+4, +3},
-                               };
-
-
-uint8_t array_index;
-uint8_t pre_calc_path[100][2];
-#include <input.h>
+/*
+ * A firework is plotted as a sequence of x,y attribute location pairs.
+ * The height of the stem is random, so this array needs to be big
+ * enough to handle the tallest firework. Array is in lower memory.
+ */
+extern uint8_t pre_calc_path[MAX_PAIRS_PER_FIREWORK][2];
 
 void winner_fireworks(void)
 {
   zx_cls(PAPER_BLACK);
+  zx_border(INK_BLACK);
 
   srand( ticker );
   while(1)
   {
-#define CASCADE_WIDTH  8
-#define CASCADE_HEIGHT 5
 
-    uint8_t height = (rand()%(24-CASCADE_HEIGHT))+CASCADE_HEIGHT;
-    uint8_t xpos   = (rand()%(32-(CASCADE_WIDTH*2)))+CASCADE_WIDTH;
+
+    uint8_t height    = (rand()%(24-CASCADE_HEIGHT))+CASCADE_HEIGHT;
+    uint8_t xpos      = (rand()%(32-(CASCADE_WIDTH*2)))+CASCADE_WIDTH;
     uint8_t direction = (rand()&0x01);
 
+    uint8_t array_index;
     int8_t* arch_pattern;
     uint8_t arch_index;
     uint8_t cascade_index;
