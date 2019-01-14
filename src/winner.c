@@ -45,7 +45,7 @@ void winner_banner(void)
   uint8_t  bit;
 
   uint8_t* current_char_ptr;
-  uint8_t  ticker_string[] = "You are a winner!    ";
+  uint8_t  ticker_string[] = "You are a winner!  A not very convincing firework display follows!     ";
 
   zx_cls(PAPER_WHITE);
 
@@ -153,13 +153,17 @@ void winner_fireworks(void)
 #define CASCADE_HEIGHT 5
 
     uint8_t height = (rand()%(24-CASCADE_HEIGHT))+CASCADE_HEIGHT;
-    uint8_t xpos   = (rand()%(32-CASCADE_WIDTH))+CASCADE_WIDTH;
-
+    uint8_t xpos   = (rand()%(32-(CASCADE_WIDTH*2)))+CASCADE_WIDTH;
     uint8_t direction = (rand()&0x01);
+
+    int8_t* arch_pattern;
+    uint8_t arch_index;
+    uint8_t cascade_index;
 
     uint8_t y = 24;
 
     /* Build the stem */
+    array_index = 0;
     {
       uint8_t i = 0;
       for( i=0; i<height; i++ )
@@ -172,103 +176,83 @@ void winner_fireworks(void)
     }    
 
     /* Add the arch */
-    {
-      int8_t*  arch_pattern;
-      uint8_t  arch_index;
-      if( direction == 0 )
-        arch_pattern = (int8_t*)&arch_pattern_l[0];
-      else
-        arch_pattern = (int8_t*)&arch_pattern_r[0];
+    if( direction == 0 )
+      arch_pattern = (int8_t*)&arch_pattern_l[0];
+    else
+      arch_pattern = (int8_t*)&arch_pattern_r[0];
 
-      for( arch_index=0; arch_index<4; arch_index++ )
-      {
-        pre_calc_path[array_index][0] = xpos+(*(arch_pattern+(2*arch_index)));
-        pre_calc_path[array_index][1] = y   +(*(arch_pattern+(2*arch_index)+1));
-        array_index++;
-      }
+    for( arch_index=0; arch_index<4; arch_index++ )
+    {
+      pre_calc_path[array_index][0] = xpos+(*(arch_pattern+(2*arch_index)));
+      pre_calc_path[array_index][1] = y   +(*(arch_pattern+(2*arch_index)+1));
+      array_index++;
     }
 
     /* Add cascade */
     y++;
-    if( direction == 0 ) 
+    if( direction == 0 )
       xpos -= 4;
     else
       xpos += 4;
 
+    for( cascade_index=0; cascade_index<6; cascade_index++ )
     {
-      uint8_t  cascade_index;
-      for( cascade_index=0; cascade_index<6; cascade_index++ )
-      {
-        pre_calc_path[array_index][0] = xpos+cascade_pattern[cascade_index][0];
-        pre_calc_path[array_index][1] = y   +cascade_pattern[cascade_index][1];
-        array_index++;
-      }
-      
+      pre_calc_path[array_index][0] = xpos+cascade_pattern[cascade_index][0];
+      pre_calc_path[array_index][1] = y   +cascade_pattern[cascade_index][1];
+      array_index++;
     }
 
-    if(0)
     {
-    uint8_t display_index = 0;
-    uint8_t remove_index  = 255;
-    uint8_t colour = (uint8_t)rand();
-    uint8_t repeat = 0;
-    while( repeat++ < array_index+4 )
-    {
-      if( display_index != 255 )
+      /* Animate the firework */
+#define DONT_SHOW 255
+#define TRAIL     8
+
+      uint8_t display_index = 0;
+      uint8_t remove_index  = DONT_SHOW;
+      uint8_t colour = (uint8_t)(((rand()%7)+1)<<3);
+
+      while( 1 )
       {
-        if( display_index < array_index )
+        if( display_index != DONT_SHOW )
         {
-          uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
-                                        pre_calc_path[display_index][1] );
-          *addr = colour;
-          
-          display_index++;
+          if( display_index < array_index )
+          {
+            uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
+                                          pre_calc_path[display_index][1] );
+            if( display_index < height )
+              *addr = PAPER_WHITE|BRIGHT;
+            else
+              *addr = (uint8_t)(((rand()%7)+1)<<3)|BRIGHT;
+
+            display_index++;
+          }
+          else
+          {
+            display_index = DONT_SHOW;
+          }
         }
-        else
+
+        if( display_index == TRAIL )
+          remove_index = 0;
+
+        if( remove_index != DONT_SHOW )
         {
-          display_index = 255;
+          if( remove_index < array_index )
+          {
+            uint8_t* addr = zx_cxy2aaddr( pre_calc_path[remove_index][0],
+                                          pre_calc_path[remove_index][1] );
+            *addr = PAPER_BLACK;
+
+            remove_index++;
+          }
+          else
+          {
+            break;
+          }
         }
+
+        intrinsic_halt();
       }
-
-      if( display_index == 4 )
-        remove_index = 0;
-
-      if( remove_index != 255 )
-      {
-        if( remove_index < array_index )
-        {
-          uint8_t* addr = zx_cxy2aaddr( pre_calc_path[remove_index][0],
-                                        pre_calc_path[remove_index][1] );
-          *addr = PAPER_BLACK;
-
-          remove_index++;
-        }
-        else
-        {
-          remove_index = 255;
-          display_index = 0;
-          colour = (uint8_t)rand();        }
-      }
-
-      intrinsic_halt();
-    }
-    }
-
-
-
-
-
-
-    {
-        uint8_t display_index;
-        for(display_index=0; display_index<array_index; display_index++) {
-          uint8_t* addr = zx_cxy2aaddr( pre_calc_path[display_index][0],
-                                        pre_calc_path[display_index][1] );
-          *addr = PAPER_BLUE;
-        }
-        while( !in_key_pressed( IN_KEY_SCANCODE_q ) );
-        while( in_key_pressed( IN_KEY_SCANCODE_q ) );
-        zx_cls(PAPER_BLACK);
     }
 
   }
