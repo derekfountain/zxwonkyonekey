@@ -41,8 +41,6 @@ extern uint8_t ticker_string[];
 
 void winner_banner(void)
 {
-#if 1
-/* Not enough memory for this as well as the fireworks */
   uint8_t* buffer_address;
   uint8_t  i;
 
@@ -119,7 +117,7 @@ void winner_banner(void)
 
     intrinsic_halt();
   }
-#endif
+
   return;
 }
 

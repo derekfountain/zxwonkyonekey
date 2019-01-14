@@ -32,7 +32,6 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <arch/zx/sp1.h>
 
 #include "utils.h"

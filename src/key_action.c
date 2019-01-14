@@ -18,7 +18,6 @@
  */
 
 #include <arch/zx.h>
-#include <stdio.h>
 #include <string.h>
 #include "utils.h"
 #include "action.h"
