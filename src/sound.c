@@ -18,6 +18,7 @@
  */
 
 #include <stdint.h>
+#include <sound.h>
 #include "key_action.h"
 #include "int.h"
 #include "runner.h"
@@ -73,8 +74,9 @@ static uint8_t music_notes[] = {
 };
 #define MUSIC_NUM_NOTES (sizeof(music_notes)/sizeof(music_notes[0]))
 
-static uint8_t  music_on  = 0;
-static uint8_t  slow_note = 0;
+static uint8_t  music_on    = 0;
+static uint8_t  slow_note   = 0;
+static uint8_t  effects_on  = 1;
 
 /* Keep a track of which note is playing */
 static uint16_t music_current_note_index = 0;
@@ -87,6 +89,21 @@ void toggle_music( void )
   music_on = !music_on;
 }
 
+/*
+ * Sounds are split into 4 cycles. A cycle is a 50th of a second, i.e. one
+ * frame of the Spectrum's display. Each and every cycle does the usual game
+ * stuff, but because sound is CPU intensive we can't play sounds every cycle,
+ * and we can't play both a music note and a sound effect in one cycle.
+ * So, the spare time in every 4th cycle is handed over to playing background
+ * music. The spare time in every other 4th cycle is handed over to playing
+ * sound effects. There are 2 other cycles where the spare time is currently
+ * not used.
+ */
+#define BACKGROUND_MUSIC_CYCLE 0x000
+#define UNUSED_CYCLE_1         0x001
+#define SOUND_EFFECT_CYCLE     0x002
+#define UNUSED_CYCLE_2         0x003
+
 PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
 {
   (void)data;
@@ -97,7 +114,7 @@ PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
    * needs to complete in 11ms to ensure a frame isn't dropped. This currently
    * isn't a problem.
    */
-  if( music_on && ((GET_TICKER & 0x0003) == 0x003) )
+  if( music_on && ((GET_TICKER & 0x0003) == BACKGROUND_MUSIC_CYCLE) )
   {
     play_note_raw( &(music_notes[music_current_note_index]) );
 
@@ -122,3 +139,55 @@ PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
 
 }
 
+/*
+ * Sound effects use the beepfx engine from Shuru:
+ *
+ *   https://shiru.untergrund.net/software.shtml
+ *
+ * which has been ported into Z88DK.
+ *
+ * There are lots of good effects, and the editor works in Windows 7 so
+ * creating more is possible. The problem is that if the effect lasts
+ * longer than about 10ms the game skips a frame which is rather obvious
+ * and effects game play. So until I get to doing multi frame sound effects
+ * the effects used are the very short ones. :)
+ *
+ * Sound effects are put into a queue, which is currently of length 1. :)
+ * It's still important though, because the effect can only be played during
+ * the correct cycle which is something the play function takes into account.
+ *
+ * There's a immediate play function too which is used on the odd occasion
+ * when sound needs to play immediately, like end of level or teleport.
+ */
+void* pending_sound = 0;
+void queue_beepfx_sound( void* sound )
+{
+  pending_sound = sound;
+}
+
+void toggle_sound_effects( void )
+{
+  effects_on = !effects_on;
+  if( pending_sound )
+    pending_sound = 0;
+}
+
+PROCESSING_FLAG play_beepfx_sound( void* data, GAME_ACTION* output_action )
+{
+  (void)data;
+
+  if( effects_on && pending_sound && ((GET_TICKER & 0x0003) == SOUND_EFFECT_CYCLE) )
+  {
+    bit_beepfx(pending_sound);
+    pending_sound = 0;
+  }
+
+  *output_action = NO_ACTION;
+  return KEEP_PROCESSING;
+}
+
+void play_beepfx_sound_immediate( void* sound )
+{
+  if( effects_on )
+    bit_beepfx(sound);
+}

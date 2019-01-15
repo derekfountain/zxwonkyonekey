@@ -18,6 +18,8 @@
  */
 
 #include <arch/zx.h>
+#include <input.h>
+#include <sound.h>
 #include <string.h>
 #include "utils.h"
 #include "action.h"
@@ -27,6 +29,7 @@
 #include "game_state.h"
 #include "tracetable.h"
 #include "int.h"
+#include "sound.h"
 
 /***
  *      _______             _             
@@ -391,6 +394,12 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   uint8_t     xpos = GET_RUNNER_XPOS;
   uint8_t     ypos = GET_RUNNER_YPOS;
 
+  /* Check for cheat key */
+  if( in_key_pressed( IN_KEY_SCANCODE_q ) ) {
+    *output_action = FINISH;
+    return STOP_PROCESSING;
+  }
+
   /* Are we in the middle of a jump? If so, no action */
   if( RUNNER_JUMPING( GET_RUNNER_JUMP_OFFSET ) ) {
     *output_action = NO_ACTION;
@@ -477,6 +486,9 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
         *output_action = TOGGLE_DIRECTION;
       }
 
+      /* Play effect immediately otherwise he starts to emerge from the teleporter */
+      play_beepfx_sound_immediate(BEEPFX_ROBOBLIP);
+
       KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
 
       break;
@@ -490,6 +502,9 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
       if( teleporter->change_direction ) {
         *output_action = TOGGLE_DIRECTION;
       }
+
+      /* Play effect immediately otherwise he starts to emerge from the teleporter */
+      play_beepfx_sound_immediate(BEEPFX_ROBOBLIP);
 
       KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
 

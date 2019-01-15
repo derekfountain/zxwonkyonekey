@@ -45,14 +45,9 @@ void game_over( void )
   winner_fireworks();
 }
 
-#include <sound.h>
 int main()
 {
   uint8_t current_level_num;
-
-//  bit_beep(1000,261);
-//  bit_beepfx(BEEPFX_JUMP_1);
-  bit_beep(5,261);
 
   if( is_rom_writable() ) {
     /* Flicker the border if ROM is being used for trace */

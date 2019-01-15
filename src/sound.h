@@ -23,4 +23,9 @@
 void toggle_music( void );
 PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action );
 
+void toggle_sound_effects( void );
+void queue_beepfx_sound( void* sound );
+PROCESSING_FLAG play_beepfx_sound( void* data, GAME_ACTION* output_action );
+void play_beepfx_sound_immediate( void* sound );
+
 #endif

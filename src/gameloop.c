@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <z80.h>
+#include <sound.h>
 
 #include "game_state.h"
 #include "runner.h"
@@ -38,6 +39,7 @@
 #include "collision.h"
 #include "scoring.h"
 #include "sound.h"
+
 
 
 /***
@@ -193,6 +195,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
 LOOP_ACTION game_actions[] =
   {
     {play_bg_music_note,         NORMAL_WHEN_SLOWDOWN    },
+    {play_beepfx_sound,          NORMAL_WHEN_SLOWDOWN    },
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
@@ -212,7 +215,9 @@ LOOP_ACTION game_actions[] =
 
 void finish_level(void)
 {
-  /* Do I need anything here? Trace point, maybe? */
+  play_beepfx_sound_immediate(BEEPFX_SELECT_1);
+
+  /* Trace point, maybe? */
 }
 
 /***
@@ -231,6 +236,7 @@ void gameloop( GAME_STATE* game_state )
   while(1) {
     uint8_t     i;
 
+    /* Check for user input, every cycle */
     if( in_key_pressed( IN_KEY_SCANCODE_SPACE ) ) {
       game_state->key_pressed = 1;
     } else {
@@ -238,14 +244,18 @@ void gameloop( GAME_STATE* game_state )
       game_state->key_processed = 0;
     }
 
-    if( in_key_pressed( IN_KEY_SCANCODE_q ) ) {
-      finish_level();
-      break;
-    }
+    /* I don't need to check for the sound toggle keys *every* cycle */
+    if( ((GET_TICKER & 0x0008) == 0) )
+    {
+      if( in_key_pressed( IN_KEY_SCANCODE_m ) ) {
+        while( in_key_pressed( IN_KEY_SCANCODE_m ) );
+        toggle_music();
+      }
 
-    if( in_key_pressed( IN_KEY_SCANCODE_m ) ) {
-      while( in_key_pressed( IN_KEY_SCANCODE_m ) );
-      toggle_music();
+      if( in_key_pressed( IN_KEY_SCANCODE_s ) ) {
+        while( in_key_pressed( IN_KEY_SCANCODE_s ) );
+        toggle_sound_effects();
+      }
     }
 
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
@@ -282,7 +292,13 @@ void gameloop( GAME_STATE* game_state )
           toggle_runner_direction();
           break;
 
+        case BOUNCE_OFF_WALL:
+          queue_beepfx_sound(BEEPFX_PICK);
+          toggle_runner_direction();
+          break;
+
         case ACTIVATE_SLOWDOWN:
+          queue_beepfx_sound(BEEPFX_JUMP_2);
           SET_RUNNER_SLOWDOWN( SLOWDOWN_ACTIVE );
           break;
 
@@ -291,6 +307,7 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case JUMP:
+          queue_beepfx_sound(BEEPFX_SHOT_1);
           start_runner_jumping();
           break;
 
