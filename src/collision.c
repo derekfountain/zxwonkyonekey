@@ -362,7 +362,7 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
   switch( reaction )
   {
   case BOUNCE:
-    *output_action = TOGGLE_DIRECTION;
+    *output_action = BOUNCE_OFF_WALL;
     return STOP_PROCESSING;
 
   case DROP_VERTICALLY:

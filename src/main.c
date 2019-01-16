@@ -33,6 +33,7 @@
 #include "tracetable.h"
 #include "gameloop.h"
 #include "collision.h"
+#include "winner.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -40,19 +41,13 @@ GAME_STATE game_state;
 
 void game_over( void )
 {
-  /* TODO... */
-  zx_border( INK_GREEN );
-  while(1);
+  winner_banner();
+  winner_fireworks();
 }
 
-#include <sound.h>
 int main()
 {
   uint8_t current_level_num;
-
-//  bit_beep(1000,261);
-//  bit_beepfx(BEEPFX_JUMP_1);
-  bit_beep(5,261);
 
   if( is_rom_writable() ) {
     /* Flicker the border if ROM is being used for trace */
