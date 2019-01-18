@@ -614,7 +614,7 @@ LEVEL_DATA level_data[] = {
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_WHITE|PAPER_BLACK,
                    "Solid",      INK_YELLOW|PAPER_BLACK,
-                   "Jumper",     INK_YELLOW|PAPER_RED,
+                   "Jumper",     INK_RED|PAPER_YELLOW,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
     &level2_tiles[0],
