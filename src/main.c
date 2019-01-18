@@ -77,7 +77,7 @@ int main()
 
   create_runner( RIGHT );
 
-  current_level_num = 4;
+  current_level_num = 0;
   while( 1 ) {
     
     /* Get the level data and call it's draw function to draw it */

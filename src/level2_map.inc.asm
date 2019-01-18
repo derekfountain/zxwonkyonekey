@@ -5,7 +5,7 @@
 
 	;LEVEL DESIGNER PASSTHROUGH START
 	;LEVEL DESIGNER PASSTHROUGH END
-        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
+        defb 0x10, 0x06, 0x11, 0x00 ; ink red, paper white
         defb 0x16, 0x00, 0x0F   ; AT 0,15
         defb 0x80 ; solidh
         defb 0x16, 0x00, 0x1F   ; AT 0,31

@@ -1,6 +1,6 @@
 	;LEVEL DESIGNER PASSTHROUGH START
 	;LEVEL DESIGNER PASSTHROUGH END
-        defb 0x10, 0x07, 0x11, 0x00 ; ink white, paper black
+        defb 0x10, 0x05, 0x11, 0x00 ; ink cyan, paper black
         defb 0x16, 0x00, 0x00   ; AT 0,0
         defb 0x80 ; solidh
         defb 0x16, 0x01, 0x00   ; AT 1,0
@@ -304,4 +304,3 @@
         defb 0x81 ; jumper
         defb 0x16, 0x17, 0x07   ; AT 23,7
         defb 0x81 ; jumper
-        defb 0

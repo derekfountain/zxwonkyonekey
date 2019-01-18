@@ -278,8 +278,6 @@ PUBLIC _level0_map_end
 	
 PUBLIC _level1_map
 ._level1_map
-        defb 0x10, 0x07         ; ink white
-        defb 0x11, 0x00         ; paper black
 
 INCLUDE "level1_map.inc.asm"	
 			        
