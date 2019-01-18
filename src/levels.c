@@ -613,7 +613,7 @@ LEVEL_DATA level_data[] = {
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_5("Background", INK_WHITE|PAPER_BLACK,
-                   "Solid",      INK_BLACK|PAPER_YELLOW,
+                   "Solid",      INK_YELLOW|PAPER_BLACK,
                    "Jumper",     INK_YELLOW|PAPER_RED,
                    "Teleporter", INK_GREEN|PAPER_MAGENTA,
                    "Finish",     INK_YELLOW|PAPER_BLUE),
