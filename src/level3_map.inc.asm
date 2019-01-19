@@ -3,7 +3,7 @@
 ; See the levels_maps.asm file for the inclusion point and
 ; any manual tweaks or addendums to the level.
 
-        defb 0x10, 0x04, 0x11, 0x07 ; ink green, paper white
+        defb 0x10, 0x02, 0x11, 0x06 ; ink red, paper yellow
         defb 0x16, 0x00, 0x00   ; AT 0,0
         defb 0x80 ; solidh
         defb 0x16, 0x00, 0x01   ; AT 0,1
@@ -332,7 +332,7 @@
         defb 0x80 ; solidh
         defb 0x16, 0x17, 0x1F   ; AT 23,31
         defb 0x80 ; solidh
-        defb 0x10, 0x05, 0x11, 0x01 ; ink cyan, paper blue
+        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
         defb 0x16, 0x05, 0x04   ; AT 5,4
         defb 0x81 ; jumper
         defb 0x16, 0x05, 0x0F   ; AT 5,15

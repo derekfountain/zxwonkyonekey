@@ -45,9 +45,9 @@ PUBLIC _blank
 PUBLIC _grassh
 ._grassh
         defb @01001010
-	   	defb @01101110
+        defb @01101110
         defb @11001110
-    	defb @11011110
+        defb @11011110
         defb @11111111
         defb @11111111
         defb @11111111
@@ -56,68 +56,68 @@ PUBLIC _grassh
 PUBLIC _grassv
 ._grassv
         defb @11111111
-	defb @11111011
-	defb @10111111
-	defb @11111101
-	defb @11111111
-	defb @11011111
-	defb @11110111
-	defb @11111111
-	
+        defb @11111011
+        defb @10111111
+        defb @11111101
+        defb @11111111
+        defb @11011111
+        defb @11110111
+        defb @11111111
+        
 PUBLIC _platform1
 ._platform1
         defb @11111111
         defb @01010101
-	defb @01100100
-	defb @11010010
-	defb @10101001
-	defb @10100010
-	defb @01010010
-	defb @10000100
+        defb @01100100
+        defb @11010010
+        defb @10101001
+        defb @10100010
+        defb @01010010
+        defb @10000100
 
 PUBLIC _platform1v
 ._platform1v
         defb @10010101
         defb @01011101
-	defb @01100100
-	defb @11010010
-	defb @10101001
-	defb @10111010
-	defb @01110111
-	defb @10101101
-		
+        defb @01100100
+        defb @11010010
+        defb @10101001
+        defb @10111010
+        defb @01110111
+        defb @10101101
+                
 PUBLIC _jumper
 ._jumper
         defb @11111111
         defb @11111111
-	defb @00011000
-	defb @01111110
-	defb @00011000
-	defb @00111100
-	defb @00011000
-	defb @00000000
+        defb @00011000
+        defb @01111110
+        defb @00011000
+        defb @00111100
+        defb @00011000
+        defb @00000000
 
 PUBLIC _block_platform1
 ._block_platform1
-        defb @01111110
-        defb @10000001
-	defb @11111111
-	defb @01111110
-	defb @11010101
-	defb @10101010
-	defb @11010101
-	defb @01111110
+        defb @11111111
+        defb @10101010
+        defb @01010101
+        defb @10101010
+        defb @01010101
+        defb @10101010
+        defb @01010101
+        defb @10101010
         
 PUBLIC _block_platform2
 ._block_platform2
-        defb @01111110
-        defb @10101011
-        defb @01111110
-        defb @11010101
-        defb @01111110
-        defb @10101011
-        defb @01111110
-        defb @11111111
+        defb @01010101
+        defb @10101010
+        defb @01010101
+        defb @10101010
+        defb @01010101
+        defb @10101010
+        defb @01010101
+        defb @10101010
 
 PUBLIC _block_platform3
 ._block_platform3
@@ -133,24 +133,35 @@ PUBLIC _block_platform3
 PUBLIC _block_platform4
 ._block_platform4
         defb @11111111
+        defb @10001000
         defb @11111111
-        defb @11011101
-        defb @01101010
-        defb @11010101
-        defb @11010011
-        defb @01011010
-        defb @00101100
+        defb @00010001
+        defb @11111111
+        defb @10001000
+        defb @11111111
+        defb @00010001
+
+PUBLIC _block_platform5
+._block_platform5
+        defb @11111111
+        defb @10000001
+        defb @10000001
+        defb @10001001
+        defb @10010001
+        defb @10000001
+        defb @10000001
+        defb @11111111
 
 PUBLIC _finish
 ._finish
         defb @11111111
         defb @10000001
-	defb @10111101
-	defb @10100101
-	defb @10100101
-	defb @10111101
-	defb @10000001
-	defb @11111111
+        defb @10111101
+        defb @10100101
+        defb @10100101
+        defb @10111101
+        defb @10000001
+        defb @11111111
 
 PUBLIC _teleporter
 ._teleporter
@@ -185,73 +196,73 @@ PUBLIC _door_key
 ;;                                                                  
 ;;                                                                  
      
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
 PUBLIC _slowdown_pill_f1
 ._slowdown_pill_f1
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00010000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00010000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
 PUBLIC _slowdown_pill_f2
 ._slowdown_pill_f2
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00011000
-	defb @00011000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00011000
+        defb @00011000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
 PUBLIC _slowdown_pill_f3
 ._slowdown_pill_f3
-	defb @00000000
-	defb @00000000
-	defb @00011000
-	defb @00100100
-	defb @00100100
-	defb @00011000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00011000
+        defb @00100100
+        defb @00100100
+        defb @00011000
+        defb @00000000
+        defb @00000000
 
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
 
 
@@ -275,11 +286,11 @@ PUBLIC _door_f1
     defb @11011011
     defb @11000011
 
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
-	defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
