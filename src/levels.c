@@ -69,6 +69,7 @@ extern uint8_t level4_map[];
  *
  */
 
+/* FIXME All these tables can be moved to lower memory */
 /*
  * Tables of tiles required for each level. "UDGs".
  * Tile number 0 is end of list; assumes I'll never
@@ -138,39 +139,27 @@ TILE_DEFINITION level4_tiles[] = {
 TELEPORTER_DEFINITION level1_teleporters[] = {
   {  0*8,  1*8,  0,  1,
     22*8, 30*8, 22, 30,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {  0*8, 10*8,  0, 10,
     22*8, 10*8, 22, 10,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   { 14*8, 20*8, 14, 20,
      3*8,  0*8,  3,  0,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   { 11*8, 28*8, 11, 28,
      6*8,  0*8,  6,  0,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   {  4*8,  8*8,  4,  8,
      2*8, 30*8,  2, 30,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {  2*8, 23*8,  2, 23,
     16*8,  6*8,  16, 6,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {0}
 };
@@ -178,21 +167,15 @@ TELEPORTER_DEFINITION level1_teleporters[] = {
 TELEPORTER_DEFINITION level2_teleporters[] = {
   { 15*8, 13*8, 15, 13,
     14*8, 22*8, 14, 22,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   {  9*8, 14*8,  9, 14,
      4*8,  1*8,  4,  1,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   {  13*8, 24*8,  13, 24,
      9*8,  30*8,  9,  30,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {0}
 };
@@ -201,50 +184,36 @@ TELEPORTER_DEFINITION level3_teleporters[] = {
   /* Bottom left up to top left */
   {  4*8,  1*8,  4,  1,
     22*8,  1*8, 22,  1,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   /* Third platform up to central puzzle start */
   { 14*8,  7*8, 14,  7,
      6*8, 16*8,  6, 16,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   /* Lower left decoy */
   { 10*8,  7*8, 10,  7,
     10*8, 25*8, 10, 25,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   /* Upper left decoy */
   { 8*8,  7*8, 8,  7,
     12*8, 25*8, 12, 25,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   /* Upper right passage */
   { 8*8, 25*8, 8, 25,
     2*8, 30*8, 2, 30,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   {  9*8, 30*8,  9, 30,
     22*8, 27*8, 22, 27,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   /* Final one */
   {  1*8,  7*8,  1,  7,
     19*8,  7*8, 19,  7,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {0}
 };
@@ -252,21 +221,15 @@ TELEPORTER_DEFINITION level3_teleporters[] = {
 TELEPORTER_DEFINITION level4_teleporters[] = {
   {  1*8,  1*8,  1,  1,
     20*8, 31*8, 20, 31,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {  1*8, 30*8,  1, 30,
     22*8, 11*8, 22, 11,
-    NAMED_VALUES_1("Change direction", 1),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 1)
   },
   { 12*8,  8*8, 12,  8,
     16*8, 25*8, 16, 25,
-    NAMED_VALUES_1("Change direction", 0),
-    INK_GREEN,
-    INK_MAGENTA,
+    NAMED_VALUES_1("Change direction", 0)
   },
   {0}
 };
@@ -765,22 +728,19 @@ void print_level_from_sp1_string(LEVEL_DATA* level_data)
     uint8_t print_string[9];
 
     print_string[0] = '\x10'; /* Ink <n> */
+    print_string[1] = TELEPORTER_INK;
     print_string[2] = '\x11'; /* Paper <n> */
+    print_string[3] = TELEPORTER_PAPER;
 
     print_string[4] = '\x16'; /* AT <x>,<y> */
 
+    print_string[7] = TELEPORTER_UDG;
     print_string[8] = '\0';
 
     while( teleporter->end_1_x || teleporter->end_1_y )
     {
-      /* TODO Pull this out into a teleporter.c file */
-      
-      print_string[1] = teleporter->ink;
-      print_string[3] = teleporter->paper;
-
       print_string[5] = teleporter->end_1_y_cell;
       print_string[6] = teleporter->end_1_x_cell;
-      print_string[7] = '\x84'; /* FIXME Hardcoded teleporter UDG number */
 
       sp1_PrintString(&level_print_control, print_string);
 

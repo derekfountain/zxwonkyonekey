@@ -23,6 +23,21 @@
 #include <stdint.h>
 
 /*
+ * These used to be set in the level data so each level could have
+ * different coloured teleporters. Not a good idea because the colour
+ * is the visual cue for these. Changing colours made it confusing.
+ * So the code was streamlined by hardcoding these values.
+ */
+#define TELEPORTER_INK   INK_GREEN
+#define TELEPORTER_PAPER INK_MAGENTA
+
+/*
+ * This could also be level specific, but in practise it was always the
+ * same.
+ */
+#define TELEPORTER_UDG   '\x84'
+
+/*
  * Teleporter moves the runner from one screen location to another.
  * The x,y coords are pixels, required for testing against where
  * the sprite is. The x_cell,y_cell coords are cells, required for
@@ -48,8 +63,11 @@ typedef struct _teleporter_defintion
 
   uint8_t change_direction;
 
+#if 0
+  /* Ink is always green and paper is always magenta, so these are redundant */
   uint8_t ink;
   uint8_t paper;
+#endif
 
 } TELEPORTER_DEFINITION;
 
