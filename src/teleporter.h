@@ -30,6 +30,7 @@
  */
 #define TELEPORTER_INK   INK_GREEN
 #define TELEPORTER_PAPER INK_MAGENTA
+#define TELEPORTER_ATT   (INK_GREEN|PAPER_MAGENTA)
 
 /*
  * This could also be level specific, but in practise it was always the

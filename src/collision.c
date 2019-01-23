@@ -30,6 +30,7 @@
 #include "runner.h"
 #include "action.h"
 #include "game_state.h"
+#include "teleporter.h"
 
 /***
  *      _______             _             
@@ -356,7 +357,7 @@ PROCESSING_FLAG act_on_collision( void* data, GAME_ACTION* output_action )
 
   GAME_STATE* game_state = (GAME_STATE*)data;
   uint8_t     background = game_state->current_level->background_att;
-  uint8_t     teleporter = game_state->current_level->teleporter_att;
+  uint8_t     teleporter = TELEPORTER_ATT;
 
   reaction = test_direction_blocked( xpos, ypos, facing, jump_status, background, teleporter );
   switch( reaction )

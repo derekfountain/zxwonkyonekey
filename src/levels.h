@@ -63,7 +63,6 @@ typedef struct _level_data
   uint8_t   background_att;
   uint8_t   solid_att;
   uint8_t   jumper_att;
-  uint8_t   teleporter_att;
   uint8_t   finish_att;
 
   TILE_DEFINITION*       level_tiles;
