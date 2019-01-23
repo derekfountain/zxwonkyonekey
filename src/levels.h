@@ -44,8 +44,6 @@ typedef struct _level_data
 {
   void*     draw_data;
 
-  void      (*teardown_func)(struct _level_data*);
-
   uint8_t   start_x;
   uint8_t   start_y;
 
@@ -88,5 +86,6 @@ typedef struct _level_data
 #define SLOWDOWN_SECS(s) s
 
 void print_level_from_sp1_string(LEVEL_DATA* level_data);
+void teardown_level(LEVEL_DATA* level_data);
 
 #endif

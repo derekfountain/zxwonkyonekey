@@ -509,7 +509,6 @@ LEVEL_DATA level_data[] = {
    */
   {
     level0_map,
-    teardown_level,
     START_POINT(0,135),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
@@ -540,7 +539,6 @@ LEVEL_DATA level_data[] = {
    */
   {
     level1_map,
-    teardown_level,
     START_POINT(0,155),
     LEVEL_BORDER(INK_BLUE),
     START_FACING(RIGHT),
@@ -571,7 +569,6 @@ LEVEL_DATA level_data[] = {
    */
   {
     level2_map,
-    teardown_level,
     START_POINT(0,155),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
@@ -602,7 +599,6 @@ LEVEL_DATA level_data[] = {
    */
   {
     level3_map,
-    teardown_level,
     START_POINT(8,16),
     LEVEL_BORDER(INK_RED),
     START_FACING(RIGHT),
@@ -633,7 +629,6 @@ LEVEL_DATA level_data[] = {
    */
   {
     level4_map,
-    teardown_level,
     START_POINT(8,0),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),

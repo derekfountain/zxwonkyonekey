@@ -114,7 +114,7 @@ int main()
     gameloop( &game_state );
 
     /* Call the level's teardown function to reclaim resources */
-    (game_state.current_level->teardown_func)(game_state.current_level);
+    teardown_level( game_state.current_level );
 
     if( ++current_level_num == NUM_LEVELS ) {
       game_over();
