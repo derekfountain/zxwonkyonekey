@@ -64,12 +64,6 @@ typedef struct _teleporter_defintion
 
   uint8_t change_direction;
 
-#if 0
-  /* Ink is always green and paper is always magenta, so these are redundant */
-  uint8_t ink;
-  uint8_t paper;
-#endif
-
 } TELEPORTER_DEFINITION;
 
 #endif

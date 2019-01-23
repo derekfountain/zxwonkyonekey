@@ -63,7 +63,6 @@ typedef struct _level_data
   uint8_t   background_att;
   uint8_t   solid_att;
   uint8_t   jumper_att;
-  uint8_t   finish_att;
 
   TILE_DEFINITION*       level_tiles;
   TELEPORTER_DEFINITION* teleporters;
@@ -74,6 +73,12 @@ typedef struct _level_data
   uint16_t               max_bonus;
   SCORE_SCREEN_DATA      score_screen_data;
 } LEVEL_DATA;
+
+/*
+ * Attribute of the finish block is the same on all levels so this is
+ * now hardcoded.
+ */
+#define FINISH_ATT (INK_YELLOW|PAPER_BLUE)
 
 #define NUM_LEVELS 5
 

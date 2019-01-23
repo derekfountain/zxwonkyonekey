@@ -30,6 +30,7 @@
 #include "tracetable.h"
 #include "int.h"
 #include "sound.h"
+#include "levels.h"
 
 /***
  *      _______             _             
@@ -420,7 +421,7 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
     else
       attr_address = zx_pxy2aaddr( xpos-8, ypos );
   
-    if( *attr_address == game_state->current_level->finish_att ) {
+    if( *attr_address == FINISH_ATT ) {
       *output_action = FINISH;
       return STOP_PROCESSING;
     }
