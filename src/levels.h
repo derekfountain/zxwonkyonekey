@@ -42,7 +42,6 @@ typedef struct _tile_definition
 
 typedef struct _level_data
 {
-  void      (*draw_func)(struct _level_data*);
   void*     draw_data;
 
   void      (*teardown_func)(struct _level_data*);
@@ -88,6 +87,6 @@ typedef struct _level_data
 #define MAX_BONUS(b) b
 #define SLOWDOWN_SECS(s) s
 
-LEVEL_DATA* get_level_data( uint8_t level );
+void print_level_from_sp1_string(LEVEL_DATA* level_data);
 
 #endif

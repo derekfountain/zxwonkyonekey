@@ -45,6 +45,12 @@ void game_over( void )
   winner_fireworks();
 }
 
+/*
+ * Forward declare the level data. It's not external, it's at the bottom of this file,
+ * but C insists it's declared extern.
+ */
+extern LEVEL_DATA level_data[];
+
 int main()
 {
   uint8_t current_level_num;
@@ -81,8 +87,8 @@ int main()
   while( 1 ) {
     
     /* Get the level data and call it's draw function to draw it */
-    game_state.current_level = get_level_data( current_level_num );
-    (game_state.current_level->draw_func)(game_state.current_level);
+    game_state.current_level = &level_data[current_level_num];
+    print_level_from_sp1_string( game_state.current_level );
 
     sp1_Invalidate(&full_screen);
     sp1_UpdateNow();

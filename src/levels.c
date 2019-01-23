@@ -507,7 +507,7 @@ LEVEL_DATA level_data[] = {
    *     |____\___|\_/\___|_|  \__/
    *
    */
-  { print_level_from_sp1_string,
+  {
     level0_map,
     teardown_level,
     START_POINT(0,135),
@@ -538,7 +538,7 @@ LEVEL_DATA level_data[] = {
    *     |____\___|\_/\___|_| |_|
    *
    */
-  { print_level_from_sp1_string,
+  {
     level1_map,
     teardown_level,
     START_POINT(0,155),
@@ -569,7 +569,7 @@ LEVEL_DATA level_data[] = {
    *     |____\___|\_/\___|_| /___|
    *
    */
-  { print_level_from_sp1_string,
+  {
     level2_map,
     teardown_level,
     START_POINT(0,155),
@@ -600,7 +600,7 @@ LEVEL_DATA level_data[] = {
    *     |____\___|\_/\___|_| |___/
    *
    */
-  { print_level_from_sp1_string,
+  {
     level3_map,
     teardown_level,
     START_POINT(8,16),
@@ -631,7 +631,7 @@ LEVEL_DATA level_data[] = {
    *     |____\___|\_/\___|_|   |_|
    *
    */
-  { print_level_from_sp1_string,
+  {
     level4_map,
     teardown_level,
     START_POINT(8,0),
@@ -657,11 +657,6 @@ LEVEL_DATA level_data[] = {
 
 };
 
-
-LEVEL_DATA* get_level_data( uint8_t level )
-{
-  return &level_data[level];
-}
 
 /*
  * This is defined in main.c. Just share it for now.
