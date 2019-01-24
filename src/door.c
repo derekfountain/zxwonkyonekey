@@ -205,7 +205,7 @@ void animate_door( DOOR* door )
 void animate_door_key( DOOR* door )
 {
   /* Call key display key using availability as visibility */
-  display_key( door, IS_COLLECTABLE_AVAILABLE( &(door->collectable) ) );
+  display_key( door, IS_COLLECTABLE_AVAILABLE( door->collectable ) );
 }
 
 /*

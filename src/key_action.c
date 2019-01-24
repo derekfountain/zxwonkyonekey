@@ -97,12 +97,12 @@ TRACE_FN( key_action, KEY_ACTION_TRACE, KEY_ACTION_TRACETABLE_SIZE )
 void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype, uint16_t d )
 {
   if( key_action_tracetable != TRACING_INACTIVE ) {
-    KEY_ACTION_TRACE  ka;		  
-    ka.ticker       = GET_TICKER;			
+    KEY_ACTION_TRACE  ka;                 
+    ka.ticker       = GET_TICKER;                       
     ka.tracetype    = ttype;
     ka.data         = d;
-    key_action_add_trace(&ka);			
-  }						
+    key_action_add_trace(&ka);                  
+  }                                             
 }
 
 void init_key_action_trace(void)
@@ -161,15 +161,15 @@ PROCESSING_FLAG test_for_direction_change( void* data, GAME_ACTION* output_actio
     {
       while( (teleporter->end_1_x || teleporter->end_1_y) ) {
 
-	if( (xpos == teleporter->end_1_x && ypos == teleporter->end_1_y) ||
-	    (xpos == teleporter->end_2_x && ypos == teleporter->end_2_y) )
-	{
-	  KEY_ACTION_TRACE_CREATE( SKIP_DIR_CHG_TELEPORTER, (uint16_t)teleporter );
+        if( (xpos == teleporter->end_1_x && ypos == teleporter->end_1_y) ||
+            (xpos == teleporter->end_2_x && ypos == teleporter->end_2_y) )
+        {
+          KEY_ACTION_TRACE_CREATE( SKIP_DIR_CHG_TELEPORTER, (uint16_t)teleporter );
 
-	  *output_action = NO_ACTION;
-	  return KEEP_PROCESSING;
-	}
-	teleporter++;
+          *output_action = NO_ACTION;
+          return KEEP_PROCESSING;
+        }
+        teleporter++;
       }
     }
 
@@ -553,12 +553,12 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
        * If the pill has been consumed and is active, reduce the
        * timer. If that's got to zero, reinstate the pill.
        */
-      if( !IS_COLLECTABLE_AVAILABLE(&(slowdown->collectable)) )
+      if( !IS_COLLECTABLE_AVAILABLE( slowdown->collectable ) )
       {
-	DECREMENT_COLLECTABLE_TIMER( &(slowdown->collectable) );
+        DECREMENT_COLLECTABLE_TIMER( slowdown->collectable );
 
-        if( COLLECTABLE_TIMER_EXPIRED( &(slowdown->collectable) ) )
-	{
+        if( COLLECTABLE_TIMER_EXPIRED( slowdown->collectable ) )
+        {
           KEY_ACTION_TRACE_CREATE( SLOWDOWN_EXPIRED, 0 );
 
           /*
@@ -574,11 +574,11 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       }
       else
       {
-	/*
-	 * Pill is available. If he's walked onto it call the hander.
-	 */
+        /*
+         * Pill is available. If he's walked onto it call the hander.
+         */
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
-                                 RUNNER_CENTRE_Y(ypos), &(slowdown->collectable)) )
+                                 RUNNER_CENTRE_Y(ypos), slowdown->collectable ) )
         {
           KEY_ACTION_TRACE_CREATE( CONSUMED_SLOWDOWN, 0 );
 
@@ -635,19 +635,19 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
        * If the door has been opened and is active, reduce the
        * timer. If that's got to zero, reinstate the key.
        */
-      if( !IS_COLLECTABLE_AVAILABLE(&(door->collectable)) )
+      if( !IS_COLLECTABLE_AVAILABLE( door->collectable ) )
       {
-	DECREMENT_COLLECTABLE_TIMER( &(door->collectable) );
+        DECREMENT_COLLECTABLE_TIMER( door->collectable );
 
-        if( COLLECTABLE_TIMER_EXPIRED( &(door->collectable) ) )
-	{
+        if( COLLECTABLE_TIMER_EXPIRED( door->collectable ) )
+        {
           KEY_ACTION_TRACE_CREATE( SLOWDOWN_EXPIRED, 0 );
 
           /*
            * The return value of the timeout function is taken to indicate
            * whether the slowdown mode should be deactivated.
            */
-          if( (*(door->collectable.timer_fn))( &(door->collectable), (void*)door ) )
+          if( (*(door->collectable.timer_fn))( &door->collectable, (void*)door ) )
             *output_action = CLOSE_DOOR;
           else
             *output_action = NO_ACTION;
@@ -656,11 +656,11 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
       }
       else
       {
-	/*
-	 * Key is available. If he's walked onto it call the hander.
-	 */
+        /*
+         * Key is available. If he's walked onto it call the hander.
+         */
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
-                                 RUNNER_CENTRE_Y(ypos), &(door->collectable)) )
+                                 RUNNER_CENTRE_Y(ypos), door->collectable ) )
         {
           KEY_ACTION_TRACE_CREATE( OPENED_DOOR, 0 );
 
