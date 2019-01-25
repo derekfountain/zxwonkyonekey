@@ -84,13 +84,6 @@ typedef struct _door
   uint8_t            key_paper;
 
   /*
-   * Keys are displayed using a single tile - a UDG in effect. Which UDG depends on
-   * how the UDGs are set up for the level, so the actual key UDG is in the door
-   * definition.
-   */
-  uint8_t            key_tile_num;
-
-  /*
    * Number of seconds the door stays open. The actual timer is in the collectable.
    * It's initialised to this value
    */
@@ -114,6 +107,12 @@ typedef struct _door
 
 } DOOR;
 
+/*
+ * SP1 tile number for the key. It's always the same, as things turned out,
+ * so hardcode it.
+ */
+#define KEY_TILE_NUM         133
+#define KEY_BLANK_TILE_NUM   255
 
 /*
  * Macro initialises the data for the door location. These values are set by the

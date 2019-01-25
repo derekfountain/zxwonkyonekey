@@ -117,9 +117,9 @@ void display_key( DOOR* door, uint8_t visible )
   key_sp1_string[6] = door->key_paper;
 
   if( visible )
-    key_sp1_string[7] = door->key_tile_num;
+    key_sp1_string[7] = KEY_TILE_NUM;
   else
-    key_sp1_string[7] = 255; /* TODO Macro needed */
+    key_sp1_string[7] = KEY_BLANK_TILE_NUM;
 
   sp1_PrintString(&level_print_control, key_sp1_string);
 }
@@ -183,7 +183,6 @@ void animate_door( DOOR* door )
 {
   if( door->moving == DOOR_OPENING )
   {
-    /* TODO Consider direction door opens - trapdoors? */
     if( ++(door->y_offset) == 8 )
       door->moving = DOOR_STATIONARY;
 
