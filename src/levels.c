@@ -658,7 +658,6 @@ extern struct sp1_Rect full_screen;
  * which needs SP1 print control (after the level printing code which
  * initialises it has run).
  */
-/* FIXME I can move this to lower memory */
 struct sp1_pss level_print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
                                        0, 0,
                                        0x00, 0,
