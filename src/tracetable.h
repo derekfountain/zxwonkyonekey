@@ -44,9 +44,9 @@
 
 /*
  * Maximum amount of memory to allocate to tracetables.
- * We use the ROM area, so 16K.
+ * We use the ROM area up to the char set definition at 0x3D00.
  */
-#define MAX_TRACE_MEMORY ((uint16_t)16384)
+#define MAX_TRACE_MEMORY ((uint16_t)(0x3D00))
 
 /*
  * Macro to generate a function to add an entry to a trace table.
