@@ -215,7 +215,7 @@ LOOP_ACTION game_actions[] =
 
 void finish_level(void)
 {
-  play_beepfx_sound_immediate(BEEPFX_SELECT_1);
+  play_beepfx_sound_immediate(BEEPFX_SELECT_6);
 
   /* Trace point, maybe? */
 }

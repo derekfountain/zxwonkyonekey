@@ -488,7 +488,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
       }
 
       /* Play effect immediately otherwise he starts to emerge from the teleporter */
-      play_beepfx_sound_immediate(BEEPFX_ROBOBLIP);
+      play_beepfx_sound_immediate(BEEPFX_SELECT_3);
 
       KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
 
@@ -505,7 +505,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
       }
 
       /* Play effect immediately otherwise he starts to emerge from the teleporter */
-      play_beepfx_sound_immediate(BEEPFX_ROBOBLIP);
+      play_beepfx_sound_immediate(BEEPFX_SELECT_3);
 
       KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
 
