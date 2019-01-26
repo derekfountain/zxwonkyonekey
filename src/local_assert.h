@@ -32,7 +32,7 @@ void local_assert_bp(void);
  * This is the local_assert(expression) macro to use in the code.
  * For no debug (-DNDEBUG) builds this boils away to nothing.
  */
-#define local_assert(exp) if( !exp ) { local_assert_bp(); }
+#define local_assert(exp) if( !(exp) ) { local_assert_bp(); }
 
 #endif
 
