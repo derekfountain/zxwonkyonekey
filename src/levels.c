@@ -171,7 +171,7 @@ TELEPORTER_DEFINITION level2_teleporters[] = {
   },
   {  9*8, 14*8,  9, 14,
      4*8,  1*8,  4,  1,
-    NAMED_VALUES_1("Change direction", 1)
+    NAMED_VALUES_1("Change direction", 0)
   },
   {  13*8, 24*8,  13, 24,
      9*8,  30*8,  9,  30,
