@@ -557,7 +557,7 @@ LEVEL_DATA level_data[] = {
    */
   {
     level2_map,
-    START_POINT(0,155),
+    START_POINT(0,163),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_WHITE|PAPER_BLACK,
