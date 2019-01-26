@@ -61,7 +61,7 @@ typedef struct _collision_trace
 #define COLLISION_TRACE_ENTRIES 250
 #define COLLISION_TRACETABLE_SIZE ((size_t)sizeof(COLLISION_TRACE)*COLLISION_TRACE_ENTRIES)
 
-#define COLLISION_TRACE_CREATE(x,y,d,js,b,t,r) {	\
+#define COLLISION_TRACE_CREATE(x,y,d,js,b,t,r) {        \
     if( collision_tracetable != TRACING_INACTIVE ) { \
       COLLISION_TRACE      ct;   \
       ct.ticker          = GET_TICKER; \
@@ -139,7 +139,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         /* OK, check if he's about to bang his foot */
         check_y = y+SPRITE_HEIGHT-1;
 
-	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+        if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -150,7 +150,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
 
     case LEFT_FLAT:
       /* Check if he's about to bang his face */
-      check_x = x+1;
+      check_x = x-1;
       check_y = y;
 
       if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
@@ -160,7 +160,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         /* OK, check if he's about to bang his foot */
         check_y = y+SPRITE_HEIGHT-1;
 
-	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+        if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -185,7 +185,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x+SPRITE_WIDTH;
         check_y = y+SPRITE_HEIGHT-1;
 
-	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+        if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -194,19 +194,19 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x+SPRITE_WIDTH;
           check_y = y-1;
 
-	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+          if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = DROP_VERTICALLY;
           }
-	  else {
+          else {
 
-	    /* Check if he's about to bang the back of his head */
-	    check_x = x;
-	    check_y = y-1;
+            /* Check if he's about to bang the back of his head */
+            check_x = x;
+            check_y = y-1;
 
-	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
-	      result = DROP_VERTICALLY;
-	    }
-	  }
+            if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+              result = DROP_VERTICALLY;
+            }
+          }
         }
       }
       break;
@@ -227,7 +227,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x-1;
         check_y = y+SPRITE_HEIGHT-1;
 
-	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+        if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -236,19 +236,19 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x-1;
           check_y = y-1;
 
-	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+          if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = DROP_VERTICALLY;
           }
-	  else {
+          else {
 
-	    /* Check if he's about to bang the back of his head */
-	    check_x = x+SPRITE_WIDTH;
-	    check_y = y-1;
+            /* Check if he's about to bang the back of his head */
+            check_x = x+SPRITE_WIDTH;
+            check_y = y-1;
 
-	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
-	      result = DROP_VERTICALLY;
-	    }
-	  }
+            if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+              result = DROP_VERTICALLY;
+            }
+          }
         }
       }
       break;
@@ -269,7 +269,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x+SPRITE_WIDTH;
         check_y = y+SPRITE_HEIGHT-1;
 
-	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+        if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -278,18 +278,18 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x+SPRITE_WIDTH-1;
           check_y = y+SPRITE_HEIGHT;
 
-	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+          if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = LANDED;
           }
-	  else {
+          else {
 
-	    /* Check if he's landed on something (heel check) */
-	    check_x = x;
+            /* Check if he's landed on something (heel check) */
+            check_x = x;
 
-	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
-	      result = LANDED;
-	    }
-	  }
+            if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+              result = LANDED;
+            }
+          }
         }
       }
       break;
@@ -310,7 +310,7 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
         check_x = x-1;
         check_y = y+SPRITE_HEIGHT-1;
 
-	if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+        if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
           result = BOUNCE;
         }
         else {
@@ -319,18 +319,18 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
           check_x = x;
           check_y = y+SPRITE_HEIGHT;
 
-	  if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+          if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
             result = LANDED;
           }
-	  else {
+          else {
 
-	    /* Check if he's landed on something (heel check) */
-	    check_x = x+SPRITE_WIDTH-1;
+            /* Check if he's landed on something (heel check) */
+            check_x = x+SPRITE_WIDTH-1;
 
-	    if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
-	      result = LANDED;
-	    }
-	  }
+            if( is_attr_not( check_x, check_y, background_att, teleporter_att ) ) {
+              result = LANDED;
+            }
+          }
         }
       }
       break;
