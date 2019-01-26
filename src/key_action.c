@@ -449,6 +449,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 {
   GAME_STATE* game_state = (GAME_STATE*)data;
   LEVEL_DATA* level_data = game_state->current_level;
+  PROCESSING_FLAG return_value = KEEP_PROCESSING;
 
   uint8_t     xpos = GET_RUNNER_XPOS;
   uint8_t     ypos = GET_RUNNER_YPOS;
@@ -492,6 +493,8 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
       KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
 
+      return_value = STOP_PROCESSING;
+
       break;
 
     } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
@@ -509,6 +512,8 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
       KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
 
+      return_value = STOP_PROCESSING;
+
       break;
 
     }
@@ -516,7 +521,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
     teleporter++;
   }
 
-  return KEEP_PROCESSING;
+  return return_value;
 }
 
 
