@@ -294,3 +294,14 @@ PUBLIC _door_f1
         defb @00000000
         defb @00000000
         defb @00000000
+
+
+
+
+SECTION ro_userdata
+
+PUBLIC _font
+
+._font
+
+   BINARY "font.fnt"

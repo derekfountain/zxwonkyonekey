@@ -50,6 +50,9 @@ void game_over( void )
  * but C insists it's declared extern.
  */
 extern LEVEL_DATA level_data[];
+extern uint8_t font[];
+
+  struct sp1_pss ps0;
 
 int main()
 {
@@ -79,6 +82,25 @@ int main()
   sp1_Initialize( SP1_IFLAG_MAKE_ROTTBL | SP1_IFLAG_OVERWRITE_TILES | SP1_IFLAG_OVERWRITE_DFILE,
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
+
+  // setup our font
+  {
+  uint8_t *pt = font;
+  uint8_t i;
+  for (i = 0; i < 96; ++i, pt += 8)
+     sp1_TileEntry(32 + i, pt);
+
+   ps0.bounds = &full_screen;
+   ps0.flags = SP1_PSSFLAG_INVALIDATE;
+   ps0.visit = 0;
+
+   sp1_SetPrintPos(&ps0, 10, 5);
+   sp1_PrintString(&ps0, "\x14\x47" "Code, Graphics & sound");
+    sp1_Invalidate(&full_screen);
+    sp1_UpdateNow();
+//while(1);
+  }
+
 
 
   create_runner( RIGHT );
