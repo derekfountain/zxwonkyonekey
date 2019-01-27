@@ -641,6 +641,11 @@ LEVEL_DATA level_data[] = {
 extern struct sp1_Rect full_screen;
 
 /*
+ * Font is tucked away in levels_graphics.asm
+ */
+extern uint8_t font[];
+
+/*
  * This "prints" a level using the comprehensive SP1 print function.
  * The level data draw_data value should be a pointer to the string.
  * The string itself will likely need to be defined in ASM because
@@ -776,4 +781,25 @@ void teardown_level(LEVEL_DATA* level_data)
     }
   }
 
+}
+
+void setup_levels_font( void )
+{
+  uint8_t          i;
+
+  /*
+   * At the moment all levels use the same font, so this is
+   * hardcoded to the data pointer
+   */
+  uint8_t*         font_ptr = font;
+
+  /*
+   * The font is hardcoded to contain 96 chars for space (32d) onwards.
+   * I don't need them all so there's a saving to be made here if I need to.
+   */
+  for( i = 0; i < 96; i++ )
+  {
+     sp1_TileEntry( i+32, font_ptr );
+     font_ptr += 8;
+  }
 }

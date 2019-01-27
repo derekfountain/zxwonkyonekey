@@ -39,6 +39,11 @@ extern int8_t  cascade_pattern[6][2];
 
 extern uint8_t ticker_string[];
 
+/*
+ * Font is tucked away in levels_graphics.asm
+ */
+extern uint8_t font[];
+
 void winner_banner(void)
 {
   uint8_t* buffer_address;
@@ -60,7 +65,7 @@ void winner_banner(void)
   memset( off_screen_buffer, PAPER_WHITE+INK_WHITE, sizeof(off_screen_buffer) );
 
   current_char_ptr = ticker_string;
-  rom_address      = ((*current_char_ptr-0x20)*8)+(uint8_t*)0x3D00;
+  rom_address      = ((*current_char_ptr-0x20)*8)+(uint8_t*)font;
   bit              = 128;
 
   while( 1 ){
@@ -100,7 +105,7 @@ void winner_banner(void)
       if( *current_char_ptr == '\0' )
         break;
 
-      rom_address = ((*current_char_ptr-0x20)*8)+(uint8_t*)0x3D00;
+      rom_address = ((*current_char_ptr-0x20)*8)+(uint8_t*)font;
 
       bit = 128;
     }

@@ -30,7 +30,7 @@ SECTION LEVEL_DATA
 ;;                                                      
 ;;                                                      
 
-;; I can't use SPACE in the ROM because the tracing overwrites it.
+;; I could use space from the character set...
 PUBLIC _blank
 ._blank
         defb @00000000
@@ -277,14 +277,14 @@ PUBLIC _slowdown_pill_f3
 
 PUBLIC _door_f1
 ._door_f1
-    defb @01111110
-    defb @11111111
-    defb @11111111
-    defb @11111111
-    defb @11111111
-    defb @11011011
-    defb @11011011
-    defb @11000011
+        defb @01111110
+        defb @11111111
+        defb @11111111
+        defb @11111111
+        defb @11111111
+        defb @11011011
+        defb @11011011
+        defb @11000011
 
         defb @00000000
         defb @00000000
@@ -298,7 +298,23 @@ PUBLIC _door_f1
 
 
 
-SECTION ro_userdata
+
+;;      ______          _
+;;     |  ____|        | |
+;;     | |__ ___  _ __ | |_
+;;     |  __/ _ \| '_ \| __|
+;;     | | | (_) | | | | |_
+;;     |_|  \___/|_| |_|\__|
+;;
+
+;; The font is called "Mega 1", and is presented by Einar Saukas‎:
+;;  https://sites.google.com/site/zxgraph/home/einar-saukas/fonts
+;;
+;; It's not clear who owns it. I took it from the ZX-ALFA package:
+;;  https://spectrumcomputing.co.uk/index.php?cat=96&id=0025283
+;; which claims it's sourced from commercial games.
+;;
+;; Well, Einar, or whoever owns it, thanks! :)
 
 PUBLIC _font
 

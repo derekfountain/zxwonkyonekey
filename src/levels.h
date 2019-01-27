@@ -91,5 +91,6 @@ typedef struct _level_data
 
 void print_level_from_sp1_string(LEVEL_DATA* level_data);
 void teardown_level(LEVEL_DATA* level_data);
+void setup_levels_font( void );
 
 #endif
