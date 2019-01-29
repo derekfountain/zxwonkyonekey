@@ -38,6 +38,27 @@ PUBLIC _level_intro_map
 ._level_intro_map
 
 INCLUDE "level_intro_map.inc.asm"
+
+        defb 0x16, 0x03, 0x8
+        defm "ZX Wonky One Key"
+
+        defb 0x16, 0x05, 0x3
+        defm "A game featuring a single"
+        defb 0x16, 0x06, 0x09
+        defm "control key!"
+        
+        
+        defb 0x16, 0xF, 0x01
+        defm "The only key you need is SPACE"
+        
+        defb 0x16, 0x11, 0x02
+        defm "Plus M to toggle the music,"
+        defb 0x16, 0x12, 0x03
+        defm "and S to toggle the sound"
+                
+        defb 0x16, 0x15, 0x05   ; AT 21 down, 5 along
+        defm "Press SPACE to start!"
+
         defb 0x00
 	
 PUBLIC _level_intro_map_end

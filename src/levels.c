@@ -503,6 +503,7 @@ LEVEL_DATA level_data[] = {
  *                                               
  */
   {
+    0,
     level_intro_map,
     START_POINT(0,0),
     LEVEL_BORDER(INK_BLACK),
@@ -527,6 +528,7 @@ LEVEL_DATA level_data[] = {
    *
    */
   {
+    1,
     level0_map,
     START_POINT(0,135),
     LEVEL_BORDER(INK_BLACK),
@@ -555,6 +557,7 @@ LEVEL_DATA level_data[] = {
    *
    */
   {
+    2,
     level1_map,
     START_POINT(0,155),
     LEVEL_BORDER(INK_BLUE),
@@ -583,6 +586,7 @@ LEVEL_DATA level_data[] = {
    *
    */
   {
+    3,
     level2_map,
     START_POINT(0,163),
     LEVEL_BORDER(INK_BLACK),
@@ -611,6 +615,7 @@ LEVEL_DATA level_data[] = {
    *
    */
   {
+    4,
     level3_map,
     START_POINT(8,16),
     LEVEL_BORDER(INK_RED),
@@ -639,6 +644,7 @@ LEVEL_DATA level_data[] = {
    *
    */
   {
+    5,
     level4_map,
     START_POINT(8,0),
     LEVEL_BORDER(INK_BLACK),

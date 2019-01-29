@@ -238,7 +238,21 @@ void gameloop( GAME_STATE* game_state )
 
     /* Check for user input, every cycle */
     if( in_key_pressed( IN_KEY_SCANCODE_SPACE ) ) {
+
+      /*
+       * Ew, yikes, this is a crude hack forced by the last minute
+       * decision to have the intro screen implemented as a level
+       * just like all the others. The difference is that this one
+       * repurposes the SPACE key as the "start game" one, rather
+       * than the control key.
+       */
+      if( game_state->current_level->level_num == 0 ) {
+        finish_level();
+        return;
+      }
+
       game_state->key_pressed = 1;
+
     } else {
       game_state->key_pressed = 0;
       game_state->key_processed = 0;

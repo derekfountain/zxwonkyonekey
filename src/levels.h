@@ -42,6 +42,8 @@ typedef struct _tile_definition
 
 typedef struct _level_data
 {
+  uint8_t   level_num;
+
   void*     draw_data;
 
   uint8_t   start_x;
