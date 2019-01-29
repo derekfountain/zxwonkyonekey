@@ -51,6 +51,7 @@ extern uint8_t door_key[8];
  * Maps, also in assembler because the strings require
  * '\0' bytes.
  */
+extern uint8_t level_intro_map[];
 extern uint8_t level0_map[];
 extern uint8_t level1_map[];
 extern uint8_t level2_map[];
@@ -491,6 +492,32 @@ DOOR level4_doors[] = {
  */
 
 LEVEL_DATA level_data[] = {
+
+
+
+/***
+ *      ___     _             _                _ 
+ *     |_ _|_ _| |_ _ _ ___  | |   _____ _____| |
+ *      | || ' |  _| '_/ _ \ | |__/ -_\ V / -_| |
+ *     |___|_||_\__|_| \___/ |____\___|\_/\___|_|
+ *                                               
+ */
+  {
+    level_intro_map,
+    START_POINT(0,0),
+    LEVEL_BORDER(INK_BLACK),
+    START_FACING(RIGHT),
+    NAMED_VALUES_3("Background", INK_BLACK|PAPER_WHITE,
+                   "Solid",      INK_GREEN|PAPER_WHITE,
+                   "Jumper",     INK_RED|PAPER_GREEN),
+    &level0_tiles[0],
+    NULL,
+    NULL,
+    NULL,
+    MAX_POINTS(0),
+    MAX_BONUS(0),
+    { 0 }
+  },
 
   /***
    *      _                _    __

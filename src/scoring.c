@@ -96,8 +96,13 @@ uint8_t* small_utoa( uint16_t, uint8_t* );
 
 void show_scores( SCORE_SCREEN_DATA* score_screen_data )
 {
-  /* Only update the screen when one of the values changes. This update is expensive! */
-  if( level_score != last_printed_level_score || level_bonus != last_printed_level_bonus )
+  /*
+   * Only update the screen when one of the values changes. This update is expensive!
+   * Also, if the display attribute is zero, assume that means the scores shouldn't
+   * be displayed.
+   */
+  if( score_screen_data->score_screen_attribute &&
+      (level_score != last_printed_level_score || level_bonus != last_printed_level_bonus) )
     {
       /*
        * Boy did this unsigned to ascii thing take some time to get right. :)

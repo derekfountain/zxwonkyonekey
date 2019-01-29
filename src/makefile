@@ -134,7 +134,8 @@ HEADERS = action.h \
 all : clean_tmp $(EXEC) $(SYM_OUTPUT) $(TAGGABLE_SRC) $(BE_ENUMS) $(BE_STRUCTS) $(BE_STATICS) $(TAGS) report
 
 # Level maps, except the first, are in files built with the level designer
-levels_maps.o : level1_map.inc.asm \
+levels_maps.o : level_intro_map.inc.asm \
+                level1_map.inc.asm \
                 level2_map.inc.asm \
                 level3_map.inc.asm \
                 level4_map.inc.asm

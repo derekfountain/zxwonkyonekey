@@ -80,7 +80,7 @@ typedef struct _level_data
  */
 #define FINISH_ATT (INK_YELLOW|PAPER_BLUE)
 
-#define NUM_LEVELS 5
+#define NUM_LEVELS 6
 
 #define START_POINT(x,y) x,y
 #define LEVEL_BORDER(b) b
