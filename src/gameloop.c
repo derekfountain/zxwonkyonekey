@@ -244,7 +244,10 @@ void gameloop( GAME_STATE* game_state )
        * decision to have the intro screen implemented as a level
        * just like all the others. The difference is that this one
        * repurposes the SPACE key as the "start game" one, rather
-       * than the control key.
+       * than the control key. I could have put something in the
+       * level data to indicate repurposing of the control key, but
+       * as of this writing the game is all but finished so it's
+       * not worth the churn.
        */
       if( game_state->current_level->level_num == 0 ) {
         finish_level();
@@ -258,18 +261,14 @@ void gameloop( GAME_STATE* game_state )
       game_state->key_processed = 0;
     }
 
-    /* I don't need to check for the sound toggle keys *every* cycle */
-    if( ((GET_TICKER & 0x0008) == 0) )
-    {
-      if( in_key_pressed( IN_KEY_SCANCODE_m ) ) {
-        while( in_key_pressed( IN_KEY_SCANCODE_m ) );
-        toggle_music();
-      }
+    if( in_key_pressed( IN_KEY_SCANCODE_m ) ) {
+      while( in_key_pressed( IN_KEY_SCANCODE_m ) );
+      toggle_music();
+    }
 
-      if( in_key_pressed( IN_KEY_SCANCODE_s ) ) {
-        while( in_key_pressed( IN_KEY_SCANCODE_s ) );
-        toggle_sound_effects();
-      }
+    if( in_key_pressed( IN_KEY_SCANCODE_s ) ) {
+      while( in_key_pressed( IN_KEY_SCANCODE_s ) );
+      toggle_sound_effects();
     }
 
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
