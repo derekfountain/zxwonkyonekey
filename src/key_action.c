@@ -458,69 +458,71 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
   *output_action = NO_ACTION;
 
-  while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
-
-    /*
-     * There's an issue here with the slowdown code. If slowdown is on then he only
-     * moves every other cycle. That means if he teleports when slowdown is on his
-     * x,y position is updated to the destination end of the teleporter, but then
-     * he doesn't move. Next cycle this code finds him at the teleporter trigger
-     * location and he's teleported back. He still doesn't move for this cycle so
-     * we go round again. He's stuck in an endless teleport sequence!
-     * The fix is to keep a flag saying he's just teleported. If that's set then
-     * reset it and don't do the teleport sequence. That frees up a cycle to move
-     * his location by a pixel, he leaves the teleport trigger point and then it
-     * all works again.
-     */
-    if( just_teleported ) {
-      KEY_ACTION_TRACE_CREATE( JUST_TELEPORTED, (*output_action == TOGGLE_DIRECTION) );
-      just_teleported = 0;
-      break;
-    }
-
-    if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
-
-      SET_RUNNER_XPOS( teleporter->end_2_x );
-      SET_RUNNER_YPOS( teleporter->end_2_y );
-      just_teleported = 1;
-      
-      if( teleporter->change_direction ) {
-        *output_action = TOGGLE_DIRECTION;
-      }
-
-      /* Play effect immediately otherwise he starts to emerge from the teleporter */
-      play_beepfx_sound_immediate(BEEPFX_SELECT_3);
-
-      KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
-
-      return_value = STOP_PROCESSING;
-
-      break;
-
-    } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
-
-      SET_RUNNER_XPOS( teleporter->end_1_x );
-      SET_RUNNER_YPOS( teleporter->end_1_y );
-      just_teleported = 1;
-
-      if( teleporter->change_direction ) {
-        *output_action = TOGGLE_DIRECTION;
-      }
-
-      /* Play effect immediately otherwise he starts to emerge from the teleporter */
-      play_beepfx_sound_immediate(BEEPFX_SELECT_3);
-
-      KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
-
-      return_value = STOP_PROCESSING;
-
-      break;
-
-    }
-
-    teleporter++;
+  /*
+   * There's an issue here with the slowdown code. If slowdown is on then he only
+   * moves every other cycle. That means if he teleports when slowdown is on his
+   * x,y position is updated to the destination end of the teleporter, but then
+   * he doesn't move. Next cycle this code finds him at the teleporter trigger
+   * location and he's teleported back. He still doesn't move for this cycle so
+   * we go round again. He's stuck in an endless teleport sequence!
+   * The fix is to keep a flag saying he's just teleported. If that's set then
+   * reset it and don't do the teleport sequence. That frees up a cycle to move
+   * his location by a pixel, he leaves the teleport trigger point and then it
+   * all works again.
+   */
+  if( just_teleported )
+  {
+    KEY_ACTION_TRACE_CREATE( JUST_TELEPORTED, (*output_action == TOGGLE_DIRECTION) );
+    just_teleported = 0;
   }
+  else
+  {
 
+    while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
+
+      if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
+
+        SET_RUNNER_XPOS( teleporter->end_2_x );
+        SET_RUNNER_YPOS( teleporter->end_2_y );
+        just_teleported = 1;
+
+        if( teleporter->change_direction ) {
+          *output_action = TOGGLE_DIRECTION;
+        }
+
+        /* Play effect immediately otherwise he starts to emerge from the teleporter */
+        play_beepfx_sound_immediate(BEEPFX_SELECT_3);
+
+        KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
+
+        return_value = STOP_PROCESSING;
+
+        break;
+
+      } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
+
+        SET_RUNNER_XPOS( teleporter->end_1_x );
+        SET_RUNNER_YPOS( teleporter->end_1_y );
+        just_teleported = 1;
+
+        if( teleporter->change_direction ) {
+          *output_action = TOGGLE_DIRECTION;
+        }
+
+        /* Play effect immediately otherwise he starts to emerge from the teleporter */
+        play_beepfx_sound_immediate(BEEPFX_SELECT_3);
+
+        KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
+
+        return_value = STOP_PROCESSING;
+
+        break;
+
+      }
+
+      teleporter++;
+    }
+  }
   return return_value;
 }
 
