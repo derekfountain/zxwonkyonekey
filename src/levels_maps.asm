@@ -39,25 +39,61 @@ PUBLIC _level_intro_map
 
 INCLUDE "level_intro_map.inc.asm"
 
-        defb 0x16, 0x03, 0x8
+        defb 0x10, 0x01, 0x11, 0x07 ; ink blue, paper white
+
+        defb 0x16, 0x02, 0x5
+        defm "----------------------"
+
+        defb 0x16, 0x03, 0x5
+        defm "++ "
+
+        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
         defm "ZX Wonky One Key"
 
-        defb 0x16, 0x05, 0x3
+        defb 0x10, 0x01, 0x11, 0x07 ; ink blue, paper white
+        defm " ++"
+
+        defb 0x16, 0x04, 0x5
+        defm "----------------------"
+
+        defb 0x10, 0x03, 0x11, 0x07 ; ink magenta, paper white
+
+        defb 0x16, 0x07, 0x3
         defm "A game featuring a single"
-        defb 0x16, 0x06, 0x09
+        defb 0x16, 0x08, 0x09
         defm "control key!"
         
         
+
+        defb 0x10, 0x00, 0x11, 0x07 ; ink black, paper white
+
         defb 0x16, 0xF, 0x01
-        defm "The only key you need is SPACE"
+        defm "The only key you need is "
+
+        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
+        defm "SPACE"
+        defb 0x10, 0x00, 0x11, 0x07 ; ink black, paper white
         
         defb 0x16, 0x11, 0x02
-        defm "Plus M to toggle the music,"
+        defm "Plus "
+        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
+        defm "M"
+        defb 0x10, 0x00, 0x11, 0x07 ; ink black, paper white
+
+        defm " to toggle the music,"
         defb 0x16, 0x12, 0x03
-        defm "and S to toggle the sound"
+        defm "and "
+        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
+        defm "S"
+        defb 0x10, 0x00, 0x11, 0x07 ; ink black, paper white
+        defm " to toggle the sound"
                 
         defb 0x16, 0x15, 0x05   ; AT 21 down, 5 along
-        defm "Press SPACE to start!"
+        defm "Press "
+        defb 0x10, 0x02, 0x11, 0x07 ; ink red, paper white
+        defm "SPACE"
+        defb 0x10, 0x00, 0x11, 0x07 ; ink black, paper white
+        defm " to start!"
 
         defb 0x00
 	
