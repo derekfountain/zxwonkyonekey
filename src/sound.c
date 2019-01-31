@@ -183,13 +183,15 @@ PROCESSING_FLAG play_beepfx_sound( void* data, GAME_ACTION* output_action )
 {
   (void)data;
 
+  *output_action = NO_ACTION;
+
   if( effects_on && pending_sound && ((GET_TICKER & 0x0003) == SOUND_EFFECT_CYCLE) )
   {
     bit_beepfx(pending_sound);
     pending_sound = 0;
+    *output_action = SOUND_EFFECT;
   }
 
-  *output_action = NO_ACTION;
   return KEEP_PROCESSING;
 }
 
