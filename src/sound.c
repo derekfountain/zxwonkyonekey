@@ -108,6 +108,8 @@ PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
 {
   (void)data;
 
+  *output_action = NO_ACTION;
+
   /*
    * Play a note every 4 game cycles. i.e. the game runs at 50fps, a note of music
    * is played every 4 of those. Each note lasts 8.8ms so every 4th game cycle
@@ -132,9 +134,14 @@ PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
 
     if( music_current_note_index == MUSIC_NUM_NOTES )
       music_current_note_index = 0;
+
+    /*
+     * The action of playing a note is already done, so this just causes
+     * the main gameloop to trace the fact.
+     */
+    *output_action = MUSIC_NOTE;
   }
 
-  *output_action = NO_ACTION;
   return KEEP_PROCESSING;
 
 }

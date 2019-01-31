@@ -43,6 +43,7 @@ typedef enum _game_action
   JUMP,
   STOP_JUMP,
   FINISH,
+  MUSIC_NOTE,
 } GAME_ACTION;
 
 typedef enum _when_slowdown
