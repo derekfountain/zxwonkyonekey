@@ -60,4 +60,4 @@ PUBLIC _pre_calc_path
 
 PUBLIC _ticker_string
 ._ticker_string
-        defm    "You are a winner!  A not very convincing firework display follows!     ", 0
+        defm    "You are a winner!  Cue the fireworks!     ", 0
