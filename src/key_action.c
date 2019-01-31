@@ -408,11 +408,6 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   }
 
   /* If he's not on a character cell boundary he can't be up against a wall */
-  /*
-   * This won't work if he approaches the finish from the left side
-   * i.e. facing right. Or falling, etc. This might have to go into the
-   * collision code.
-   */
   if( MODULO8( xpos ) == 0 ) {
 
     /* Pick up the attributes of the char cell he's facing and about to move into */
