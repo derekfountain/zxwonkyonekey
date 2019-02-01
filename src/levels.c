@@ -531,7 +531,7 @@ LEVEL_DATA level_data[] = {
     1,
     level0_map,
     START_POINT(0,135),
-    LEVEL_BORDER(INK_BLACK),
+    LEVEL_BORDER(INK_RED),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_BLACK|PAPER_WHITE,
                    "Solid",      INK_GREEN|PAPER_WHITE,
