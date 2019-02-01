@@ -41,6 +41,8 @@ PUBLIC _play_note_raw
 ; ample for each game cycle this is fine. It it weren't I'd have to shift some of the load out of the game cycle
 ; which plays the note into the other 3 which don't.
 
+EXTERN _GLOBAL_ZX_PORT_FE
+
 _play_note_raw:
     pop     af
     pop     hl
@@ -52,7 +54,7 @@ _play_note_raw:
     push    hl
     push    af
 
-	ld      a,0
+	ld      a,(_GLOBAL_ZX_PORT_FE)     ;Pick up current port 0xfe value from z88dk global
     ld      d,0
  	ld      e,(hl) 	                   ;Initialise the pitch delay counter in E
  	ld      bc,3 	                   ;Initialise the duration delay counters in B (0) and C (3)
@@ -69,5 +71,7 @@ pitch_loop_not_done:                   ;Countdown B from 256 (i.e. 0) to 0
 
  	dec     c                          ;T=4  BC make the note duration counter
  	jr      nz,speaker_loop            ;T=12 if met, T=7 if not
+
+	ld      (_GLOBAL_ZX_PORT_FE),a     ;Update z88dk's understanding of port 0xfe status
 
 	ret
