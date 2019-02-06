@@ -35,5 +35,6 @@ typedef struct _hotspot
 
 void create_hotspot_list( GAME_STATE* game_state );
 void teardown_hotspot_list( GAME_STATE* game_state );
+uint8_t is_hotspot( HOTSPOT* hotspot_list, uint8_t x, uint8_t y );
 
 #endif
