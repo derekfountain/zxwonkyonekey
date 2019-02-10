@@ -34,6 +34,7 @@
 #include "gameloop.h"
 #include "collision.h"
 #include "winner.h"
+#include "bonus.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -83,6 +84,7 @@ int main()
   setup_levels_font();
 
   create_runner( RIGHT );
+//  create_game_bonuses( STARTING_NUM_BONUSES );
 
   current_level_num = 0;
   while( 1 ) {
@@ -91,6 +93,7 @@ int main()
     game_state.current_level = &level_data[current_level_num];
     print_level_from_sp1_string( game_state.current_level );
 
+  create_game_bonuses( STARTING_NUM_BONUSES );
     sp1_Invalidate(&full_screen);
     sp1_UpdateNow();
 
