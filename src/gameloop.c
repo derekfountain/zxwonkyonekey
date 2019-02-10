@@ -39,7 +39,7 @@
 #include "collision.h"
 #include "scoring.h"
 #include "sound.h"
-#include "hotspot.h"
+
 
 
 /***
@@ -270,9 +270,6 @@ void gameloop( GAME_STATE* game_state )
       while( in_key_pressed( IN_KEY_SCANCODE_s ) );
       toggle_sound_effects();
     }
-
-      game_state->runner_on_hotspot = is_hotspot( game_state->hotspot_list, GET_RUNNER_XPOS, GET_RUNNER_YPOS );
-if( game_state->runner_on_hotspot ) while(1);
 
     for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
       PROCESSING_FLAG flag;

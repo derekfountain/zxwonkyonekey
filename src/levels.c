@@ -259,7 +259,7 @@ SLOWDOWN level0_slowdowns[] = {
                             slowdown_timeup)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
                             "Sprite x", 208, "Sprite y", 104,
-                            "Centre x", 212, "Centre y", 108,
+                            "Centre x", 210, "Centre y", 108,
                             slowdown_collected,
                             slowdown_timeup)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,

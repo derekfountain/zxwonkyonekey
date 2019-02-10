@@ -473,52 +473,49 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
   else
   {
 
-    if( game_state->runner_on_hotspot )
-    {
-      while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
+    while( teleporter && (teleporter->end_1_x || teleporter->end_1_y) ) {
 
-        if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
+      if( xpos == teleporter->end_1_x && ypos == teleporter->end_1_y ) {
 
-          SET_RUNNER_XPOS( teleporter->end_2_x );
-          SET_RUNNER_YPOS( teleporter->end_2_y );
-          just_teleported = 1;
+        SET_RUNNER_XPOS( teleporter->end_2_x );
+        SET_RUNNER_YPOS( teleporter->end_2_y );
+        just_teleported = 1;
 
-          if( teleporter->change_direction ) {
-            *output_action = TOGGLE_DIRECTION;
-          }
-
-          /* Play effect immediately otherwise he starts to emerge from the teleporter */
-          play_beepfx_sound_immediate(BEEPFX_SELECT_3);
-
-          KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
-
-          return_value = STOP_PROCESSING;
-
-          break;
-
-        } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
-
-          SET_RUNNER_XPOS( teleporter->end_1_x );
-          SET_RUNNER_YPOS( teleporter->end_1_y );
-          just_teleported = 1;
-
-          if( teleporter->change_direction ) {
-            *output_action = TOGGLE_DIRECTION;
-          }
-
-          /* Play effect immediately otherwise he starts to emerge from the teleporter */
-          play_beepfx_sound_immediate(BEEPFX_SELECT_3);
-
-          KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
-
-          return_value = STOP_PROCESSING;
-
-          break;
-
+        if( teleporter->change_direction ) {
+          *output_action = TOGGLE_DIRECTION;
         }
 
-        teleporter++;
+        /* Play effect immediately otherwise he starts to emerge from the teleporter */
+        play_beepfx_sound_immediate(BEEPFX_SELECT_3);
+
+        KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
+
+        return_value = STOP_PROCESSING;
+
+        break;
+
+      } else if( xpos == teleporter->end_2_x && ypos == teleporter->end_2_y ) {
+
+        SET_RUNNER_XPOS( teleporter->end_1_x );
+        SET_RUNNER_YPOS( teleporter->end_1_y );
+        just_teleported = 1;
+
+        if( teleporter->change_direction ) {
+          *output_action = TOGGLE_DIRECTION;
+        }
+
+        /* Play effect immediately otherwise he starts to emerge from the teleporter */
+        play_beepfx_sound_immediate(BEEPFX_SELECT_3);
+
+        KEY_ACTION_TRACE_CREATE( ENTER_TELEPORTER, (*output_action == TOGGLE_DIRECTION) );
+
+        return_value = STOP_PROCESSING;
+
+        break;
+
       }
+
+      teleporter++;
     }
   }
   return return_value;
@@ -577,7 +574,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
         }
 
       }
-      else if( game_state->runner_on_hotspot )
+      else
       {
         /*
          * Pill is available. If he's walked onto it call the hander.
@@ -659,7 +656,7 @@ PROCESSING_FLAG test_for_door_key( void* data, GAME_ACTION* output_action )
         }
 
       }
-      else if( game_state->runner_on_hotspot )
+      else
       {
         /*
          * Key is available. If he's walked onto it call the hander.
@@ -729,7 +726,7 @@ PROCESSING_FLAG animate_doors( void* data, GAME_ACTION* output_action )
             door->animation_step = 0;
         }
       }
-      else if( game_state->runner_on_hotspot )
+      else
       {
         /*
          * The door isn't moving, so check to see if it's open and he's reached it.

@@ -34,9 +34,7 @@ typedef struct _game_state
   uint8_t     key_processed;
 
   LEVEL_DATA* current_level;
-
   struct _hotspot*    hotspot_list;
-  uint8_t          runner_on_hotspot;
 
 } GAME_STATE;
 
