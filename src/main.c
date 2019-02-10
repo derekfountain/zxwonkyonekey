@@ -34,7 +34,6 @@
 #include "gameloop.h"
 #include "collision.h"
 #include "winner.h"
-#include "hotspot.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -112,15 +111,11 @@ int main()
     set_level_bonus( game_state.current_level->max_bonus );
     reset_cached_screen_scores();
 
-    create_hotspot_list( &game_state );
-
     /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );
 
     /* Call the level's teardown function to reclaim resources */
     teardown_level( game_state.current_level );
-
-    teardown_hotspot_list( &game_state );
 
     if( ++current_level_num == NUM_LEVELS ) {
       game_over();
