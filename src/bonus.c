@@ -59,13 +59,25 @@ void create_game_bonuses( uint8_t num_bonuses )
     bonuses[i].sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, BONUS_PLANE);
     sp1_AddColSpr(bonuses[i].sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, BONUS_PLANE);
 
-    sp1_MoveSprPix(bonuses[i].sprite, &full_screen,
-                  (void*)apple,
-                  i*8, 8);
-
     /* Colour the cells the sprite occupies */
     ink_param = INK_GREEN;
     sp1_IterateSprChar(bonuses[i].sprite, initialise_colour);
 
+  }
+}
+
+void draw_bonuses( void )
+{
+//    sp1_MoveSprPix(bonuses[i].sprite, &full_screen,
+  //                (void*)apple,
+    //              255, 255);
+
+
+}
+
+void lose_bonus( void )
+{
+  if( bonuses_left )
+  {
   }
 }

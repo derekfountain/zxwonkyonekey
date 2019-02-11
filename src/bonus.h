@@ -29,7 +29,7 @@ typedef struct _bonus
 #define STARTING_NUM_BONUSES  12
 
 void create_game_bonuses( uint8_t num_bonuses );
-uint8_t query_remaining_bonuses( void );
+void draw_bonuses( void );
 void lose_bonus( void );
 
 #endif

@@ -24,10 +24,6 @@
  *
  * When the player completes the level the remaining score is added onto the
  * total score.
- *
- * The level bonus starts at a value defined in the level data and is reduced
- * by a value defined in the level data each time the player uses a slowdown
- * block. This bit's a TODO.
  */
 
 #include <stdint.h>
@@ -42,17 +38,9 @@ uint32_t total_score = 0;
 uint16_t level_score = 5000;
 uint16_t last_printed_level_score = 0;
 
-uint16_t level_bonus = 350;
-uint16_t last_printed_level_bonus = 0;
-
 void set_level_score( uint16_t score )
 {
   level_score = score;
-}
-
-void set_level_bonus( uint16_t bonus )
-{
-  level_bonus = bonus;
 }
 
 uint16_t get_level_score( void )
@@ -90,7 +78,7 @@ struct sp1_pss scoring_print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
                                          0x00, 0x03,
                                          0,
                                          0 };
-uint8_t scoring_print_string[] = "\x14" "A\x16" "YXScore:00000\x16" "YXBonus:00000";
+uint8_t scoring_print_string[] = "\x14" "A\x16" "YXScore:00000";
 
 uint8_t* small_utoa( uint16_t, uint8_t* );
 
@@ -101,8 +89,7 @@ void show_scores( SCORE_SCREEN_DATA* score_screen_data )
    * Also, if the display attribute is zero, assume that means the scores shouldn't
    * be displayed.
    */
-  if( score_screen_data->score_screen_attribute &&
-      (level_score != last_printed_level_score || level_bonus != last_printed_level_bonus) )
+  if( score_screen_data->score_screen_attribute && (level_score != last_printed_level_score) )
     {
       /*
        * Boy did this unsigned to ascii thing take some time to get right. :)
@@ -112,19 +99,13 @@ void show_scores( SCORE_SCREEN_DATA* score_screen_data )
       scoring_print_string[1]  = score_screen_data->score_screen_attribute;
       scoring_print_string[3]  = score_screen_data->level_score_y;
       scoring_print_string[4]  = score_screen_data->level_score_x;
-      scoring_print_string[17] = score_screen_data->bonus_score_y;
-      scoring_print_string[18] = score_screen_data->bonus_score_x;
 
       if( level_score != last_printed_level_score )
-	small_utoa( level_score, &scoring_print_string[11] );
-
-      if( level_bonus != last_printed_level_bonus )
-	small_utoa( level_bonus, &scoring_print_string[25] );
+        small_utoa( level_score, &scoring_print_string[11] );
 
       sp1_PrintString(&scoring_print_control, (uint8_t*)scoring_print_string);
 
       last_printed_level_score = level_score;
-      last_printed_level_bonus = level_bonus;
     }
   
 }
@@ -132,7 +113,6 @@ void show_scores( SCORE_SCREEN_DATA* score_screen_data )
 void reset_cached_screen_scores( void )
 {
   last_printed_level_score = 0;
-  last_printed_level_bonus = 0;
 }
 
 void display_total_score( void )

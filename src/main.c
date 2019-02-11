@@ -84,7 +84,7 @@ int main()
   setup_levels_font();
 
   create_runner( RIGHT );
-//  create_game_bonuses( STARTING_NUM_BONUSES );
+  create_game_bonuses( STARTING_NUM_BONUSES );
 
   current_level_num = 0;
   while( 1 ) {
@@ -92,8 +92,8 @@ int main()
     /* Get the level data and call it's draw function to draw it */
     game_state.current_level = &level_data[current_level_num];
     print_level_from_sp1_string( game_state.current_level );
+    draw_bonuses();
 
-  create_game_bonuses( STARTING_NUM_BONUSES );
     sp1_Invalidate(&full_screen);
     sp1_UpdateNow();
 
@@ -111,7 +111,6 @@ int main()
     SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
 
     set_level_score( game_state.current_level->max_score );
-    set_level_bonus( game_state.current_level->max_bonus );
     reset_cached_screen_scores();
 
     /* Enter game loop, exit when player completes the level */

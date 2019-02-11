@@ -516,7 +516,6 @@ LEVEL_DATA level_data[] = {
     NULL,
     NULL,
     MAX_POINTS(0),
-    MAX_BONUS(0),
     { 0 }
   },
 
@@ -541,11 +540,8 @@ LEVEL_DATA level_data[] = {
     &level0_slowdowns[0],
     NULL,
     MAX_POINTS(12500),
-    MAX_BONUS(5000),
-    { NAMED_VALUES_5("Level score X", 19,
+    { NAMED_VALUES_3("Level score X", 19,
                      "Level score Y", 18,
-                     "Bonus score X", 19,
-                     "Bonus score Y", 19,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 
@@ -570,11 +566,8 @@ LEVEL_DATA level_data[] = {
     &level1_slowdowns[0],
     NULL,
     MAX_POINTS(15000),
-    MAX_BONUS(8000),
-    { NAMED_VALUES_5("Level score X", 14,
+    { NAMED_VALUES_3("Level score X", 14,
                      "Level score Y", 19,
-                     "Bonus score X", 14,
-                     "Bonus score Y", 20,
 		     "Scores att",    INK_YELLOW|PAPER_BLACK) }
   },
 
@@ -599,11 +592,8 @@ LEVEL_DATA level_data[] = {
     level2_slowdowns,
     &level2_doors[0],
     MAX_POINTS(20000),
-    MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X",  0,
+    { NAMED_VALUES_3("Level score X",  0,
                      "Level score Y",  0,
-                     "Bonus score X",  0,
-                     "Bonus score Y",  1,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 
@@ -628,11 +618,8 @@ LEVEL_DATA level_data[] = {
     level3_slowdowns,
     level3_doors,
     MAX_POINTS(20000),
-    MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X", 21,
+    { NAMED_VALUES_3("Level score X", 21,
                      "Level score Y",  0,
-                     "Bonus score X", 21,
-                     "Bonus score Y",  1,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 
@@ -657,11 +644,8 @@ LEVEL_DATA level_data[] = {
     level4_slowdowns,
     level4_doors,
     MAX_POINTS(20000),
-    MAX_BONUS(12000),
-    { NAMED_VALUES_5("Level score X", 20,
+    { NAMED_VALUES_3("Level score X", 20,
                      "Level score Y", 21,
-                     "Bonus score X", 20,
-                     "Bonus score Y", 22,
 		     "Scores att",    INK_BLUE|PAPER_WHITE) }
   },
 

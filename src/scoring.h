@@ -23,7 +23,6 @@
 #include <stdint.h>
 
 void     set_level_score( uint16_t score );
-void     set_level_bonus( uint16_t bonus );
 uint16_t get_level_score( void );
 void     decrement_level_score( uint16_t decrement );
 
@@ -41,9 +40,6 @@ typedef struct _score_screen_data
 {
   uint8_t  level_score_x;
   uint8_t  level_score_y;
-
-  uint8_t  bonus_score_x;
-  uint8_t  bonus_score_y;
 
   uint8_t  score_screen_attribute;
 

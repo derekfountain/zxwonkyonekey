@@ -72,7 +72,6 @@ typedef struct _level_data
   DOOR*       doors;
 
   uint16_t               max_score;
-  uint16_t               max_bonus;
   SCORE_SCREEN_DATA      score_screen_data;
 } LEVEL_DATA;
 

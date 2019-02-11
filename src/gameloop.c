@@ -39,7 +39,7 @@
 #include "collision.h"
 #include "scoring.h"
 #include "sound.h"
-
+#include "bonus.h"
 
 
 /***
@@ -312,6 +312,7 @@ void gameloop( GAME_STATE* game_state )
 
         case ACTIVATE_SLOWDOWN:
           queue_beepfx_sound(BEEPFX_JUMP_2);
+          lose_bonus();
           SET_RUNNER_SLOWDOWN( SLOWDOWN_ACTIVE );
           break;
 
