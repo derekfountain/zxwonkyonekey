@@ -53,11 +53,15 @@ PUBLIC _off_screen_buffer
 
 ; Buffer to hold a firework animation:
 ; uint8_t pre_calc_path[MAX_PAIRS_PER_FIREWORK][2];
-
+;
 PUBLIC _pre_calc_path
 ._pre_calc_path
         defs    29*2
 
 PUBLIC _ticker_string
+PUBLIC _ticker_bonus_char
 ._ticker_string
-        defm    "You are a winner!  Cue the fireworks!     ", 0
+        defm    "Completed with "
+._ticker_bonus_char
+        defb    0
+        defm    " bonus apples left!   Cue the fireworks!     ", 0

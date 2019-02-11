@@ -34,5 +34,6 @@ typedef struct _bonus
 void create_game_bonuses( uint8_t num_bonuses );
 void draw_bonuses( SCORE_SCREEN_DATA* screen_data );
 void lose_bonus( void );
+uint8_t query_bonuses_left( void );
 
 #endif

@@ -95,3 +95,8 @@ void lose_bonus( void )
     sp1_MoveSprPix(bonuses[bonuses_left].sprite, &full_screen, (void*)apple, 255, 255);
   }
 }
+
+uint8_t query_bonuses_left( void )
+{
+  return bonuses_left;
+}

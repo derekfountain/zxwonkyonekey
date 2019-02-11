@@ -24,6 +24,7 @@
 #include <stdlib.h>
 
 #include "int.h"
+#include "bonus.h"
 
 /*
  * Off-screen buffer to put the display into. This is blitted into the screen, replacing
@@ -38,6 +39,7 @@ extern uint8_t arch_pattern_r[4][2];
 extern int8_t  cascade_pattern[6][2];
 
 extern uint8_t ticker_string[];
+extern uint8_t ticker_bonus_char[];
 
 /*
  * Font is tucked away in levels_graphics.asm
@@ -58,6 +60,8 @@ void winner_banner(void)
   uint8_t* current_char_ptr;
 
   zx_cls(PAPER_WHITE);
+
+  ticker_bonus_char[0] = query_bonuses_left() + 0x30;
 
   /*
    * Initialise the ticker and its buffer
