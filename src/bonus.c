@@ -38,8 +38,8 @@ BONUS bonuses[STARTING_NUM_BONUSES];
  */
 extern struct sp1_Rect full_screen;
 
-/* FIXME This is in the assembly language file */
-extern uint8_t door_f1[];
+/* This is in the assembly language file */
+extern uint8_t apple[];
 
 static uint8_t ink_param;
 static void initialise_colour(unsigned int count, struct sp1_cs *c)
@@ -60,11 +60,11 @@ void create_game_bonuses( uint8_t num_bonuses )
     sp1_AddColSpr(bonuses[i].sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, BONUS_PLANE);
 
     sp1_MoveSprPix(bonuses[i].sprite, &full_screen,
-                  (void*)door_f1,
+                  (void*)apple,
                   i*8, 8);
 
     /* Colour the cells the sprite occupies */
-    ink_param = INK_BLUE;
+    ink_param = INK_GREEN;
     sp1_IterateSprChar(bonuses[i].sprite, initialise_colour);
 
   }
