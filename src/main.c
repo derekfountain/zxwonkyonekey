@@ -92,7 +92,6 @@ int main()
     /* Get the level data and call it's draw function to draw it */
     game_state.current_level = &level_data[current_level_num];
     print_level_from_sp1_string( game_state.current_level );
-    draw_bonuses();
 
     sp1_Invalidate(&full_screen);
     sp1_UpdateNow();

@@ -20,16 +20,19 @@
 #ifndef __BONUS_H
 #define __BONUS_H
 
+#include <arch/zx/sp1.h>
+#include "scoring.h"
+
 typedef struct _bonus
 {
   /* SP1 sprite bonus is shown on screen as */
   struct sp1_ss*     sprite;
 } BONUS;
 
-#define STARTING_NUM_BONUSES  12
+#define STARTING_NUM_BONUSES  5
 
 void create_game_bonuses( uint8_t num_bonuses );
-void draw_bonuses( void );
+void draw_bonuses( SCORE_SCREEN_DATA* screen_data );
 void lose_bonus( void );
 
 #endif

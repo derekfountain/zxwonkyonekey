@@ -152,7 +152,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
         slowdown++;
       }
     }
-      
+
     GAMELOOP_TRACE_CREATE(INT_500MS,
                           game_state->key_pressed,
                           game_state->key_processed,
@@ -359,6 +359,7 @@ void gameloop( GAME_STATE* game_state )
 
     draw_runner();
     show_scores( &(game_state->current_level->score_screen_data) );
+    draw_bonuses( &(game_state->current_level->score_screen_data) );
     
     /*
      * If the level has teleporters the cells they occupy are validated so

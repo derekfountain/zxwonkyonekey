@@ -62,22 +62,34 @@ void create_game_bonuses( uint8_t num_bonuses )
     /* Colour the cells the sprite occupies */
     ink_param = INK_GREEN;
     sp1_IterateSprChar(bonuses[i].sprite, initialise_colour);
-
   }
+
+  bonuses_left = num_bonuses;
 }
 
-void draw_bonuses( void )
+void draw_bonuses( SCORE_SCREEN_DATA* screen_data )
 {
-//    sp1_MoveSprPix(bonuses[i].sprite, &full_screen,
-  //                (void*)apple,
-    //              255, 255);
+  register uint8_t x = screen_data->bonus_sprite0_x_pixel;
+  register uint8_t y = screen_data->bonus_sprite0_y_pixel;
+  uint8_t i;
 
-
+  for( i=0; i<bonuses_left; i++ )
+  {
+    sp1_MoveSprPix(bonuses[i].sprite, &full_screen,
+                  (void*)apple,
+                  x, y);
+    x+=8;
+  }
 }
 
 void lose_bonus( void )
 {
   if( bonuses_left )
   {
+    sp1_MoveSprPix(bonuses[bonuses_left-1].sprite, &full_screen,
+                  (void*)apple,
+                  255, 255);
+
+    bonuses_left--;
   }
 }
