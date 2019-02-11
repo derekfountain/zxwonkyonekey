@@ -516,7 +516,11 @@ LEVEL_DATA level_data[] = {
     NULL,
     NULL,
     MAX_POINTS(0),
-    { 0 }
+    { NAMED_VALUES_5("Level score X", 255,  /* I don't want bonuses showing on the intro */
+                     "Level score Y", 255,  /* level so they actually get drawn off screen */
+                     "Scores att",    0,
+                     "Bonus X pixel", 255,
+                     "Bonus Y pixel", 255) }
   },
 
   /***
@@ -540,9 +544,11 @@ LEVEL_DATA level_data[] = {
     &level0_slowdowns[0],
     NULL,
     MAX_POINTS(12500),
-    { NAMED_VALUES_3("Level score X", 19,
+    { NAMED_VALUES_5("Level score X", 19,
                      "Level score Y", 18,
-		     "Scores att",    INK_BLUE|PAPER_WHITE) }
+                     "Scores att",    INK_BLUE|PAPER_WHITE,
+                     "Bonus X pixel", 19*8,
+                     "Bonus Y pixel", 19*8) }
   },
 
   /***
@@ -566,9 +572,11 @@ LEVEL_DATA level_data[] = {
     &level1_slowdowns[0],
     NULL,
     MAX_POINTS(15000),
-    { NAMED_VALUES_3("Level score X", 14,
+    { NAMED_VALUES_5("Level score X", 14,
                      "Level score Y", 19,
-		     "Scores att",    INK_YELLOW|PAPER_BLACK) }
+                     "Scores att",    INK_YELLOW|PAPER_BLACK,
+                     "Bonus X pixel", 14*8,
+                     "Bonus Y pixel", 20*8) }
   },
 
   /***
@@ -592,9 +600,11 @@ LEVEL_DATA level_data[] = {
     level2_slowdowns,
     &level2_doors[0],
     MAX_POINTS(20000),
-    { NAMED_VALUES_3("Level score X",  0,
+    { NAMED_VALUES_5("Level score X",  0,
                      "Level score Y",  0,
-		     "Scores att",    INK_BLUE|PAPER_WHITE) }
+                     "Scores att",    INK_MAGENTA|PAPER_BLACK,
+                     "Bonus X pixel", 0*8,
+                     "Bonus Y pixel", 1*8) }
   },
 
   /***
@@ -618,9 +628,11 @@ LEVEL_DATA level_data[] = {
     level3_slowdowns,
     level3_doors,
     MAX_POINTS(20000),
-    { NAMED_VALUES_3("Level score X", 21,
+    { NAMED_VALUES_5("Level score X", 21,
                      "Level score Y",  0,
-		     "Scores att",    INK_BLUE|PAPER_WHITE) }
+                     "Scores att",    INK_BLUE|PAPER_WHITE,
+                     "Bonus X pixel", 21*8,
+                     "Bonus Y pixel", 1*8) }
   },
 
   /***
@@ -644,9 +656,11 @@ LEVEL_DATA level_data[] = {
     level4_slowdowns,
     level4_doors,
     MAX_POINTS(20000),
-    { NAMED_VALUES_3("Level score X", 20,
+    { NAMED_VALUES_5("Level score X", 20,
                      "Level score Y", 21,
-		     "Scores att",    INK_BLUE|PAPER_WHITE) }
+                     "Scores att",    INK_RED|PAPER_BLACK,
+                     "Bonus X pixel", 20*8,
+                     "Bonus Y pixel", 22*8) }
   },
 
 };

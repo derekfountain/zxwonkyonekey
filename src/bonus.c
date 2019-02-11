@@ -24,9 +24,9 @@
 #include "bonus.h"
 
 /*
- * The bonus sprites sit some way back. Everything else will cover them.
+ * The bonus sprites are never obscured so this isn't relevant really.
  */
-#define BONUS_PLANE    (uint8_t)(25)
+#define BONUS_PLANE    (uint8_t)(1)
 
 /* Number of bonuses still left */
 uint8_t bonuses_left;
@@ -41,13 +41,12 @@ extern struct sp1_Rect full_screen;
 /* This is in the assembly language file */
 extern uint8_t apple[];
 
-static uint8_t ink_param;
 static void initialise_colour(unsigned int count, struct sp1_cs *c)
 {
   (void)count;    /* Suppress compiler warning about unused parameter */
 
   c->attr_mask = SP1_AMASK_INK;
-  c->attr      = ink_param;
+  c->attr      = INK_RED;
 }
 
 void create_game_bonuses( uint8_t num_bonuses )
@@ -60,7 +59,6 @@ void create_game_bonuses( uint8_t num_bonuses )
     sp1_AddColSpr(bonuses[i].sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, BONUS_PLANE);
 
     /* Colour the cells the sprite occupies */
-    ink_param = INK_GREEN;
     sp1_IterateSprChar(bonuses[i].sprite, initialise_colour);
   }
 
@@ -69,15 +67,14 @@ void create_game_bonuses( uint8_t num_bonuses )
 
 void draw_bonuses( SCORE_SCREEN_DATA* screen_data )
 {
-  register uint8_t x = screen_data->bonus_sprite0_x_pixel;
-  register uint8_t y = screen_data->bonus_sprite0_y_pixel;
+  uint8_t x = screen_data->bonus_sprite0_x_pixel;
+  uint8_t y = screen_data->bonus_sprite0_y_pixel;
   uint8_t i;
 
+  /* Just line them up in the level-prescribed location */
   for( i=0; i<bonuses_left; i++ )
   {
-    sp1_MoveSprPix(bonuses[i].sprite, &full_screen,
-                  (void*)apple,
-                  x, y);
+    sp1_MoveSprPix(bonuses[i].sprite, &full_screen, (void*)apple, x, y);
     x+=8;
   }
 }
@@ -86,10 +83,15 @@ void lose_bonus( void )
 {
   if( bonuses_left )
   {
-    sp1_MoveSprPix(bonuses[bonuses_left-1].sprite, &full_screen,
-                  (void*)apple,
-                  255, 255);
-
     bonuses_left--;
+
+    /*
+     * I wanted the apples to fall off the screen, and wrote the code to do
+     * it, but it slowed the game to less than 50fps. That was an initial
+     * requirement, so I took the animation out again. This just moves the
+     * sprite off screen. The apples can be converted to tiles if I need to
+     * save a bit more space.
+     */
+    sp1_MoveSprPix(bonuses[bonuses_left].sprite, &full_screen, (void*)apple, 255, 255);
   }
 }
