@@ -251,7 +251,7 @@ SLOWDOWN level0_slowdowns[] = {
                             "Sprite x", 184, "Sprite y", 176,
                             "Centre x", 188, "Centre y", 180,
                             slowdown_collected,
-                            slowdown_timeup)}, SLOWDOWN_SECS(12) },
+                            slowdown_timeup)}, SLOWDOWN_SECS(15) },
   { {INITIALISE_COLLECTABLE(SLOWDOWN_PILL,
                             "Sprite x",  24, "Sprite y",  64,
                             "Centre x",  28, "Centre y",  68,
@@ -658,7 +658,7 @@ LEVEL_DATA level_data[] = {
     MAX_POINTS(20000),
     { NAMED_VALUES_5("Level score X", 20,
                      "Level score Y", 21,
-                     "Scores att",    INK_RED|PAPER_BLACK,
+                     "Scores att",    INK_CYAN|PAPER_BLACK,
                      "Bonus X pixel", 20*8,
                      "Bonus Y pixel", 22*8) }
   },
