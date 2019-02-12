@@ -28,6 +28,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
 #include "utils.h"
@@ -65,58 +66,41 @@ void decrement_level_score( uint16_t decrement )
  *                  |_|            |___/
  */
 
+static struct sp1_ss* slider_sprite;
+
+static void initialise_colour(unsigned int count, struct sp1_cs *c)
+{
+  (void)count;    /* Suppress compiler warning about unused parameter */
+
+  c->attr_mask = SP1_AMASK_INK;
+  c->attr      = INK_WHITE;
+}
+
+extern uint8_t score_slider[8];
+
+#define SLIDER_PLANE 1
+
+void create_slider( void )
+{
+  slider_sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, SLIDER_PLANE);
+  sp1_AddColSpr(slider_sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, SLIDER_PLANE);
+
+  /* Colour the cells the sprite occupies */
+  sp1_IterateSprChar(slider_sprite, initialise_colour);
+}
+
 /*
- * This is defined in main.c. Just share it for now.
+ * This is in the levels code. It can only be used after the levels code
+ * has initialised it.
  */
-extern struct sp1_Rect full_screen;
+extern struct sp1_pss level_print_control;
 
-/*
- * Keep this global so the compiler can preallocate it
- */
-struct sp1_pss scoring_print_control = { &full_screen, SP1_PSSFLAG_INVALIDATE,
-                                         0, 0,
-                                         0x00, 0x03,
-                                         0,
-                                         0 };
-uint8_t scoring_print_string[] = "\x14" "A\x16" "YXScore:00000";
-
-uint8_t* small_utoa( uint16_t, uint8_t* );
-
-void show_scores( SCORE_SCREEN_DATA* score_screen_data )
+static uint8_t slider_sp1_string[16] = "\x16" "yx" "\x8c" "\x8e\x8e\x8e\x8e\x8e\x8e\x8e\x8e\x8e" "\x8d\0";
+void initialise_score_tiles( uint8_t x_cell, uint8_t y_cell )
 {
-  /*
-   * Only update the screen when one of the values changes. This update is expensive!
-   * Also, if the display attribute is zero, assume that means the scores shouldn't
-   * be displayed.
-   */
-  if( score_screen_data->score_screen_attribute && (level_score != last_printed_level_score) )
-    {
-      /*
-       * Boy did this unsigned to ascii thing take some time to get right. :)
-       *
-       * https://github.com/derekfountain/zxwonkyonekey/wiki/Adding-sprintf()
-       */
-      scoring_print_string[1]  = score_screen_data->score_screen_attribute;
-      scoring_print_string[3]  = score_screen_data->level_score_y;
-      scoring_print_string[4]  = score_screen_data->level_score_x;
+  /* Build and print the string to display the slider */
+  slider_sp1_string[1] = y_cell;
+  slider_sp1_string[2] = x_cell;
 
-      if( level_score != last_printed_level_score )
-        small_utoa( level_score, &scoring_print_string[11] );
-
-      sp1_PrintString(&scoring_print_control, (uint8_t*)scoring_print_string);
-
-      last_printed_level_score = level_score;
-    }
-  
+  sp1_PrintString(&level_print_control, slider_sp1_string);
 }
-
-void reset_cached_screen_scores( void )
-{
-  last_printed_level_score = 0;
-}
-
-void display_total_score( void )
-{
-
-}
-

@@ -46,6 +46,9 @@ extern uint8_t finish[8];
 extern uint8_t grassv[8];
 extern uint8_t teleporter[8];
 extern uint8_t door_key[8];
+extern uint8_t score_slider_left[8];
+extern uint8_t score_slider_right[8];
+extern uint8_t score_slider_centre[8];
 
 /*
  * Maps, also in assembler because the strings require
@@ -70,7 +73,6 @@ extern uint8_t level4_map[];
  *
  */
 
-/* FIXME All these tables can be moved to lower memory */
 /*
  * Tables of tiles required for each level. "UDGs".
  * Tile number 0 is end of list; assumes I'll never
@@ -81,6 +83,9 @@ TILE_DEFINITION level0_tiles[] = {
   {129, jumper},
   {130, finish},
   {131, grassv},
+  {140, score_slider_left},
+  {141, score_slider_right},
+  {142, score_slider_centre},
   {0,   {0}   }
 };
 
@@ -90,6 +95,9 @@ TILE_DEFINITION level1_tiles[] = {
   {130, finish},
   {131, platform1v},
   {132, teleporter},
+  {140, score_slider_left},
+  {141, score_slider_right},
+  {142, score_slider_centre},
   {0,   {0}   }
 };
 
@@ -100,6 +108,9 @@ TILE_DEFINITION level2_tiles[] = {
   {131, block_platform2},
   {132, teleporter},
   {133, door_key},
+  {140, score_slider_left},
+  {141, score_slider_right},
+  {142, score_slider_centre},
   {255, blank},
   {0,   {0}   }
 };
@@ -110,6 +121,9 @@ TILE_DEFINITION level3_tiles[] = {
   {130, finish},
   {132, teleporter},
   {133, door_key},
+  {140, score_slider_left},
+  {141, score_slider_right},
+  {142, score_slider_centre},
   {255, blank},
   {0,   {0}   }
 };
@@ -121,6 +135,9 @@ TILE_DEFINITION level4_tiles[] = {
   {131, block_platform5},
   {132, teleporter},
   {133, door_key},
+  {140, score_slider_left},
+  {141, score_slider_right},
+  {142, score_slider_centre},
   {255, blank},
   {0,   {0}   }
 };

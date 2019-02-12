@@ -232,12 +232,12 @@ void finish_level(void)
  */
 void gameloop( GAME_STATE* game_state )
 {
-
   /*
    * Bonus apples are drawn once. It's not possible for them to be
    * obscured so this can happen once outside the main loop.
    */
   draw_bonuses( &(game_state->current_level->score_screen_data) );
+
 
   while(1) {
     uint8_t     i;
@@ -364,7 +364,7 @@ void gameloop( GAME_STATE* game_state )
     }
 
     draw_runner();
-    show_scores( &(game_state->current_level->score_screen_data) );
+    // show_scores( &(game_state->current_level->score_screen_data) );
     
     /*
      * If the level has teleporters the cells they occupy are validated so

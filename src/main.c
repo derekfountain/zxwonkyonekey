@@ -85,6 +85,7 @@ int main()
 
   create_runner( RIGHT );
   create_game_bonuses( STARTING_NUM_BONUSES );
+  create_slider();
 
   current_level_num = 0;
   while( 1 ) {
@@ -110,7 +111,6 @@ int main()
     SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
 
     set_level_score( game_state.current_level->max_score );
-    reset_cached_screen_scores();
 
     /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );

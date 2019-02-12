@@ -333,7 +333,14 @@ PUBLIC _level0_map
         
         defb 0x16, 0x0F, 0x0    ; AT 15,0
         defb 0x82               ; finish
-                
+
+        ;; Place score slider
+
+        defb 0x16, 18,19        ; AT
+        defb 0x10, 0x01         ; ink
+        defb 0x11, 0x07         ; paper white
+        defb 140,142,142,142,142,142,142,142,142,142,141
+
         defb 0x00
 PUBLIC _level0_map_end
 ._level0_map_end
@@ -364,7 +371,13 @@ INCLUDE "level1_map.inc.asm"
         
         defb 0x16, 0x10, 0x0    ; AT 16,0
         defb 0x82               ; finish
-		                
+
+        ;; Place score slider
+        defb 0x16, 19,14        ; AT
+        defb 0x10, 0x06         ; ink
+        defb 0x11, 0x00         ; paper
+        defb 140,142,142,142,142,142,142,142,142,142,141
+
         defb 0x00
 PUBLIC _level1_map_end
 ._level1_map_end
@@ -396,6 +409,13 @@ INCLUDE "level2_map.inc.asm"
         defb 0x16, 0x16, 0x1E   ; AT 22,30
         defb 0x82               ; finish
         
+        ;; Place score slider
+
+        defb 0x16, 0,0        ; AT
+        defb 0x10, 0x07         ; ink
+        defb 0x11, 0x00         ; paper
+        defb 140,142,142,142,142,142,142,142,142,142,141
+
 	defb 0x00
 	
 PUBLIC _level2_map_end
@@ -428,6 +448,13 @@ INCLUDE "level3_map.inc.asm"
         defb 0x16, 0x01, 0x01   ; AT 1,1
         defb 0x82               ; finish
 
+        ;; Place score slider
+
+        defb 0x16, 0,21        ; AT
+        defb 0x10, 0x01         ; ink
+        defb 0x11, 0x07         ; paper
+        defb 140,142,142,142,142,142,142,142,142,142,141
+
 	defb 0x00
 
 PUBLIC _level3_map_end
@@ -459,6 +486,13 @@ INCLUDE "level4_map.inc.asm"
 
         defb 0x16, 14, 1        ; AT side
         defb 0x82               ; finish
+
+        ;; Place score slider
+
+        defb 0x16, 21,20        ; AT
+        defb 0x10, 0x04         ; ink
+        defb 0x11, 0x00         ; paper
+        defb 140,142,142,142,142,142,142,142,142,142,141
 
 	defb 0x00
 

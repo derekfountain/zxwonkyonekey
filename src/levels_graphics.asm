@@ -185,7 +185,38 @@ PUBLIC _door_key
         defb @00000010
         defb @00000100
 
+PUBLIC _score_slider_left
+._score_slider_left
+        defb @00000000
+        defb @00000000
+        defb @01100000
+        defb @11111111
+        defb @11111111
+        defb @01100000
+        defb @00000000
+        defb @00000000
 
+PUBLIC _score_slider_right
+._score_slider_right
+        defb @00000000
+        defb @00000000
+        defb @00000110
+        defb @11111111
+        defb @11111111
+        defb @00000110
+        defb @00000000
+        defb @00000000
+
+PUBLIC _score_slider_centre
+._score_slider_centre
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @11111111
+        defb @11111111
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
 ;;     _____ _                  _                       _____ _ _ _ 
 ;;    / ____| |                | |                     |  __ (_| | |
@@ -329,6 +360,34 @@ PUBLIC _apple
 
 
 
+
+;;     _____                          _ _     _
+;;    / ____|                        | (_)   | |
+;;   | (___   ___ ___  _ __ ___   ___| |_  __| | ___ _ __
+;;    \___ \ / __/ _ \| '__/ _ \ / __| | |/ _` |/ _ | '__|
+;;    ____) | (_| (_) | | |  __/ \__ | | | (_| |  __| |
+;;   |_____/ \___\___/|_|  \___| |___|_|_|\__,_|\___|_|
+;;
+;;
+PUBLIC _score_slider
+._score_slider
+        defb @00111100
+        defb @01111110
+        defb @01111110
+        defb @01111110
+        defb @01111110
+        defb @01111110
+        defb @01111110
+        defb @00111100
+
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
+        defb @00000000
 
 
 ;;      ______          _

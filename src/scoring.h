@@ -27,12 +27,6 @@ uint16_t get_level_score( void );
 void     decrement_level_score( uint16_t decrement );
 
 /*
- * Display routines. I'm not sure if Spectrum games benefit from separating out
- * the view code. Such fancy modern techniques seems to consume resources. :)
- * I'll keep this here for now.
- */
-
-/*
  * Structure to hold the screen locations and colours etc. to place the scores.
  * These vary from level to level.
  */
@@ -47,22 +41,6 @@ typedef struct _score_screen_data
 
 } SCORE_SCREEN_DATA;
 
-/*
- * Show scores on screen according to the given screen data.
- * Locations on screen, colours, etc., change from level to
- * level so the parameter is required to pass that in.
- */
-void     show_scores( SCORE_SCREEN_DATA* score_screen_data );
-
-/*
- * Scores are only updated on screen when they change because
- * it's an expensive operation which might feasibly have to be
- * done every cycle. This routine resets the caching, guaranteeing
- * the scores will be redrawn next cycle. This needs calling when
- * the level changes, probably among other key points.
- */
-void     reset_cached_screen_scores( void );
-
-void     display_total_score( void );
+void create_slider( void );
 
 #endif
