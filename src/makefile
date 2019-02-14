@@ -71,7 +71,7 @@ OBJECTS = gameloop.o \
           collision.o \
           levels_graphics.o \
           levels_maps.o \
-          scoring.o \
+          countdown.o \
           small_utoa.o \
           initialisation.o \
           sound.o \
@@ -93,7 +93,7 @@ C_OBJECTS = gameloop.o \
             tracetable.o \
             local_assert.o \
             collision.o \
-            scoring.o \
+            countdown.o \
             sound.o \
             winner.o \
             bonus.o
@@ -108,7 +108,7 @@ HEADERS = action.h \
           collision.h \
           collectable.h \
           slowdown_pill.h \
-          scoring.h \
+          countdown.h \
           gameloop.h \
           game_state.h \
           int.h \

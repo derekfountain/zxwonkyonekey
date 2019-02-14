@@ -37,9 +37,9 @@
 #include "slowdown_pill.h"
 #include "teleporter.h"
 #include "collision.h"
-#include "scoring.h"
 #include "sound.h"
 #include "bonus.h"
+#include "countdown.h"
 
 
 /***

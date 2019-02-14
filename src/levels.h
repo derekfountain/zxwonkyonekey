@@ -22,9 +22,9 @@
 
 #include <stdint.h>
 
+#include "countdown.h"
 #include "runner.h"
 #include "utils.h"
-#include "scoring.h"
 #include "teleporter.h"
 #include "door.h"
 #include "slowdown_pill.h"

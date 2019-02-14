@@ -31,8 +31,8 @@
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
+#include "countdown.h"
 #include "utils.h"
-#include "scoring.h"
 
 uint32_t total_score = 0;
 

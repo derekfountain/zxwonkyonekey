@@ -21,7 +21,8 @@
 #define __BONUS_H
 
 #include <arch/zx/sp1.h>
-#include "scoring.h"
+
+#include "countdown.h"
 
 typedef struct _bonus
 {
