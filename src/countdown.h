@@ -22,10 +22,6 @@
 
 #include <stdint.h>
 
-void     set_level_score( uint16_t score );
-uint16_t get_level_score( void );
-void     decrement_level_score( uint16_t decrement );
-
 /*
  * Structure to hold the screen locations and colours etc. to place the scores.
  * These vary from level to level.
@@ -41,6 +37,9 @@ typedef struct _score_screen_data
 
 } SCORE_SCREEN_DATA;
 
-void create_slider( void );
+void     set_game_countdown( uint16_t countdown );
+uint16_t get_game_countdown( void );
+void     decrement_game_countdown( uint16_t decrement );
+void     create_slider( void );
 
 #endif

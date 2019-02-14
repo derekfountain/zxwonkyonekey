@@ -34,34 +34,33 @@
 #include "countdown.h"
 #include "utils.h"
 
-uint32_t total_score = 0;
+uint16_t game_countdown = 5000;
 
-uint16_t level_score = 5000;
-uint16_t last_printed_level_score = 0;
-
-void set_level_score( uint16_t score )
+void set_game_countdown( uint16_t countdown )
 {
-  level_score = score;
+  game_countdown = countdown;
 }
 
-uint16_t get_level_score( void )
+uint16_t get_game_countdown( void )
 {
-  return level_score;
+  return game_countdown;
 }
 
-void decrement_level_score( uint16_t decrement )
+void decrement_game_countdown( uint16_t decrement )
 {
-  if( level_score )
-      level_score -= decrement;
+  if( game_countdown )
+      game_countdown -= decrement;
 }
+
+
 
 /***
- *      _____  _           _                _____
- *     |  __ \(_)         | |              / ____|
- *     | |  | |_ ___ _ __ | | __ _ _   _  | (___   ___ ___  _ __ ___ ___
- *     | |  | | / __| '_ \| |/ _` | | | |  \___ \ / __/ _ \| '__/ _ / __|
- *     | |__| | \__ | |_) | | (_| | |_| |  ____) | (_| (_) | | |  __\__ \
- *     |_____/|_|___| .__/|_|\__,_|\__, | |_____/ \___\___/|_|  \___|___/
+ *      _____  _           _                _____                  _      _
+ *     |  __ \(_)         | |              / ____|                | |    | |
+ *     | |  | |_ ___ _ __ | | __ _ _   _  | |     ___  _   _ _ __ | |_ __| | _____      ___ __
+ *     | |  | | / __| '_ \| |/ _` | | | | | |    / _ \| | | | '_ \| __/ _` |/ _ \ \ /\ / | '_ \
+ *     | |__| | \__ | |_) | | (_| | |_| | | |___| (_) | |_| | | | | || (_| | (_) \ V  V /| | | |
+ *     |_____/|_|___| .__/|_|\__,_|\__, |  \_____\___/ \__,_|_| |_|\__\__,_|\___/ \_/\_/ |_| |_|
  *                  | |             __/ |
  *                  |_|            |___/
  */
@@ -76,8 +75,6 @@ static void initialise_colour(unsigned int count, struct sp1_cs *c)
   c->attr      = INK_WHITE;
 }
 
-extern uint8_t score_slider[8];
-
 #define SLIDER_PLANE 1
 
 void create_slider( void )
@@ -87,20 +84,4 @@ void create_slider( void )
 
   /* Colour the cells the sprite occupies */
   sp1_IterateSprChar(slider_sprite, initialise_colour);
-}
-
-/*
- * This is in the levels code. It can only be used after the levels code
- * has initialised it.
- */
-extern struct sp1_pss level_print_control;
-
-static uint8_t slider_sp1_string[16] = "\x16" "yx" "\x8c" "\x8e\x8e\x8e\x8e\x8e\x8e\x8e\x8e\x8e" "\x8d\0";
-void initialise_score_tiles( uint8_t x_cell, uint8_t y_cell )
-{
-  /* Build and print the string to display the slider */
-  slider_sp1_string[1] = y_cell;
-  slider_sp1_string[2] = x_cell;
-
-  sp1_PrintString(&level_print_control, slider_sp1_string);
 }

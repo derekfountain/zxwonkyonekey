@@ -40,6 +40,7 @@
 #include "sound.h"
 #include "bonus.h"
 #include "countdown.h"
+#include "action.h"
 
 
 /***
@@ -123,8 +124,11 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
                           GET_RUNNER_SLOWDOWN,
                           0, 0);
 
-    decrement_level_score( 1 );
-
+    decrement_game_countdown( 1 );
+    if( get_game_countdown() == 0 )
+    {
+      *output_action = COUNTDOWN_EXPIRED;
+    }
     /*
      * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
      * need atomic protection.
@@ -219,6 +223,16 @@ void finish_level(void)
 
   /* Trace point, maybe? */
 }
+
+void countdown_expired(void)
+{
+  /* TODO */
+  /* New beep, banner, restart if possible */
+  play_beepfx_sound_immediate(BEEPFX_SELECT_6);
+  while(1);
+  /* Trace point, maybe? */
+}
+
 
 /***
  *      _______ _             _____                        _                       
@@ -353,6 +367,10 @@ void gameloop( GAME_STATE* game_state )
 
         case FINISH:
           finish_level();
+          return;
+
+        case COUNTDOWN_EXPIRED:
+          countdown_expired();
           return;
 
         case SKIP_CYCLE:

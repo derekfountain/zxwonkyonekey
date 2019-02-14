@@ -85,6 +85,8 @@ int main()
 
   create_runner( RIGHT );
   create_game_bonuses( STARTING_NUM_BONUSES );
+  /* TODO Macro here, remove level scoring from levels data. Ensure score isn't decrementing on intro */
+  set_game_countdown( 100 );
   create_slider();
 
   current_level_num = 0;
@@ -110,8 +112,6 @@ int main()
     set_runner_colour( game_state.current_level->background_att );
     SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
 
-    set_level_score( game_state.current_level->max_score );
-
     /* Enter game loop, exit when player completes the level */
     gameloop( &game_state );
 
@@ -120,7 +120,6 @@ int main()
 
     if( ++current_level_num == NUM_LEVELS ) {
       game_over();
-      current_level_num = 0;
     }
   }
 }
