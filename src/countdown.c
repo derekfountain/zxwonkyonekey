@@ -34,25 +34,7 @@
 #include "countdown.h"
 #include "utils.h"
 
-uint16_t game_countdown = 5000;
-
-void set_game_countdown( uint16_t countdown )
-{
-  game_countdown = countdown;
-}
-
-uint16_t get_game_countdown( void )
-{
-  return game_countdown;
-}
-
-void decrement_game_countdown( uint16_t decrement )
-{
-  if( game_countdown )
-      game_countdown -= decrement;
-}
-
-
+uint16_t game_countdown = 0;
 
 /***
  *      _____  _           _                _____                  _      _

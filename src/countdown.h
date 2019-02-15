@@ -37,9 +37,14 @@ typedef struct _score_screen_data
 
 } SCORE_SCREEN_DATA;
 
-void     set_game_countdown( uint16_t countdown );
-uint16_t get_game_countdown( void );
-void     decrement_game_countdown( uint16_t decrement );
+/*
+ * Interface via macros for speed
+ */
+extern uint16_t game_countdown;
+#define SET_GAME_COUNTDOWN(c)       (game_countdown=(c))
+#define GET_GAME_COUNTDOWN          ((uint16_t)(game_countdown))
+#define DECREMENT_GAME_COUNTDOWN    {if( game_countdown ) game_countdown--;}
+
 void     create_slider( void );
 
 #endif

@@ -112,6 +112,8 @@ void init_gameloop_trace(void)
 
 PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action )
 {
+  *output_action = NO_ACTION;
+
   if( interrupt_service_required_100ms )
   {
     GAME_STATE* game_state = (GAME_STATE*)data;
@@ -124,11 +126,20 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
                           GET_RUNNER_SLOWDOWN,
                           0, 0);
 
-    decrement_game_countdown( 1 );
-    if( get_game_countdown() == 0 )
+    /*
+     * Countdown does start running until intro level is over,
+     * so if it hasn't started, don't touch it.
+     */
+    if( GET_GAME_COUNTDOWN != 0 )
     {
-      *output_action = COUNTDOWN_EXPIRED;
+      DECREMENT_GAME_COUNTDOWN;
+      if( GET_GAME_COUNTDOWN == 0 )
+      {
+        /* This leads to game over so no need to worry about reseting etc */
+        *output_action = COUNTDOWN_EXPIRED;
+      }
     }
+
     /*
      * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
      * need atomic protection.
@@ -136,7 +147,6 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
     interrupt_service_required_100ms = 0;
   }
 
-  *output_action = NO_ACTION;
   return KEEP_PROCESSING;
 }
 
@@ -229,7 +239,7 @@ void countdown_expired(void)
   /* TODO */
   /* New beep, banner, restart if possible */
   play_beepfx_sound_immediate(BEEPFX_SELECT_6);
-  while(1);
+  //  while(1);
   /* Trace point, maybe? */
 }
 

@@ -85,8 +85,7 @@ int main()
 
   create_runner( RIGHT );
   create_game_bonuses( STARTING_NUM_BONUSES );
-  /* TODO Macro here, remove level scoring from levels data. Ensure score isn't decrementing on intro */
-  set_game_countdown( 100 );
+  SET_GAME_COUNTDOWN( 0 );
   create_slider();
 
   current_level_num = 0;
@@ -120,6 +119,15 @@ int main()
 
     if( ++current_level_num == NUM_LEVELS ) {
       game_over();
+    }
+
+    /*
+     * Another crude hack caused by having level 0 as the introduction.
+     * The countdown can't start at level 0 - that's hardly fair. So
+     * it gets started here when the proper 1st level starts.
+     */
+    if( current_level_num == 1 ) {
+      SET_GAME_COUNTDOWN( /* TODO need a suitable number */ 10000 );
     }
   }
 }
