@@ -38,13 +38,47 @@ typedef struct _score_screen_data
 } SCORE_SCREEN_DATA;
 
 /*
+ * TODO How do I calculate this?
+ */
+#define STARTING_SCORE     ((uint16_t)10000)
+
+/*
+ * Countdown amount lost when a slowdown pill is consumed.
+ */
+/* TODO Calculate this, somehow */
+#define SLOWDOWN_PENALTY   ((uint16_t)500)
+
+/*
  * Interface via macros for speed
  */
 extern uint16_t game_countdown;
-#define SET_GAME_COUNTDOWN(c)       (game_countdown=(c))
-#define GET_GAME_COUNTDOWN          ((uint16_t)(game_countdown))
-#define DECREMENT_GAME_COUNTDOWN    {if( game_countdown ) game_countdown--;}
+#define SET_GAME_COUNTDOWN(c)         (game_countdown=(c))
+#define GET_GAME_COUNTDOWN            ((uint16_t)(game_countdown))
+#define DECREMENT_GAME_COUNTDOWN      {if( game_countdown ) game_countdown--;}
 
-void     create_slider( void );
+/*
+ * Be generous! Only subract the slowdown consumption penalty if the
+ * current countdown is still high enough not to go to zero.
+ */
+#define COUNTDOWN_APPLY_SLOWDOWN_PENALTY \
+      if( game_countdown>SLOWDOWN_PENALTY ) game_countdown-=SLOWDOWN_PENALTY;\
+
+void create_slider( void );
+
+#define SLIDER_WIDTH_IN_PIXELS ((uint8_t)(11*8))
+
+/*
+ * TODO I think this needs to calculate 
+ *   STARTING_SCORE/SLIDER_WIDTH_IN_PIXELS = POINTS_PER_PIXEL
+ *   current_score /POINTS_PER_PIXEL       = PIXELS_FROM_ZERO
+ *
+ * eg
+ *  10000/88  = 113
+ *   9000/113 =  79 so 79 pixels from zero
+ *
+ *  50000/88  = 568
+ *  45000/568 =  79
+ */
+void position_slider( uint16_t current_countdown );
 
 #endif

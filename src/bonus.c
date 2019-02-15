@@ -86,6 +86,10 @@ void lose_bonus( void )
     bonuses_left--;
 
     /*
+     * TODO If that was the last bonus, remove all slowdown pills
+     */
+
+    /*
      * I wanted the apples to fall off the screen, and wrote the code to do
      * it, but it slowed the game to less than 50fps. That was an initial
      * requirement, so I took the animation out again. This just moves the

@@ -35,6 +35,7 @@
 #include "collision.h"
 #include "winner.h"
 #include "bonus.h"
+#include "countdown.h"
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
@@ -127,7 +128,7 @@ int main()
      * it gets started here when the proper 1st level starts.
      */
     if( current_level_num == 1 ) {
-      SET_GAME_COUNTDOWN( /* TODO need a suitable number */ 10000 );
+      SET_GAME_COUNTDOWN( STARTING_SCORE );
     }
   }
 }
