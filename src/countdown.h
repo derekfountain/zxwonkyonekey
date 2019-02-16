@@ -64,6 +64,7 @@ extern uint16_t game_countdown;
       if( game_countdown>SLOWDOWN_PENALTY ) game_countdown-=SLOWDOWN_PENALTY;\
 
 void create_slider( void );
+void reset_slider(void);
 void update_countdown_slider( SCORE_SCREEN_DATA* );
 
 #endif

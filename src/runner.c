@@ -176,7 +176,7 @@ RUNNER runner;
  */
 #define RUNNER_PLANE    (uint8_t)(20)
 
-RUNNER* create_runner( DIRECTION initial_direction )
+RUNNER* create_runner( void )
 {
   runner.sprite = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, RUNNER_PLANE);
   sp1_AddColSpr(runner.sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, RUNNER_PLANE);
@@ -190,6 +190,11 @@ RUNNER* create_runner( DIRECTION initial_direction )
    */
   runner.sprite->xthresh = 3;
 
+  return &runner;
+}
+
+void reset_runner( DIRECTION initial_direction )
+{
   /* These will be initialised from level data. Just make them sane here. */
   runner.xpos        = 0;
   runner.ypos        = 0;
@@ -197,8 +202,6 @@ RUNNER* create_runner( DIRECTION initial_direction )
   runner.slowdown    = FALSE;
 
   runner.jump_offset = NO_JUMP;
-
-  return &runner;
 }
 
 

@@ -43,6 +43,7 @@ typedef enum _game_action
   JUMP,
   STOP_JUMP,
   FINISH,
+  LOSE,
   COUNTDOWN_EXPIRED,
   MUSIC_NOTE,
   SOUND_EFFECT,

@@ -58,10 +58,14 @@ PUBLIC _pre_calc_path
 ._pre_calc_path
         defs    29*2
 
-PUBLIC _ticker_string
-PUBLIC _ticker_bonus_char
-._ticker_string
+PUBLIC _winner_string
+PUBLIC _winner_bonus_char
+._winner_string
         defm    "Completed with "
-._ticker_bonus_char
+._winner_bonus_char
         defb    0
         defm    " bonuses left!   Cue the fireworks!     ", 0
+
+PUBLIC _failure_string
+._failure_string
+        defm    "Time up! A miserable failure! Try again...     ", 0

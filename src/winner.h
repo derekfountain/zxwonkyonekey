@@ -23,4 +23,6 @@
 void winner_banner(void);
 void winner_fireworks(void);
 
+void loser_banner(void);
+
 #endif

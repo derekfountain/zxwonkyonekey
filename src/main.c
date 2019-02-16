@@ -47,6 +47,11 @@ void game_over( void )
   winner_fireworks();
 }
 
+void loser( void )
+{
+  loser_banner();
+}
+
 /*
  * Forward declare the level data. It's not external, it's at the bottom of this file,
  * but C insists it's declared extern.
@@ -84,51 +89,69 @@ int main()
 
   setup_levels_font();
 
-  create_runner( RIGHT );
-  create_game_bonuses( STARTING_NUM_BONUSES );
-  SET_GAME_COUNTDOWN( 0 );
+  create_runner();
   create_slider();
+  create_game_bonuses( STARTING_NUM_BONUSES );
 
-  current_level_num = 0;
+  /*
+   * Outer loop loops over games. A winner game goes into infinite fireworks so this is a loop
+   * over losing games.
+   */
   while( 1 ) {
-    
-    /* Get the level data and call it's draw function to draw it */
-    game_state.current_level = &level_data[current_level_num];
-    print_level_from_sp1_string( game_state.current_level );
+    reset_runner( RIGHT );
+    reset_slider();
+    reset_game_bonuses( STARTING_NUM_BONUSES );
 
-    sp1_Invalidate(&full_screen);
-    sp1_UpdateNow();
+    SET_GAME_COUNTDOWN( 0 );
 
-    /* Wait in case the user is holding down the control key */
-    while( in_key_pressed( IN_KEY_SCANCODE_SPACE ) );
-    game_state.key_pressed = 0;
-    game_state.key_processed = 0;
+    current_level_num = 0;
+    while( 1 ) {
+      LEVEL_COMPLETION_TYPE completion_type;
 
-    /* Runner at start point */
-    zx_border( game_state.current_level->border_colour );
-    SET_RUNNER_FACING( game_state.current_level->start_facing );
-    SET_RUNNER_XPOS( game_state.current_level->start_x );
-    SET_RUNNER_YPOS( game_state.current_level->start_y );
-    set_runner_colour( game_state.current_level->background_att );
-    SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
+      /* Get the level data and call it's draw function to draw it */
+      game_state.current_level = &level_data[current_level_num];
+      print_level_from_sp1_string( game_state.current_level );
 
-    /* Enter game loop, exit when player completes the level */
-    gameloop( &game_state );
+      sp1_Invalidate(&full_screen);
+      sp1_UpdateNow();
 
-    /* Call the level's teardown function to reclaim resources */
-    teardown_level( game_state.current_level );
+      /* Wait in case the user is holding down the control key */
+      while( in_key_pressed( IN_KEY_SCANCODE_SPACE ) );
+      game_state.key_pressed = 0;
+      game_state.key_processed = 0;
 
-    if( ++current_level_num == NUM_LEVELS ) {
-      game_over();
-    }
+      /* Runner at start point */
+      zx_border( game_state.current_level->border_colour );
+      SET_RUNNER_FACING( game_state.current_level->start_facing );
+      SET_RUNNER_XPOS( game_state.current_level->start_x );
+      SET_RUNNER_YPOS( game_state.current_level->start_y );
+      set_runner_colour( game_state.current_level->background_att );
+      SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
 
-    /*
-     * Another crude hack caused by having level 0 as the introduction.
-     * The countdown can't start at level 0 - that's hardly fair. So
-     * it gets started here when the proper 1st level starts.
-     */
-    if( current_level_num == 1 ) {
-      SET_GAME_COUNTDOWN( /*STARTING_SCORE*/ 250 );
+      /* Enter game loop, exit when player completes the level */
+      completion_type = gameloop( &game_state );
+
+      /* Call the level's teardown function to reclaim resources */
+      teardown_level( game_state.current_level );
+
+      /* Did the level end because time was up? If so break to outer loop to reset everything */
+      if( completion_type == GAME_COMPLETE_LOSER ) {
+        loser();
+        break;
+      }
+
+      if( ++current_level_num == NUM_LEVELS ) {
+        game_over();
+      }
+
+      /*
+       * Another crude hack caused by having level 0 as the introduction.
+       * The countdown can't start at level 0 - that's hardly fair. So
+       * it gets started here when the proper 1st level starts.
+       */
+      if( current_level_num == 1 ) {
+        SET_GAME_COUNTDOWN( /*STARTING_SCORE*/ 250 );
+      }
     }
   }
 }

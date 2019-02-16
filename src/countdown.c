@@ -71,6 +71,12 @@ void create_slider( void )
   sp1_IterateSprChar(slider_sprite, initialise_colour);
 }
 
+void reset_slider( void )
+{
+  /* Primer the countdown for the into screen */
+  game_countdown = 0;
+}
+
 
 #define SLIDER_WIDTH_IN_PIXELS ((uint8_t)(10*8))
 #define STARTING_SCORE_OVER_SLIDER_WIDTH (/*STARTING_SCORE*/ 250/SLIDER_WIDTH_IN_PIXELS)

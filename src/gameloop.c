@@ -231,16 +231,16 @@ void finish_level(void)
 {
   play_beepfx_sound_immediate(BEEPFX_SELECT_6);
 
-  /* Trace point, maybe? */
+  /* TODO Trace point, maybe? */
 }
 
 void countdown_expired(void)
 {
-  /* TODO */
   /* New beep, banner, restart if possible */
+  /* TODO Choose another sound */
   play_beepfx_sound_immediate(BEEPFX_SELECT_6);
-  while(1);
-  /* Trace point, maybe? */
+
+  /* TODO Trace point, maybe? */
 }
 
 
@@ -254,7 +254,7 @@ void countdown_expired(void)
  *                                                                          | |    
  *                                                                          |_|    
  */
-void gameloop( GAME_STATE* game_state )
+LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
 {
   /*
    * Bonuses are drawn once. It's not possible for them to be
@@ -280,7 +280,7 @@ void gameloop( GAME_STATE* game_state )
        */
       if( game_state->current_level->level_num == 0 ) {
         finish_level();
-        return;
+        return LEVEL_COMPLETE;
       }
 
       game_state->key_pressed = 1;
@@ -374,11 +374,12 @@ void gameloop( GAME_STATE* game_state )
 
         case FINISH:
           finish_level();
-          return;
+          return LEVEL_COMPLETE;
 
+        case LOSE:
         case COUNTDOWN_EXPIRED:
           countdown_expired();
-          return;
+          return GAME_COMPLETE_LOSER;
 
         case SKIP_CYCLE:
           break;

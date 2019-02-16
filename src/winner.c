@@ -38,15 +38,16 @@ extern uint8_t arch_pattern_l[4][2];
 extern uint8_t arch_pattern_r[4][2];
 extern int8_t  cascade_pattern[6][2];
 
-extern uint8_t ticker_string[];
-extern uint8_t ticker_bonus_char[];
+extern uint8_t winner_string[];
+extern uint8_t winner_bonus_char[];
+extern uint8_t failure_string[];
 
 /*
  * Font is tucked away in levels_graphics.asm
  */
 extern uint8_t font[];
 
-void winner_banner(void)
+void banner( uint8_t* string )
 {
   uint8_t* buffer_address;
   uint8_t  i;
@@ -61,14 +62,12 @@ void winner_banner(void)
 
   zx_cls(PAPER_WHITE);
 
-  ticker_bonus_char[0] = query_bonuses_left() + 0x30;
-
   /*
    * Initialise the ticker and its buffer
    */
   memset( off_screen_buffer, PAPER_WHITE+INK_WHITE, sizeof(off_screen_buffer) );
 
-  current_char_ptr = ticker_string;
+  current_char_ptr = string;
   rom_address      = ((*current_char_ptr-0x20)*8)+(uint8_t*)font;
   bit              = 128;
 
@@ -130,6 +129,16 @@ void winner_banner(void)
   return;
 }
 
+void winner_banner(void)
+{
+  winner_bonus_char[0] = query_bonuses_left() + 0x30;
+  banner( winner_string );
+}
+
+void loser_banner(void)
+{
+  banner( failure_string );
+}
 
 /*
  * Infinite fireworks display to end the game. It's not exactly brilliant

@@ -33,6 +33,7 @@ typedef struct _bonus
 #define STARTING_NUM_BONUSES  5
 
 void create_game_bonuses( uint8_t num_bonuses );
+void reset_game_bonuses( uint8_t num_bonuses );
 void draw_bonuses( SCORE_SCREEN_DATA* screen_data );
 void lose_bonus( void );
 uint8_t query_bonuses_left( void );

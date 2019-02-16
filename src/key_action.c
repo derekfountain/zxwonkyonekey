@@ -400,6 +400,10 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
     *output_action = FINISH;
     return STOP_PROCESSING;
   }
+  if( in_key_pressed( IN_KEY_SCANCODE_w ) ) {
+    *output_action = LOSE;
+    return STOP_PROCESSING;
+  }
 
   /* Are we in the middle of a jump? If so, no action */
   if( RUNNER_JUMPING( GET_RUNNER_JUMP_OFFSET ) ) {

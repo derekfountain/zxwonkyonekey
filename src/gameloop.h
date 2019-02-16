@@ -30,6 +30,6 @@ void init_gameloop_trace(void);
 /*
  * This function is the main game loop. It exits when the player completes the level.
  */
-void gameloop( GAME_STATE* game_state );
+LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state );
 
 #endif

@@ -96,7 +96,8 @@ typedef struct _runner
 /*
  * Create the runner, initially facing in the direction given.
  */
-RUNNER* create_runner( DIRECTION initial_direction );
+RUNNER* create_runner( void );
+void    reset_runner( DIRECTION initial_direction );
 
 /*
  * Expose runner structure to enable getter and setter macros.

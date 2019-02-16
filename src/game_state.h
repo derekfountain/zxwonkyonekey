@@ -24,6 +24,13 @@
 
 #include "levels.h"
 
+typedef enum _level_completion_type
+{
+  LEVEL_COMPLETE,
+  GAME_COMPLETE_WINNER,
+  GAME_COMPLETE_LOSER,
+} LEVEL_COMPLETION_TYPE;
+
 /*
  * This structure defines the state of the game.
  *

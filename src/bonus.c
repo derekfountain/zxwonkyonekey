@@ -71,7 +71,10 @@ void create_game_bonuses( uint8_t num_bonuses )
     /* Colour the cells the sprite occupies */
     sp1_IterateSprChar(bonuses[i].sprite, initialise_colour);
   }
+}
 
+void reset_game_bonuses( uint8_t num_bonuses )
+{
   bonuses_left = num_bonuses;
 }
 
