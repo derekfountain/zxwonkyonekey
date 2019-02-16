@@ -28,8 +28,8 @@
  */
 typedef struct _score_screen_data
 {
-  uint8_t  level_score_x;
-  uint8_t  level_score_y;
+  uint8_t  countdown_slider_x;
+  uint8_t  countdown_slider_y;
   uint8_t  score_screen_attribute;
 
   uint8_t  bonus_sprite0_x_pixel;

@@ -58,22 +58,26 @@ static void initialise_colour(unsigned int count, struct sp1_cs *c)
   c->attr      = slider_colour;
 }
 
+/* On top, not that it matters */
 #define SLIDER_PLANE 1
 
+/* This is in the graphics ASM file */
 extern uint8_t score_slider[8];
 
 void create_slider( void )
 {
+  /*
+   * The bar of the slider is in background tiles. The marker slides along.
+   * Since it's the same colour and is designed to sit on top of the bar
+   * the slider can be ORed into the display.
+   */
   slider_sprite = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, SLIDER_PLANE);
   sp1_AddColSpr(slider_sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, SLIDER_PLANE);
-
-  /* Colour the cells the sprite occupies */
-  sp1_IterateSprChar(slider_sprite, initialise_colour);
 }
 
 void reset_slider( void )
 {
-  /* Primer the countdown for the into screen */
+  /* Prime the countdown for the intro screen */
   game_countdown = 0;
 }
 
@@ -99,7 +103,7 @@ void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
    *   9000/113 =  79 so 79 pixels from left side
    *
    *  50000/88  = 568
-   *  45000/568 =  79
+   *  45000/568 =  79 ditto
    */
 
   if( game_countdown )
@@ -108,7 +112,11 @@ void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
 
     if( slider_x_pos < 8 )
     {
-      slider_colour = INK_RED;
+      /*
+       * Time is short, change slider to red. The colour clash rather handily
+       * changes the colour of the bar in the tiles too. :)
+       */
+      slider_colour = (screen_data->score_screen_attribute & SP1_AMASK_INK) | INK_RED;
     }
     else
     {
@@ -119,7 +127,7 @@ void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
     sp1_IterateSprChar(slider_sprite, initialise_colour);
 
     sp1_MoveSprPix(slider_sprite, &full_screen, (void*)score_slider,
-                   ((screen_data->level_score_x)*8)+slider_x_pos, (screen_data->level_score_y)*8);
+                   screen_data->countdown_slider_x+slider_x_pos, screen_data->countdown_slider_y);
   }
 }
 
