@@ -619,7 +619,7 @@ LEVEL_DATA level_data[] = {
     MAX_POINTS(20000),
     { NAMED_VALUES_5("Level score X",  0,
                      "Level score Y",  0,
-                     "Scores att",    INK_MAGENTA|PAPER_BLACK,
+                     "Scores att",    INK_WHITE|PAPER_BLACK,
                      "Bonus X pixel", 0*8,
                      "Bonus Y pixel", 1*8) }
   },
@@ -675,7 +675,7 @@ LEVEL_DATA level_data[] = {
     MAX_POINTS(20000),
     { NAMED_VALUES_5("Level score X", 20,
                      "Level score Y", 21,
-                     "Scores att",    INK_CYAN|PAPER_BLACK,
+                     "Scores att",    INK_GREEN|PAPER_BLACK,
                      "Bonus X pixel", 20*8,
                      "Bonus Y pixel", 22*8) }
   },

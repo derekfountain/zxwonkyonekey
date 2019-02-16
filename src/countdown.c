@@ -54,7 +54,7 @@ static void initialise_colour(unsigned int count, struct sp1_cs *c)
 {
   (void)count;    /* Suppress compiler warning about unused parameter */
 
-  c->attr_mask = SP1_AMASK_INK;
+  c->attr_mask = 0;
   c->attr      = slider_colour;
 }
 
@@ -109,10 +109,14 @@ void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
     if( slider_x_pos < 8 )
     {
       slider_colour = INK_RED;
-
-      /* Colour the cells the sprite occupies */
-      sp1_IterateSprChar(slider_sprite, initialise_colour);
     }
+    else
+    {
+      slider_colour = screen_data->score_screen_attribute;
+    }
+
+    /* Colour the cells the sprite occupies */
+    sp1_IterateSprChar(slider_sprite, initialise_colour);
 
     sp1_MoveSprPix(slider_sprite, &full_screen, (void*)score_slider,
                    ((screen_data->level_score_x)*8)+slider_x_pos, (screen_data->level_score_y)*8);
