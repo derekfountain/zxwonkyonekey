@@ -25,6 +25,14 @@
 #include "bonus.h"
 
 /*
+ * Bonuses are linked to slowdown pills. This came about in a rather hacky
+ * way as I was putting finishing touches to the game. You start with a
+ * number of bonuses which are depleted each time to consume a slowdown
+ * pill. When all the bonuses are gone all the slowdown pills disappear
+ * and the game has to be completed at full speed.
+ */
+
+/*
  * The bonus sprites are never obscured so this isn't relevant really.
  */
 #define BONUS_PLANE    (uint8_t)(1)

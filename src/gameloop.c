@@ -340,6 +340,7 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case ACTIVATE_SLOWDOWN:
+          /* NOP */
           break;
 
         case DEACTIVATE_SLOWDOWN:

@@ -552,8 +552,11 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
     while( IS_VALID_SLOWDOWN(slowdown) )
     {
       /*
-       * If the pill has been consumed and is active, reduce the
-       * timer. If that's got to zero, reinstate the pill.
+       * If the pill has been consumed and is active, reduce the timer. If that's got
+       * to zero, reinstate the pill.
+       *
+       * This needs to happen even if the last pill has been consumed because the timeout
+       * for the active one still needs to work.
        */
       if( !IS_COLLECTABLE_AVAILABLE( slowdown->collectable ) )
       {
@@ -577,7 +580,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
       else if( !SLOWDOWNS_DISABLED )
       {
         /*
-         * Pill is available. If he's walked onto it call the hander.
+         * Pill is available and slowdowns are active. If he's walked onto it call the hander.
          */
         if( IS_COLLECTION_POINT( RUNNER_CENTRE_X(xpos),
                                  RUNNER_CENTRE_Y(ypos), slowdown->collectable ) )
