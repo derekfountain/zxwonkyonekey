@@ -57,28 +57,13 @@ extern uint16_t game_countdown;
 #define DECREMENT_GAME_COUNTDOWN      {if( game_countdown ) game_countdown--;}
 
 /*
- * Be generous! Only subract the slowdown consumption penalty if the
+ * Be generous! Only subtract the slowdown consumption penalty if the
  * current countdown is still high enough not to go to zero.
  */
 #define COUNTDOWN_APPLY_SLOWDOWN_PENALTY \
       if( game_countdown>SLOWDOWN_PENALTY ) game_countdown-=SLOWDOWN_PENALTY;\
 
 void create_slider( void );
-
-#define SLIDER_WIDTH_IN_PIXELS ((uint8_t)(11*8))
-
-/*
- * TODO I think this needs to calculate 
- *   STARTING_SCORE/SLIDER_WIDTH_IN_PIXELS = POINTS_PER_PIXEL
- *   current_score /POINTS_PER_PIXEL       = PIXELS_FROM_ZERO
- *
- * eg
- *  10000/88  = 113
- *   9000/113 =  79 so 79 pixels from zero
- *
- *  50000/88  = 568
- *  45000/568 =  79
- */
-void position_slider( uint16_t current_countdown );
+void update_countdown_slider( SCORE_SCREEN_DATA* );
 
 #endif

@@ -49,21 +49,67 @@ uint16_t game_countdown = 0;
 
 static struct sp1_ss* slider_sprite;
 
+uint8_t slider_colour = INK_BLUE;
 static void initialise_colour(unsigned int count, struct sp1_cs *c)
 {
   (void)count;    /* Suppress compiler warning about unused parameter */
 
   c->attr_mask = SP1_AMASK_INK;
-  c->attr      = INK_WHITE;
+  c->attr      = slider_colour;
 }
 
 #define SLIDER_PLANE 1
 
+extern uint8_t score_slider[8];
+
 void create_slider( void )
 {
-  slider_sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, SLIDER_PLANE);
-  sp1_AddColSpr(slider_sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, SLIDER_PLANE);
+  slider_sprite = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, SLIDER_PLANE);
+  sp1_AddColSpr(slider_sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, SLIDER_PLANE);
 
   /* Colour the cells the sprite occupies */
   sp1_IterateSprChar(slider_sprite, initialise_colour);
 }
+
+
+#define SLIDER_WIDTH_IN_PIXELS ((uint8_t)(10*8))
+#define STARTING_SCORE_OVER_SLIDER_WIDTH (/*STARTING_SCORE*/ 250/SLIDER_WIDTH_IN_PIXELS)
+
+/*
+ * This is defined in main.c. Just share it for now.
+ * TODO Put it in a main.h
+ */
+extern struct sp1_Rect full_screen;
+
+void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
+{
+  /*
+   * Calculate:
+   *   STARTING_SCORE/SLIDER_WIDTH_IN_PIXELS = POINTS_PER_PIXEL
+   *   current_score /POINTS_PER_PIXEL       = PIXELS_FROM_ZERO
+   *
+   * eg
+   *  10000/88  = 113
+   *   9000/113 =  79 so 79 pixels from left side
+   *
+   *  50000/88  = 568
+   *  45000/568 =  79
+   */
+
+  if( game_countdown )
+  {
+    uint16_t slider_x_pos = game_countdown / STARTING_SCORE_OVER_SLIDER_WIDTH;
+
+    if( slider_x_pos < 8 )
+    {
+      slider_colour = INK_RED;
+
+      /* Colour the cells the sprite occupies */
+      sp1_IterateSprChar(slider_sprite, initialise_colour);
+    }
+
+    sp1_MoveSprPix(slider_sprite, &full_screen, (void*)score_slider,
+                   ((screen_data->level_score_x)*8)+slider_x_pos, (screen_data->level_score_y)*8);
+  }
+}
+

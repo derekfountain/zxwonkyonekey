@@ -370,14 +370,14 @@ PUBLIC _bonus
 ;;
 PUBLIC _score_slider
 ._score_slider
-        defb @00111100
-        defb @01111110
-        defb @01111110
-        defb @01111110
-        defb @01111110
-        defb @01111110
-        defb @01111110
-        defb @00111100
+        defb @01111000
+        defb @10110100
+        defb @00110000
+        defb @00110000
+        defb @00110000
+        defb @00110000
+        defb @10110100
+        defb @01111000
 
         defb @00000000
         defb @00000000

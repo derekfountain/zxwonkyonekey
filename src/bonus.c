@@ -22,6 +22,7 @@
 #include <arch/zx/sp1.h>
 
 #include "slowdown_pill.h"
+#include "countdown.h"
 #include "bonus.h"
 
 /*
@@ -94,6 +95,8 @@ void lose_bonus( void )
   {
     if( --bonuses_left == 0 )
       DISABLE_SLOWDOWNS;
+
+    COUNTDOWN_APPLY_SLOWDOWN_PENALTY
 
     /*
      * I wanted the bonuses to fall off the screen, and wrote the code to do

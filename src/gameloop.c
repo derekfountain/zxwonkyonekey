@@ -239,7 +239,7 @@ void countdown_expired(void)
   /* TODO */
   /* New beep, banner, restart if possible */
   play_beepfx_sound_immediate(BEEPFX_SELECT_6);
-  //  while(1);
+  while(1);
   /* Trace point, maybe? */
 }
 
@@ -389,7 +389,7 @@ void gameloop( GAME_STATE* game_state )
     }
 
     draw_runner();
-    // show_scores( &(game_state->current_level->score_screen_data) );
+    update_countdown_slider( &(game_state->current_level->score_screen_data) );
     
     /*
      * If the level has teleporters the cells they occupy are validated so
