@@ -45,6 +45,11 @@ typedef struct _slowdown_definition
 
 } SLOWDOWN;
 
+extern uint8_t slowdowns_disabled;
+#define SLOWDOWNS_DISABLED (slowdowns_disabled)
+#define DISABLE_SLOWDOWNS  (slowdowns_disabled=1)
+#define ENABLE_SLOWDOWNS   (slowdowns_disabled=0)
+
 #define SLOWDOWN_SCREEN_LOCATION(slowdown) COLLECTABLE_SCREEN_LOCATION(slowdown->collectable)
 
 /*

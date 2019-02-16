@@ -30,7 +30,7 @@ typedef struct _bonus
   struct sp1_ss*     sprite;
 } BONUS;
 
-#define STARTING_NUM_BONUSES  5
+#define STARTING_NUM_BONUSES  1
 
 void create_game_bonuses( uint8_t num_bonuses );
 void draw_bonuses( SCORE_SCREEN_DATA* screen_data );

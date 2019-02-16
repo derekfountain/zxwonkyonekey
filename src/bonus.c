@@ -21,6 +21,7 @@
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
+#include "slowdown_pill.h"
 #include "bonus.h"
 
 /*
@@ -39,7 +40,7 @@ BONUS bonuses[STARTING_NUM_BONUSES];
 extern struct sp1_Rect full_screen;
 
 /* This is in the assembly language file */
-extern uint8_t apple[];
+extern uint8_t bonus[];
 
 static void initialise_colour(unsigned int count, struct sp1_cs *c)
 {
@@ -74,7 +75,7 @@ void draw_bonuses( SCORE_SCREEN_DATA* screen_data )
   /* Just line them up in the level-prescribed location */
   for( i=0; i<bonuses_left; i++ )
   {
-    sp1_MoveSprPix(bonuses[i].sprite, &full_screen, (void*)apple, x, y);
+    sp1_MoveSprPix(bonuses[i].sprite, &full_screen, (void*)bonus, x, y);
     x+=8;
   }
 }
@@ -83,20 +84,17 @@ void lose_bonus( void )
 {
   if( bonuses_left )
   {
-    bonuses_left--;
+    if( --bonuses_left == 0 )
+      DISABLE_SLOWDOWNS;
 
     /*
-     * TODO If that was the last bonus, remove all slowdown pills
-     */
-
-    /*
-     * I wanted the apples to fall off the screen, and wrote the code to do
+     * I wanted the bonuses to fall off the screen, and wrote the code to do
      * it, but it slowed the game to less than 50fps. That was an initial
      * requirement, so I took the animation out again. This just moves the
-     * sprite off screen. The apples can be converted to tiles if I need to
+     * sprite off screen. The bonuses can be converted to tiles if I need to
      * save a bit more space.
      */
-    sp1_MoveSprPix(bonuses[bonuses_left].sprite, &full_screen, (void*)apple, 255, 255);
+    sp1_MoveSprPix(bonuses[bonuses_left].sprite, &full_screen, (void*)bonus, 255, 255);
   }
 }
 

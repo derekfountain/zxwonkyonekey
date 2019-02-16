@@ -64,4 +64,4 @@ PUBLIC _ticker_bonus_char
         defm    "Completed with "
 ._ticker_bonus_char
         defb    0
-        defm    " bonus apples left!   Cue the fireworks!     ", 0
+        defm    " bonuses left!   Cue the fireworks!     ", 0

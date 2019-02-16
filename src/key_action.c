@@ -574,7 +574,7 @@ PROCESSING_FLAG test_for_slowdown_pill( void* data, GAME_ACTION* output_action )
         }
 
       }
-      else
+      else if( !SLOWDOWNS_DISABLED )
       {
         /*
          * Pill is available. If he's walked onto it call the hander.

@@ -19,11 +19,14 @@
 
 #include <stdint.h>
 #include <arch/zx/sp1.h>
+#include <sound.h>
 
 #include "utils.h"
 #include "int.h"
 #include "tracetable.h"
 #include "runner.h"
+#include "sound.h"
+#include "bonus.h"
 #include "slowdown_pill.h"
 
 /***
@@ -54,6 +57,7 @@ typedef struct _slowdown_trace
   SLOWDOWN_TRACETYPE tracetype;
   SLOWDOWN*          slowdown;
   uint8_t            num_active_slowdowns;
+  uint8_t            slowdowns_disabled;
 } SLOWDOWN_TRACE;
 
 /* BE:PICKUPDEF */
@@ -61,13 +65,14 @@ typedef struct _slowdown_trace
 #define SLOWDOWN_TRACETABLE_SIZE ((size_t)sizeof(SLOWDOWN_TRACE)*SLOWDOWN_TRACE_ENTRIES)
 
 /* It's quicker to do this with a macro, as long as it's only used once or twice */
-#define SLOWDOWN_TRACE_CREATE(ttype,sptr,n) {     \
+#define SLOWDOWN_TRACE_CREATE(ttype,sptr,n,d) {     \
     if( slowdown_tracetable != TRACING_INACTIVE ) { \
       SLOWDOWN_TRACE            st;   \
       st.ticker               = GET_TICKER; \
       st.tracetype            = ttype; \
       st.slowdown             = sptr; \
       st.num_active_slowdowns = n; \
+      st.slowdowns_disabled   = d; \
       slowdown_add_trace(&st); \
     } \
 }
@@ -88,6 +93,12 @@ extern uint8_t slowdown_pill_f2[];
 extern uint8_t slowdown_pill_f3[];
 
 /*
+ * Game-wide slowdown disabling. This is set when too many slowdowns have
+ * been consumed. All slowdowns disappear and become unusable.
+ */
+uint8_t slowdowns_disabled = 0;
+
+/*
  * There can be more than one slowdown pill active. i.e. he consumes
  * one pill and its timer starts, then he consumes another pill before
  * the first one has expired. Don't deactivate the slowdown until both
@@ -95,7 +106,7 @@ extern uint8_t slowdown_pill_f3[];
  * goes back to zero there are no active timers and slowdown mode should
  * be cancelled.
  */
-uint8_t active_slowdowns = 0;
+uint8_t num_active_slowdowns = 0;
 
 /*
  * This is defined in main.c. Just share it for now.
@@ -117,7 +128,7 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
   slowdown->sprite    = sp1_CreateSpr(SP1_DRAW_OR1LB, SP1_TYPE_1BYTE, 2, 0, SLOWDOWN_PILL_PLANE);
   sp1_AddColSpr(slowdown->sprite, SP1_DRAW_OR1RB, SP1_TYPE_1BYTE, 0, SLOWDOWN_PILL_PLANE);
 
-  SLOWDOWN_TRACE_CREATE(SLOWDOWN_CREATED,slowdown,active_slowdowns);
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_CREATED,slowdown,num_active_slowdowns,slowdowns_disabled);
 
   /*
    * Pill sprite is created using absolute graphic data address.
@@ -125,9 +136,14 @@ void create_slowdown_pill( SLOWDOWN* slowdown )
    * is itself a macro and putting the SLOWDOWN_SCREEN_LOCATION macro
    * in the arguments breaks the preprocessor.
    */
-  sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
-                        (void*)slowdown_pill_f1,
-                        SLOWDOWN_SCREEN_LOCATION(slowdown));
+  if( slowdowns_disabled )
+    sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
+                          (void*)slowdown_pill_f1,
+                          255,255);
+  else
+    sp1_MoveSprPix_callee(slowdown->sprite, &full_screen,
+                          (void*)slowdown_pill_f1,
+                          SLOWDOWN_SCREEN_LOCATION(slowdown));
 
   COLLECTABLE_TRACE_CREATE( COLLECTABLE_CREATED, &(slowdown->collectable), 0, 0 );
 }
@@ -145,14 +161,14 @@ void destroy_slowdown_pill( SLOWDOWN* slowdown )
   /* If the timer is active, cancel it */
   if( !COLLECTABLE_TIMER_EXPIRED( slowdown->collectable ) ) {
     CANCEL_COLLECTABLE_TIMER( slowdown->collectable );
-    active_slowdowns--;
+    num_active_slowdowns--;
   }
 
   /* Move sprite offscreen before calling delete function */
   sp1_MoveSprPix(slowdown->sprite, &full_screen, (void*)0, 255, 255);
   sp1_DeleteSpr(slowdown->sprite);
 
-  SLOWDOWN_TRACE_CREATE(SLOWDOWN_DESTROYED,slowdown,active_slowdowns);
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_DESTROYED,slowdown,num_active_slowdowns,slowdowns_disabled);
 }
 
 /*
@@ -179,7 +195,7 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
    */
   uint8_t* next_frame;
 
-  if( !IS_COLLECTABLE_AVAILABLE( slowdown->collectable ) )
+  if( (!IS_COLLECTABLE_AVAILABLE( slowdown->collectable )) || slowdowns_disabled )
   {
     /* Move it off screen so it disappears */
     next_frame = (uint8_t*)slowdown_pill_f1;
@@ -231,7 +247,7 @@ void animate_slowdown_pill( SLOWDOWN* slowdown )
                           next_frame,
                           SLOWDOWN_SCREEN_LOCATION(slowdown));
 
-    SLOWDOWN_TRACE_CREATE(SLOWDOWN_ANIMATED,slowdown,active_slowdowns);
+    SLOWDOWN_TRACE_CREATE(SLOWDOWN_ANIMATED,slowdown,num_active_slowdowns,slowdowns_disabled);
 
     COLLECTABLE_TRACE_CREATE( COLLECTABLE_ANIMATE, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
   }
@@ -262,11 +278,15 @@ void slowdown_collected(COLLECTABLE* collectable, void* data)
    */
   animate_slowdown_pill( slowdown );
 
-  active_slowdowns++;
+  num_active_slowdowns++;
   START_COLLECTABLE_TIMER(slowdown->collectable,slowdown->duration_secs);
 
+  lose_bonus();
+  queue_beepfx_sound(BEEPFX_JUMP_2);
+  SET_RUNNER_SLOWDOWN( SLOWDOWN_ACTIVE );
+
   COLLECTABLE_TRACE_CREATE( COLLECTABLE_COLLECTED, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
-  SLOWDOWN_TRACE_CREATE(SLOWDOWN_COLLECTED,slowdown,active_slowdowns);
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_COLLECTED,slowdown,num_active_slowdowns,slowdowns_disabled);
 
   return;
 }
@@ -287,15 +307,18 @@ uint8_t slowdown_timeup(COLLECTABLE* collectable, void* data)
    */
   animate_slowdown_pill( slowdown );
 
+  SET_RUNNER_SLOWDOWN( SLOWDOWN_INACTIVE );
+
   COLLECTABLE_TRACE_CREATE( COLLECTABLE_TIMEOUT, &(slowdown->collectable), GET_RUNNER_XPOS, GET_RUNNER_YPOS );
-  SLOWDOWN_TRACE_CREATE(SLOWDOWN_TIMEOUT,slowdown,active_slowdowns);
+  SLOWDOWN_TRACE_CREATE(SLOWDOWN_TIMEOUT,slowdown,num_active_slowdowns,slowdowns_disabled);
 
   /*
    * If this was the last active slowdown, return true in order to
    * deactivate slowdown mode. Otherwise there's still at least one
    * more active slowdown, so return false to stay in slowdown mode.
    */
-  --active_slowdowns;
+  --num_active_slowdowns;
 
-  return ( active_slowdowns == 0 );
+  return ( num_active_slowdowns == 0 );
 }
+

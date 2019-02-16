@@ -257,11 +257,10 @@ void countdown_expired(void)
 void gameloop( GAME_STATE* game_state )
 {
   /*
-   * Bonus apples are drawn once. It's not possible for them to be
+   * Bonuses are drawn once. It's not possible for them to be
    * obscured so this can happen once outside the main loop.
    */
   draw_bonuses( &(game_state->current_level->score_screen_data) );
-
 
   while(1) {
     uint8_t     i;
@@ -341,9 +340,6 @@ void gameloop( GAME_STATE* game_state )
           break;
 
         case ACTIVATE_SLOWDOWN:
-          queue_beepfx_sound(BEEPFX_JUMP_2);
-          lose_bonus();
-          SET_RUNNER_SLOWDOWN( SLOWDOWN_ACTIVE );
           break;
 
         case DEACTIVATE_SLOWDOWN:
