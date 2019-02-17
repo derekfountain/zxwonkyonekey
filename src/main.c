@@ -154,7 +154,7 @@ int main()
        * it gets started here when the proper 1st level starts.
        */
       if( current_level_num == 1 ) {
-        SET_GAME_COUNTDOWN( /*STARTING_SCORE*/ 250 );
+        SET_GAME_COUNTDOWN( COUNTDOWN_START_SECS );
       }
     }
   }

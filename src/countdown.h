@@ -39,16 +39,33 @@ typedef struct _score_screen_data
 
 /*
  * Number of seconds the player starts with to complete the game.
- * Arrived at emprirically, which is always a dubious thing to do,
- * given I've spent hours play testing it. :) TODO
+ * Arrived at empirically, which is always a dubious thing to do,
+ * given I've spent hours play testing it. :)
+ *
+ * With the emulator at 33% (which makes it much easier):
+ *
+ * Level 0 took 1:20
+ * Level 1 took 1:25
+ * Level 2 took 2:15
+ * Level 3 took 1:35
+ * Level 4 took 1:25
+ *
+ * That's 8 minutes, or 480 seconds. At full speed, 160 seconds.
+ * 5 bonuses taken at 20 seconds penalty each, that's another
+ * 100 seconds, so a perfect game, at full speed, with all bonuses
+ * used, is going to require a starting point of 260 seconds.
+ * That's going to be close to impossible, so add a completely
+ * arbitrary 50%, gives 400 seconds. That's 6 minutes, 40 seconds,
+ * or 5 minutes if the player doesn't take the bonuses.
+ *
+ * Reasonable? Heck knows... :)
  */
-#define COUNTDOWN_START_SECS     ((uint16_t)10000)
+#define COUNTDOWN_START_SECS     ((uint16_t)400)
 
 /*
- * Countdown secs when a slowdown pill is consumed.
+ * Countdown secs lost when a slowdown pill is consumed.
  */
-/* TODO Calculate this, somehow */
-#define SLOWDOWN_PENALTY   ((uint16_t)500)
+#define SLOWDOWN_PENALTY   ((uint16_t)20)
 
 /*
  * Interface via macros for speed

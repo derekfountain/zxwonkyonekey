@@ -55,35 +55,35 @@ static void initialise_colour(unsigned int count, struct sp1_cs *c)
   c->attr      = INK_RED;
 }
 
+static uint8_t bonus_i;
+
 void create_game_bonuses( uint8_t num_bonuses )
 {
-  uint8_t i;
-
-  for( i=0; i<num_bonuses; i++ )
+  for( bonus_i=0; bonus_i<num_bonuses; bonus_i++ )
   {
-    bonuses[i].sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, BONUS_PLANE);
-    sp1_AddColSpr(bonuses[i].sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, BONUS_PLANE);
+    bonuses[bonus_i].sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, BONUS_PLANE);
+    sp1_AddColSpr(bonuses[bonus_i].sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, BONUS_PLANE);
 
     /* Colour the cells the sprite occupies */
-    sp1_IterateSprChar(bonuses[i].sprite, initialise_colour);
+    sp1_IterateSprChar(bonuses[bonus_i].sprite, initialise_colour);
   }
 }
 
 void reset_game_bonuses( uint8_t num_bonuses )
 {
   bonuses_left = num_bonuses;
+  ENABLE_SLOWDOWNS;
 }
 
 void draw_bonuses( SCORE_SCREEN_DATA* screen_data )
 {
   uint8_t x = screen_data->bonus_sprite0_x_pixel;
   uint8_t y = screen_data->bonus_sprite0_y_pixel;
-  uint8_t i;
 
   /* Just line them up in the level-prescribed location */
-  for( i=0; i<bonuses_left; i++ )
+  for( bonus_i=0; bonus_i<bonuses_left; bonus_i++ )
   {
-    sp1_MoveSprPix(bonuses[i].sprite, &full_screen, (void*)bonus, x, y);
+    sp1_MoveSprPix(bonuses[bonus_i].sprite, &full_screen, (void*)bonus, x, y);
     x+=8;
   }
 }

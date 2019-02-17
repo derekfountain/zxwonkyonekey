@@ -84,14 +84,14 @@ void reset_slider( void )
 
 
 #define SLIDER_WIDTH_IN_PIXELS ((uint8_t)(10*8))
-#define STARTING_SCORE_OVER_SLIDER_WIDTH (/*STARTING_SCORE*/ 250/SLIDER_WIDTH_IN_PIXELS)
+#define STARTING_SCORE_OVER_SLIDER_WIDTH (COUNTDOWN_START_SECS/SLIDER_WIDTH_IN_PIXELS)
 
 void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
 {
   /*
    * Calculate:
-   *   STARTING_SCORE/SLIDER_WIDTH_IN_PIXELS = POINTS_PER_PIXEL
-   *   current_score /POINTS_PER_PIXEL       = PIXELS_FROM_ZERO
+   *   COUNTDOWN_START_SECS/SLIDER_WIDTH_IN_PIXELS = POINTS_PER_PIXEL
+   *   current_score/POINTS_PER_PIXEL              = PIXELS_FROM_ZERO
    *
    * eg
    *  10000/88  = 113
