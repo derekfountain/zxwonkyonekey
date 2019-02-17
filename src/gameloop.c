@@ -62,7 +62,7 @@ typedef enum _gameloop_tracetype
   KEY_STATE,
   ACTION,
   BEEP,
-  INT_100MS,
+  INT_1000MS,
   INT_500MS,
   EXIT,
 } GAMELOOP_TRACETYPE;
@@ -110,15 +110,16 @@ void init_gameloop_trace(void)
 }
 
 
-PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action )
+PROCESSING_FLAG service_interrupt_1000ms( void* data, GAME_ACTION* output_action )
 {
   *output_action = NO_ACTION;
 
-  if( interrupt_service_required_100ms )
+  /* 1Hz ticker, just fiddles the countdown */
+  if( interrupt_service_required_1000ms )
   {
     GAME_STATE* game_state = (GAME_STATE*)data;
 
-    GAMELOOP_TRACE_CREATE(INT_100MS,
+    GAMELOOP_TRACE_CREATE(INT_1000MS,
                           game_state->key_pressed,
                           game_state->key_processed,
                           GET_RUNNER_XPOS,
@@ -127,7 +128,7 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
                           0, 0);
 
     /*
-     * Countdown does start running until intro level is over,
+     * Countdown doesn't start running until intro level is over,
      * so if it hasn't started, don't touch it.
      */
     if( GET_GAME_COUNTDOWN != 0 )
@@ -144,7 +145,7 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
      * This flag is 8 bit and the compiler doesn't promote it, so it doesn't
      * need atomic protection.
      */
-    interrupt_service_required_100ms = 0;
+    interrupt_service_required_1000ms = 0;
   }
 
   return KEEP_PROCESSING;
@@ -152,6 +153,7 @@ PROCESSING_FLAG service_interrupt_100ms( void* data, GAME_ACTION* output_action 
 
 PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action )
 {
+  /* 2Hz ticker, animates the slowdown pills */
   if( interrupt_service_required_500ms )
   {
     GAME_STATE* game_state = (GAME_STATE*)data;
@@ -211,7 +213,7 @@ LOOP_ACTION game_actions[] =
     {play_bg_music_note,         NORMAL_WHEN_SLOWDOWN    },
     {play_beepfx_sound,          NORMAL_WHEN_SLOWDOWN    },
     {animate_doors,              NORMAL_WHEN_SLOWDOWN    },
-    {service_interrupt_100ms,    NORMAL_WHEN_SLOWDOWN    },
+    {service_interrupt_1000ms,   NORMAL_WHEN_SLOWDOWN    },
     {service_interrupt_500ms,    NORMAL_WHEN_SLOWDOWN    },
     {test_for_finish,            NORMAL_WHEN_SLOWDOWN    },
     {test_for_teleporter,        NORMAL_WHEN_SLOWDOWN    },
@@ -309,6 +311,7 @@ LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
       }
       else
       {
+        /* Otherwise, run the function from the game actions list */
         flag = (game_actions[action_iter].test_action)(game_state, &required_action);
       }
 
