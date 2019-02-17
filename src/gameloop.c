@@ -230,17 +230,11 @@ LOOP_ACTION game_actions[] =
 void finish_level(void)
 {
   play_beepfx_sound_immediate(BEEPFX_SELECT_6);
-
-  /* TODO Trace point, maybe? */
 }
 
 void countdown_expired(void)
 {
-  /* New beep, banner, restart if possible */
-  /* TODO Choose another sound */
-  play_beepfx_sound_immediate(BEEPFX_SELECT_6);
-
-  /* TODO Trace point, maybe? */
+  play_beepfx_sound_immediate(BEEPFX_POWER_OFF);
 }
 
 
@@ -254,6 +248,7 @@ void countdown_expired(void)
  *                                                                          | |    
  *                                                                          |_|    
  */
+static uint8_t action_iter;
 LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
 {
   /*
@@ -263,7 +258,6 @@ LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
   draw_bonuses( &(game_state->current_level->score_screen_data) );
 
   while(1) {
-    uint8_t     i;
 
     /* Check for user input, every cycle */
     if( in_key_pressed( IN_KEY_SCANCODE_SPACE ) ) {
@@ -300,11 +294,11 @@ LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
       toggle_sound_effects();
     }
 
-    for( i=0; i < NUM_GAME_ACTIONS; i++ ) {
+    for( action_iter=0; action_iter < NUM_GAME_ACTIONS; action_iter++ ) {
       PROCESSING_FLAG flag;
       GAME_ACTION     required_action;
 
-      if( (GET_RUNNER_SLOWDOWN == SLOWDOWN_ACTIVE) && (game_actions[i].slowdown_flag == SLOW_WHEN_SLOWDOWN) && (GET_TICKER & 1) )
+      if( (GET_RUNNER_SLOWDOWN == SLOWDOWN_ACTIVE) && (game_actions[action_iter].slowdown_flag == SLOW_WHEN_SLOWDOWN) && (GET_TICKER & 1) )
       {
         /*
          * Runner has eaten a slowdown pill, the action function needs to respect the slowdown,
@@ -315,7 +309,7 @@ LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
       }
       else
       {
-        flag = (game_actions[i].test_action)(game_state, &required_action);
+        flag = (game_actions[action_iter].test_action)(game_state, &required_action);
       }
 
       if( required_action != NO_ACTION ) {
