@@ -33,6 +33,7 @@
 
 #include "countdown.h"
 #include "utils.h"
+#include "graphics.h"
 
 uint16_t game_countdown = 0;
 
@@ -84,12 +85,6 @@ void reset_slider( void )
 
 #define SLIDER_WIDTH_IN_PIXELS ((uint8_t)(10*8))
 #define STARTING_SCORE_OVER_SLIDER_WIDTH (/*STARTING_SCORE*/ 250/SLIDER_WIDTH_IN_PIXELS)
-
-/*
- * This is defined in main.c. Just share it for now.
- * TODO Put it in a main.h
- */
-extern struct sp1_Rect full_screen;
 
 void update_countdown_slider( SCORE_SCREEN_DATA* screen_data )
 {

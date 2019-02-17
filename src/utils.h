@@ -43,7 +43,7 @@
 #define ATTR_MASK_PAPER ((uint8_t)0x38)
 
 /*
- * Macros to allow named contants. Just throw away every other value.
+ * Macros to allow named constants. Just throw away every other value.
  */
 #define NAMED_VALUES_1(name1,val1)                                               val1
 #define NAMED_VALUES_2(name1,val1,name2,val2)                                    val1,val2

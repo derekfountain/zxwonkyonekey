@@ -37,7 +37,11 @@
 #include "bonus.h"
 #include "countdown.h"
 
+/* Hopefully the optimiser won't remove this. :) */
+unsigned char* version = "0.99";
+
 struct sp1_Rect full_screen = {0, 0, 32, 24};
+
 
 GAME_STATE game_state;
 

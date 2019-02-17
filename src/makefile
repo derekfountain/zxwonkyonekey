@@ -72,7 +72,6 @@ OBJECTS = gameloop.o \
           levels_graphics.o \
           levels_maps.o \
           countdown.o \
-          small_utoa.o \
           initialisation.o \
           sound.o \
           background_music.o \
@@ -121,7 +120,8 @@ HEADERS = action.h \
           tracetable.h \
           utils.h \
           winner.h \
-          bonus.h
+          bonus.h \
+          graphics.h
 
 
 # Run the preprocessor on *.c files to get *.cpre files

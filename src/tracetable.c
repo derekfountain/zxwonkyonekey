@@ -22,15 +22,11 @@
 #include <z80.h>
 #include <string.h>
 
-#include "tracetable.h"
-
 /*
- * TODO
- * Still not quite sure how this is going to hang together.
- * I can't return "inactive" if there are several tables active
- * but no room for one more. I need an index of where they all
- * are so I can find them in the memory map. Etc.
+ * See comments in header file describing what this lot is all about. :)
  */
+
+#include "tracetable.h"
 
 static uint8_t* tracetable_head = TRACE_MEMORY_START;
 

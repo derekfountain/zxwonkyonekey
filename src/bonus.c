@@ -24,11 +24,12 @@
 #include "slowdown_pill.h"
 #include "countdown.h"
 #include "bonus.h"
+#include "graphics.h"
 
 /*
  * Bonuses are linked to slowdown pills. This came about in a rather hacky
  * way as I was putting finishing touches to the game. You start with a
- * number of bonuses which are depleted each time to consume a slowdown
+ * number of bonuses which are depleted each time you consume a slowdown
  * pill. When all the bonuses are gone all the slowdown pills disappear
  * and the game has to be completed at full speed.
  */
@@ -42,11 +43,6 @@
 uint8_t bonuses_left;
 
 BONUS bonuses[STARTING_NUM_BONUSES];
-
-/*
- * This is defined in main.c. Just share it for now.
- */
-extern struct sp1_Rect full_screen;
 
 /* This is in the assembly language file */
 extern uint8_t bonus[];

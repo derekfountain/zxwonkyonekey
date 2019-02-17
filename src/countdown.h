@@ -38,12 +38,14 @@ typedef struct _score_screen_data
 } SCORE_SCREEN_DATA;
 
 /*
- * TODO How do I calculate this?
+ * Number of seconds the player starts with to complete the game.
+ * Arrived at emprirically, which is always a dubious thing to do,
+ * given I've spent hours play testing it. :) TODO
  */
-#define STARTING_SCORE     ((uint16_t)10000)
+#define COUNTDOWN_START_SECS     ((uint16_t)10000)
 
 /*
- * Countdown amount lost when a slowdown pill is consumed.
+ * Countdown secs when a slowdown pill is consumed.
  */
 /* TODO Calculate this, somehow */
 #define SLOWDOWN_PENALTY   ((uint16_t)500)

@@ -27,6 +27,7 @@
 #include "teleporter.h"
 #include "door.h"
 #include "levels.h"
+#include "graphics.h"
 
 /*
  * These are the UDGs, defined in assembler because
@@ -682,11 +683,6 @@ LEVEL_DATA level_data[] = {
 
 };
 
-
-/*
- * This is defined in main.c. Just share it for now.
- */
-extern struct sp1_Rect full_screen;
 
 /*
  * Font is tucked away in levels_graphics.asm

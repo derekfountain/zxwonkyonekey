@@ -15,6 +15,10 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+
+;; THIS IS NO LONGER USED IN THE CODE. MIGHT BE HANDY FOR DEBUGGING THOUGH.
+
+
 ;; This exposes the Z88DK internal unsigned int to ascii routine, which is
 ;; more efficient than the one supplied in the libraries. It prints the
 ;; value as a 5 char string, the scf meaning "with leading zeroes".

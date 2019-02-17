@@ -26,6 +26,7 @@
 #include "int.h"
 #include "tracetable.h"
 #include "game_state.h"
+#include "graphics.h"
 
 /***
  *      _______             _             
@@ -83,11 +84,6 @@ void init_door_trace(void)
 
 /* This is in the assembly language file */
 extern uint8_t door_f1[];
-
-/*
- * This is defined in main.c. Just share it for now.
- */
-extern struct sp1_Rect full_screen;
 
 /*
  * This is in the levels code. It can only be used after the levels code

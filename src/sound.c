@@ -74,12 +74,14 @@ static uint8_t music_notes[] = {
 };
 #define MUSIC_NUM_NOTES (sizeof(music_notes)/sizeof(music_notes[0]))
 
-static uint8_t  music_on    = 0;
-static uint8_t  slow_note   = 0;
-static uint8_t  effects_on  = 1;
+#define START_WITH_MUSIC 0
+#define START_WITH_SOUND 1
+static uint8_t  music_on    = START_WITH_MUSIC;
+static uint8_t  effects_on  = START_WITH_SOUND;
 
-/* Keep a track of which note is playing */
+/* Keep a track of which note is playing and whether we're playing slowly */
 static uint16_t music_current_note_index = 0;
+static uint8_t  slow_note                = 0;
 
 /* This is the low level speaker waggler, in ASM */
 extern void play_note_raw( uint8_t* pitch );

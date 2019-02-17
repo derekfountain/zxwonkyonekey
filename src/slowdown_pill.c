@@ -28,6 +28,7 @@
 #include "sound.h"
 #include "bonus.h"
 #include "slowdown_pill.h"
+#include "graphics.h"
 
 /***
  *      _______             _
@@ -107,11 +108,6 @@ uint8_t slowdowns_disabled = 0;
  * be cancelled.
  */
 uint8_t num_active_slowdowns = 0;
-
-/*
- * This is defined in main.c. Just share it for now.
- */
-extern struct sp1_Rect full_screen;
 
 /*
  * The pill sits closer to the viewer and is OR'ed into the display.

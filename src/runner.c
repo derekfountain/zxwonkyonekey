@@ -99,15 +99,15 @@ void init_runner_trace(void)
 void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t yd, uint8_t sd )
 {
   if( runner_tracetable != TRACING_INACTIVE ) {
-    RUNNER_TRACE  rt;		  
-    rt.ticker          = GET_TICKER;			
+    RUNNER_TRACE  rt;             
+    rt.ticker          = GET_TICKER;                    
     rt.tracetype       = ttype; 
-    rt.xpos            = x;	 
-    rt.ypos            = y;	  
-    rt.slowdown_active = sd;	  
-    rt.ydelta          = yd;	     
-    runner_add_trace(&rt);			
-  }						
+    rt.xpos            = x;      
+    rt.ypos            = y;       
+    rt.slowdown_active = sd;      
+    rt.ydelta          = yd;         
+    runner_add_trace(&rt);                      
+  }                                             
 }
 
 /*
@@ -132,10 +132,10 @@ const struct sp1_Rect runner_screen = {0, 0, 32, 24};
  * arc. Arrived at emprically.
  */
 const int8_t jump_y_offsets[40] =  { 2,  2,  2,  2,    2,  1,  1,  1,
-			             1,  1,  1,  1,    1,  1,  1,  0,
+                                     1,  1,  1,  1,    1,  1,  1,  0,
                                      0,  0,  0,  0,    0,  0,  0,  0,
-		                     0, -1, -1, -1,   -1, -1, -1, -1,
-			            -1, -1, -1, -2,   -2, -2, -2, -2 };
+                                     0, -1, -1, -1,   -1, -1, -1, -1,
+                                    -1, -1, -1, -2,   -2, -2, -2, -2 };
 
 /*
  * Size in bytes of one frame of the runner sprite graphic. It's currently
@@ -227,25 +227,25 @@ JUMP_STATUS get_runner_jump_status( void )
     int8_t y_delta = jump_y_offsets[runner.jump_offset];
     if( y_delta < 0 ) {
       if( runner.facing == RIGHT ) {
-	return RIGHT_FALLING;
+        return RIGHT_FALLING;
       }
       else {
-	return LEFT_FALLING;
+        return LEFT_FALLING;
       }
     }
     else if( y_delta == 0 ) {
       if( runner.facing == RIGHT ) {
-	return RIGHT_FLAT;
+        return RIGHT_FLAT;
       }
       else {
-	return LEFT_FLAT;
+        return LEFT_FLAT;
       }
     } else {
       if( runner.facing == RIGHT ) {
-	return RIGHT_RISING;
+        return RIGHT_RISING;
       }
       else {
-	return LEFT_RISING;
+        return LEFT_RISING;
       }
     }
   }
@@ -280,10 +280,10 @@ PROCESSING_FLAG adjust_for_jump(void* data, GAME_ACTION* output_action)
        */
       if( y_delta < 0 ) {
 
-	RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta, runner.slowdown);
+        RUNNER_TRACE_CREATE(JUMPING_DOWNWARDS, runner.xpos, runner.ypos, y_delta, runner.slowdown);
       }
       else {
-	RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta, runner.slowdown);
+        RUNNER_TRACE_CREATE(JUMPING_UPWARDS, runner.xpos, runner.ypos, y_delta, runner.slowdown);
       }
     }
 
