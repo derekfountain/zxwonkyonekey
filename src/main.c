@@ -38,7 +38,7 @@
 #include "countdown.h"
 
 /* Hopefully the optimiser won't remove this. :) */
-unsigned char* version = "0.99";
+unsigned char* version = "ver0.99";
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
