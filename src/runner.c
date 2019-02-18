@@ -28,6 +28,7 @@
 #include "int.h"
 #include "utils.h"
 #include "collision.h"
+#include "graphics.h"
 
 extern uint8_t runner_right_f1[];
 extern uint8_t runner_right_f2[];
@@ -109,12 +110,6 @@ void RUNNER_TRACE_CREATE( RUNNER_TRACETYPE ttype, uint8_t x, uint8_t y, int8_t y
     runner_add_trace(&rt);                      
   }                                             
 }
-
-/*
- * Runner has access to full screen.
- */
-const struct sp1_Rect runner_screen = {0, 0, 32, 24};
-
 
 /***
  *           _                        __     __   ____   __  __          _       
@@ -322,7 +317,7 @@ void draw_runner(void)
     runner_data = runner_left_f1+offset_to_frame;
   }
 
-  sp1_MoveSprPix(runner.sprite, &runner_screen, runner_data, runner.xpos, runner.ypos);
+  sp1_MoveSprPix(runner.sprite, &full_screen, runner_data, runner.xpos, runner.ypos);
 }
 
 
