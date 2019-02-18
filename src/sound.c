@@ -74,7 +74,7 @@ static uint8_t music_notes[] = {
 };
 #define MUSIC_NUM_NOTES (sizeof(music_notes)/sizeof(music_notes[0]))
 
-#define START_WITH_MUSIC 0
+#define START_WITH_MUSIC 1
 #define START_WITH_SOUND 1
 static uint8_t  music_on    = START_WITH_MUSIC;
 static uint8_t  effects_on  = START_WITH_SOUND;
