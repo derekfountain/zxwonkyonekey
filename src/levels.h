@@ -71,7 +71,6 @@ typedef struct _level_data
   SLOWDOWN*              slowdowns;
   DOOR*       doors;
 
-  uint16_t               max_score;
   SCORE_SCREEN_DATA      score_screen_data;
 } LEVEL_DATA;
 
