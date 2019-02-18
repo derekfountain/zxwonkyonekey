@@ -44,14 +44,11 @@ PUBLIC _play_note_raw
 EXTERN _GLOBAL_ZX_PORT_FE
 
 _play_note_raw:
-    pop     af
-    pop     hl
-    pop     de
-    pop     bc
 
+    ;; This is z88dk_fastcall format, so the pitch value ptr arrives in HL.
+    ;; Save the registers I use
     push    bc
     push    de
-    push    hl
     push    af
 
 	ld      a,(_GLOBAL_ZX_PORT_FE)     ;Pick up current port 0xfe value from z88dk global
@@ -74,4 +71,8 @@ pitch_loop_not_done:                   ;Countdown B from 256 (i.e. 0) to 0
 
 	ld      (_GLOBAL_ZX_PORT_FE),a     ;Update z88dk's understanding of port 0xfe status
 
+    ;; Restore registers
+    pop     af
+    pop     de
+    pop     bc
 	ret

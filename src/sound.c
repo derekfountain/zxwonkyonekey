@@ -84,7 +84,7 @@ static uint16_t music_current_note_index = 0;
 static uint8_t  slow_note                = 0;
 
 /* This is the low level speaker waggler, in ASM */
-extern void play_note_raw( uint8_t* pitch );
+void play_note_raw( uint8_t* pitch ) __z88dk_fastcall;
 
 void toggle_music( void )
 {
