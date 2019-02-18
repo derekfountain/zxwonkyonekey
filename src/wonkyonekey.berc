@@ -45,6 +45,8 @@ def COLLECTABLE_TRACE_TABLE struct
 
 def main struct
 {
+  at _version buf 8 asc "version"
+
   at 0 NullDef suppress ""
   at 0 NullDef suppress "*******************"
   at 0 NullDef suppress "** Trace tables: **"

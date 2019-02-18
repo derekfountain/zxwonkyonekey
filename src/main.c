@@ -37,8 +37,8 @@
 #include "bonus.h"
 #include "countdown.h"
 
-/* Hopefully the optimiser won't remove this. :) */
-unsigned char* version = "ver0.99";
+/* Hopefully the optimiser won't remove this. :) Keep it 8 bytes, BE expects that */
+unsigned char version[8] = "ver0.99";
 
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
