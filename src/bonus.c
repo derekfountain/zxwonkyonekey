@@ -55,10 +55,11 @@ static void initialise_colour(unsigned int count, struct sp1_cs *c)
   c->attr      = INK_RED;
 }
 
-static uint8_t bonus_i;
 
 void create_game_bonuses( uint8_t num_bonuses )
 {
+  uint8_t bonus_i;
+
   for( bonus_i=0; bonus_i<num_bonuses; bonus_i++ )
   {
     bonuses[bonus_i].sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, BONUS_PLANE);
@@ -77,6 +78,8 @@ void reset_game_bonuses( uint8_t num_bonuses )
 
 void draw_bonuses( SCORE_SCREEN_DATA* screen_data )
 {
+  uint8_t bonus_i;
+
   uint8_t x = screen_data->bonus_sprite0_x_pixel;
   uint8_t y = screen_data->bonus_sprite0_y_pixel;
 
