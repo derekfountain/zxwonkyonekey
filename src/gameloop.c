@@ -208,7 +208,7 @@ PROCESSING_FLAG service_interrupt_500ms( void* data, GAME_ACTION* output_action 
  */
 
 
-LOOP_ACTION game_actions[] =
+LOOP_ACTION game_actions[15] =
   {
     {play_bg_music_note,         NORMAL_WHEN_SLOWDOWN    },
     {play_beepfx_sound,          NORMAL_WHEN_SLOWDOWN    },
@@ -250,9 +250,10 @@ void countdown_expired(void)
  *                                                                          | |    
  *                                                                          |_|    
  */
-static uint8_t action_iter;
 LEVEL_COMPLETION_TYPE gameloop( GAME_STATE* game_state )
 {
+  uint8_t action_iter;
+
   /*
    * Bonuses are drawn once. It's not possible for them to be
    * obscured so this can happen once outside the main loop.
