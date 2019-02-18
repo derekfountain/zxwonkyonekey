@@ -101,10 +101,10 @@ void toggle_music( void )
  * sound effects. There are 2 other cycles where the spare time is currently
  * not used.
  */
-#define BACKGROUND_MUSIC_CYCLE 0x000
-#define UNUSED_CYCLE_1         0x001
-#define SOUND_EFFECT_CYCLE     0x002
-#define UNUSED_CYCLE_2         0x003
+#define UNUSED_CYCLE_1         0x000
+#define BACKGROUND_MUSIC_CYCLE 0x001
+#define UNUSED_CYCLE_2         0x002
+#define SOUND_EFFECT_CYCLE     0x003
 
 PROCESSING_FLAG play_bg_music_note( void* data, GAME_ACTION* output_action )
 {
