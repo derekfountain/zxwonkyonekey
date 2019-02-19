@@ -82,8 +82,7 @@ TRACE_FN( slowdown, SLOWDOWN_TRACE, SLOWDOWN_TRACETABLE_SIZE )
 
 void init_slowdown_trace(void)
 {
-  if( slowdown_tracetable == TRACING_UNINITIALISED )
-    slowdown_tracetable = slowdown_next_trace = allocate_tracememory(SLOWDOWN_TRACETABLE_SIZE);
+  slowdown_tracetable = slowdown_next_trace = allocate_tracememory(SLOWDOWN_TRACETABLE_SIZE);
 }
 
 

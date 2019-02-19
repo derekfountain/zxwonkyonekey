@@ -88,8 +88,7 @@ TRACE_FN( runner, RUNNER_TRACE, RUNNER_TRACETABLE_SIZE )
 
 void init_runner_trace(void)
 {
-  if( runner_tracetable == TRACING_UNINITIALISED )
-    runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
+  runner_tracetable = runner_next_trace = allocate_tracememory(RUNNER_TRACETABLE_SIZE);
 }
 
 /*

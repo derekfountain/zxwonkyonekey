@@ -81,8 +81,7 @@ TRACE_FN( collision, COLLISION_TRACE, COLLISION_TRACETABLE_SIZE )
 
 void init_collision_trace(void)
 {
-  if( collision_tracetable == TRACING_UNINITIALISED )
-    collision_tracetable = collision_next_trace = allocate_tracememory(COLLISION_TRACETABLE_SIZE);
+  collision_tracetable = collision_next_trace = allocate_tracememory(COLLISION_TRACETABLE_SIZE);
 }
 
 

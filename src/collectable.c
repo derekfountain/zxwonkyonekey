@@ -60,6 +60,5 @@ void COLLECTABLE_TRACE_CREATE(COLLECTABLE_TRACETYPE ttype, COLLECTABLE* cptr, ui
 
 void init_collectable_trace(void)
 {
-  if( collectable_tracetable == TRACING_UNINITIALISED )
-    collectable_tracetable = collectable_next_trace = allocate_tracememory(COLLECTABLE_TRACETABLE_SIZE);
+  collectable_tracetable = collectable_next_trace = allocate_tracememory(COLLECTABLE_TRACETABLE_SIZE);
 }

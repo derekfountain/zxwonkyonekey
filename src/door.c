@@ -77,8 +77,7 @@ TRACE_FN( door, DOOR_TRACE, DOOR_TRACETABLE_SIZE )
 
 void init_door_trace(void)
 {
-  if( door_tracetable == TRACING_UNINITIALISED )
-    door_tracetable = door_next_trace = allocate_tracememory(DOOR_TRACETABLE_SIZE);
+  door_tracetable = door_next_trace = allocate_tracememory(DOOR_TRACETABLE_SIZE);
 }
 
 

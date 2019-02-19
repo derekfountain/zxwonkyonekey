@@ -107,8 +107,7 @@ void KEY_ACTION_TRACE_CREATE( KEY_ACTION_TRACETYPE ttype, uint16_t d )
 
 void init_key_action_trace(void)
 {
-  if( key_action_tracetable == TRACING_UNINITIALISED )
-    key_action_tracetable = key_action_next_trace = allocate_tracememory(KEY_ACTION_TRACETABLE_SIZE);
+  key_action_tracetable = key_action_next_trace = allocate_tracememory(KEY_ACTION_TRACETABLE_SIZE);
 }
 
 /*

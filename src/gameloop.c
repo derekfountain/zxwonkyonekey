@@ -105,8 +105,7 @@ TRACE_FN( gameloop, GAMELOOP_TRACE, GAMELOOP_TRACETABLE_SIZE )
 
 void init_gameloop_trace(void)
 {
-  if( gameloop_tracetable == TRACING_UNINITIALISED )
-    gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
+  gameloop_tracetable = gameloop_next_trace = allocate_tracememory(GAMELOOP_TRACETABLE_SIZE);
 }
 
 

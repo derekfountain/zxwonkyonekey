@@ -34,8 +34,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define TRACING_UNINITIALISED ((void*)0xFFFF)
-#define TRACING_INACTIVE      ((void*)0xFFFE)
+#define TRACING_INACTIVE      ((void*)0xFFFF)
 
 /*
  * Start of memory area used for trace table.
@@ -65,7 +64,7 @@
  */
 #define TRACE_FN( NAME, TYPE, TABLE_SIZE )	\
 \
-TYPE * NAME ## _tracetable = TRACING_UNINITIALISED; \
+TYPE * NAME ## _tracetable = TRACING_INACTIVE; \
 TYPE * NAME ## _next_trace = 0xFFFF; \
 \
 void NAME ## _add_trace( TYPE * ptr ) \
