@@ -394,7 +394,7 @@ PROCESSING_FLAG test_for_finish( void* data, GAME_ACTION* output_action )
   uint8_t     xpos = GET_RUNNER_XPOS;
   uint8_t     ypos = GET_RUNNER_YPOS;
 
-#define CHEAT_MODE 1
+#define CHEAT_MODE 0
 #if CHEAT_MODE
   /* Check for cheat key */
   if( in_key_pressed( IN_KEY_SCANCODE_q ) ) {
