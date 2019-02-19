@@ -467,15 +467,16 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
    * he doesn't move. Next cycle this code finds him at the teleporter trigger
    * location and he's teleported back. He still doesn't move for this cycle so
    * we go round again. He's stuck in an endless teleport sequence!
-   * The fix is to keep a flag saying he's just teleported. If that's set then
-   * reset it and don't do the teleport sequence. That frees up a cycle to move
-   * his location by a pixel, he leaves the teleport trigger point and then it
-   * all works again.
+   * The fix is to keep a counter saying he's just teleported. Start it at 2 then
+   * decrement it and don't do the teleport sequence. That frees up 2 cycles to move
+   * his location by a pixel. Even if slowdown is active, one of those cycles will
+   * see him move by one pixel. That way he leaves the teleport trigger point and
+   * then it all works again.
    */
   if( just_teleported )
   {
     KEY_ACTION_TRACE_CREATE( JUST_TELEPORTED, (*output_action == TOGGLE_DIRECTION) );
-    just_teleported = 0;
+    just_teleported--;
   }
   else
   {
@@ -486,7 +487,7 @@ PROCESSING_FLAG test_for_teleporter( void* data, GAME_ACTION* output_action )
 
         SET_RUNNER_XPOS( teleporter->end_2_x );
         SET_RUNNER_YPOS( teleporter->end_2_y );
-        just_teleported = 1;
+        just_teleported = 2;
 
         if( teleporter->change_direction ) {
           *output_action = TOGGLE_DIRECTION;
