@@ -1,4 +1,8 @@
-# zxrunner
+# ZX Wonky One Key
 
-A piece of nonsense created while I was playing with the
-SP1 library in Z88DK.
+A game for the 48K ZX Spectrum home micro from the 1980s. The TAP file of
+the latest release is [here](https://github.com/derekfountain/zxwonkyonekey/blob/master/src/Downloads/wonky_latest.tap).
+You should be able to just drag and drop it onto your emulator window.
+
+![alt text](media/wonky_screenshot.png "ZX Wonky One Key")
+
