@@ -32,16 +32,16 @@
  */
 
 #define _C     86, 86
-#define _D     81, 81
-#define _E     72, 72
+#define _D     77, 77
+#define _E     68, 68
 #define _F     64, 64
 #define _G     57, 57
 #define _A     51, 51
-#define _B     48, 48
+#define _B     46, 46
 
 #define _UpC   43, 43
-#define _UpD   40, 40
-#define _UpE   36, 36
+#define _UpD   38, 38
+#define _UpE   34, 34
 
 static uint8_t music_notes[] = {
 #if 0
