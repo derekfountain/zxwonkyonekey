@@ -135,6 +135,7 @@ void create_door( DOOR* door )
 
   door->moving   = DOOR_STATIONARY;
   door->y_offset = 0;
+  SET_COLLECTABLE_AVAILABLE(door->collectable,COLLECTABLE_AVAILABLE);
 
   door->sprite = sp1_CreateSpr(SP1_DRAW_LOAD1LB, SP1_TYPE_1BYTE, 2, 0, DOOR_PLANE);
   sp1_AddColSpr(door->sprite, SP1_DRAW_LOAD1RB, SP1_TYPE_1BYTE, 0, DOOR_PLANE);
