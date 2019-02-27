@@ -268,7 +268,15 @@ PUBLIC _level0_map
         defb 0x16, 0x03, 0x05   ; AT 3,5
         defb 0x80               ; grassv
 
+        ;; Block cheat escape!
         
+        defb 0x16, 0x05, 0x03   ; AT 5,3
+        defb 0x83               ; grassv
+        defb 0x16, 0x06, 0x03   ; AT 6,3
+        defb 0x83               ; grassv
+        defb 0x16, 0x07, 0x03   ; AT 7,3
+        defb 0x83               ; grassv
+
         ;; Finish
 
         defb 0x16, 0x10, 0x00   ; AT 16,0
