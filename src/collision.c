@@ -102,7 +102,15 @@ REACTION test_direction_blocked( uint8_t x, uint8_t y,
   uint8_t  check_y;
   REACTION result;
 
-  if( jump_status == NOT_JUMPING ) {
+  if( ((facing == RIGHT) && ((x+SPRITE_WIDTH) == 255))
+      ||
+      ((facing == LEFT)  && ((x-1) == 0)) ) {
+
+    /* Bounce off screen boundary */
+
+    result = BOUNCE;
+  }
+  else if( jump_status == NOT_JUMPING ) {
 
     /* He's not in a jump so bouncing off walls is the only thing to worry about */
 
