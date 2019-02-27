@@ -550,7 +550,7 @@ LEVEL_DATA level_data[] = {
   {
     1,
     level0_map,
-    START_POINT(0,140),
+    START_POINT(3,140),
     LEVEL_BORDER(INK_RED),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_BLACK|PAPER_WHITE,
@@ -577,7 +577,7 @@ LEVEL_DATA level_data[] = {
   {
     2,
     level1_map,
-    START_POINT(0,155),
+    START_POINT(3,155),
     LEVEL_BORDER(INK_BLUE),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_MAGENTA|PAPER_BLACK,
@@ -604,7 +604,7 @@ LEVEL_DATA level_data[] = {
   {
     3,
     level2_map,
-    START_POINT(0,163),
+    START_POINT(3,163),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_WHITE|PAPER_BLACK,
@@ -631,7 +631,7 @@ LEVEL_DATA level_data[] = {
   {
     4,
     level3_map,
-    START_POINT(8,16),
+    START_POINT(11,16),
     LEVEL_BORDER(INK_RED),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_BLACK|PAPER_WHITE,
@@ -658,7 +658,7 @@ LEVEL_DATA level_data[] = {
   {
     5,
     level4_map,
-    START_POINT(8,0),
+    START_POINT(11,0),
     LEVEL_BORDER(INK_BLACK),
     START_FACING(RIGHT),
     NAMED_VALUES_3("Background", INK_WHITE|PAPER_BLACK,
